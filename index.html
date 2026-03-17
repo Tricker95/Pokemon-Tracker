@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Tracker Pokémon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>🏆 Mon Aventure Pokémon</h1>
+        
+        <nav>
+            <button id="btn-shiny">Shiny Tracker</button>
+            <button id="btn-hof">Hall of Fame</button>
+            <button id="btn-theme" onclick="toggleTheme()" style="background-color: #2c3e50; border-color: #2c3e50;">🌙 Mode Sombre</button>
+        </nav>
+
+        <div class="data-management" style="margin-top: 15px;">
+            <button onclick="exportData()" class="btn-save">💾 Sauvegarder mes données</button>
+            
+            <label class="btn-load">
+                📂 Charger une sauvegarde
+                <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importData(event)">
+            </label>
+        </div>
+    </header>
+
+    <main>
+        <div id="dashboard" class="dashboard-container">
+            <div class="stat-card shiny-stat">
+                <h4>✨ Total Shiny</h4>
+                <p id="stat-total-shiny">0</p>
+            </div>
+            <div class="stat-card encounter-stat">
+                <h4>🎲 Total Rencontres</h4>
+                <p id="stat-total-encounters">0</p>
+            </div>
+            <div class="stat-card longest-stat">
+                <h4>🏆 Shasse la plus longue</h4>
+                <p id="stat-longest-hunt">- (0)</p>
+            </div>
+        </div>
+        <section id="shiny-section">
+            
+            <div class="gen-buttons">
+                <button onclick="loadGeneration(151, 0, 'Kanto', 1)">Gen 1 (Kanto)</button>
+                <button onclick="loadGeneration(100, 151, 'Johto', 2)">Gen 2 (Johto)</button>
+                <button onclick="loadGeneration(135, 251, 'Hoenn', 3)">Gen 3 (Hoenn)</button>
+                <button onclick="loadGeneration(107, 386, 'Sinnoh', 4)">Gen 4 (Sinnoh)</button>
+                <button onclick="loadGeneration(156, 493, 'Unys', 5)">Gen 5 (Unys)</button>
+                <button onclick="loadGeneration(72, 649, 'Kalos', 6)">Gen 6 (Kalos)</button>
+                <button onclick="loadGeneration(88, 721, 'Alola', 7)">Gen 7 (Alola)</button>
+                <button onclick="loadGeneration(96, 809, 'Galar/Hisui', 8)">Gen 8 (Galar)</button>
+                <button onclick="loadGeneration(120, 905, 'Paldea', 9)">Gen 9 (Paldea)</button>
+                <button onclick="loadCustomList('Formes d\'Alola', specialForms.alola)" style="background-color: #f39c12; color: white; border: none;">🌴 Formes Alola</button>
+                <button onclick="loadCustomList('Formes de Galar', specialForms.galar)" style="background-color: #e74c3c; color: white; border: none;">🚂 Formes Galar</button>
+                <button onclick="loadCustomList('Formes de Hisui', specialForms.hisui)" style="background-color: #8B4513; color: white; border: none;">🪵 Formes Hisui</button>
+                <button onclick="loadCustomList('Formes de Paldea', specialForms.paldea)" style="background-color: #9b59b6; color: white; border: none;">🍇 Formes Paldea</button>
+                <button onclick="loadCustomList('Formes Spéciales', specialForms.speciales)" style="background-color: #34495e; color: white; border: none;">✨ Formes Spéciales</button>
+            </div>
+            <div class="search-bar" style="margin-bottom: 20px; background-color: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd; display: inline-block;">
+                <label style="font-weight: bold; margin-right: 10px;">Recherche rapide :</label>
+                <input type="text" id="search-shiny-input" placeholder="Nom (anglais) ou ID..." onkeypress="if(event.key === 'Enter') searchShiny()" style="padding: 8px; width: 200px; border: 1px solid #ccc; border-radius: 4px;">
+                <button onclick="searchShiny()" style="padding: 8px 15px; background-color: #f39c12; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: 5px;">🔍 Chercher</button>
+                
+                <button onclick="resetSearch()" style="padding: 8px 15px; background-color: #95a5a6; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: 5px;">❌ Réinitialiser</button>
+            </div>
+            <h2 id="gen-title">Génération 1 (Kanto)</h2>
+            <div id="pokedex-grid" class="grid-container"></div>
+            
+        </section>
+
+        <section id="hof-section" style="display: none;">
+            <h2>🏆 Mes Exploits</h2>
+            
+            <h3 style="margin-top: 30px; color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px;">Génération 1</h3>
+            
+            <div class="game-card" id="game-frlg">
+                <div class="game-title">🔴 Rouge Feu / Vert Feuille 🟢</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-frlg" onchange="saveAchievement('frlg', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-frlg" onchange="saveAchievement('frlg', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-frlg-1"><br><input type="text" id="team-frlg-1" placeholder="Nom/ID" onchange="updateTeamSprite('frlg', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-frlg-2"><br><input type="text" id="team-frlg-2" placeholder="Nom/ID" onchange="updateTeamSprite('frlg', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-frlg-3"><br><input type="text" id="team-frlg-3" placeholder="Nom/ID" onchange="updateTeamSprite('frlg', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-frlg-4"><br><input type="text" id="team-frlg-4" placeholder="Nom/ID" onchange="updateTeamSprite('frlg', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-frlg-5"><br><input type="text" id="team-frlg-5" placeholder="Nom/ID" onchange="updateTeamSprite('frlg', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-frlg-6"><br><input type="text" id="team-frlg-6" placeholder="Nom/ID" onchange="updateTeamSprite('frlg', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-frlg" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('frlg', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-frlg" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-frlg" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('frlg', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-frlg" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card" id="game-lgpe">
+                <div class="game-title" style="color: #f1c40f;">🟡 Let's Go Pikachu / Évoli 🟤</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-lgpe" onchange="saveAchievement('lgpe', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-lgpe" onchange="saveAchievement('lgpe', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-lgpe-1"><br><input type="text" id="team-lgpe-1" placeholder="Nom/ID" onchange="updateTeamSprite('lgpe', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-lgpe-2"><br><input type="text" id="team-lgpe-2" placeholder="Nom/ID" onchange="updateTeamSprite('lgpe', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-lgpe-3"><br><input type="text" id="team-lgpe-3" placeholder="Nom/ID" onchange="updateTeamSprite('lgpe', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-lgpe-4"><br><input type="text" id="team-lgpe-4" placeholder="Nom/ID" onchange="updateTeamSprite('lgpe', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-lgpe-5"><br><input type="text" id="team-lgpe-5" placeholder="Nom/ID" onchange="updateTeamSprite('lgpe', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-lgpe-6"><br><input type="text" id="team-lgpe-6" placeholder="Nom/ID" onchange="updateTeamSprite('lgpe', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-lgpe" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('lgpe', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-lgpe" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-lgpe" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('lgpe', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-lgpe" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px;">Génération 2</h3>
+            
+            <div class="game-card" id="game-hgss">
+                <div class="game-title" style="color: #d4af37;">🥇 Or HeartGold / Argent SoulSilver 🥈</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-hgss" onchange="saveAchievement('hgss', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-hgss" onchange="saveAchievement('hgss', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-hgss-1"><br><input type="text" id="team-hgss-1" placeholder="Nom/ID" onchange="updateTeamSprite('hgss', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-hgss-2"><br><input type="text" id="team-hgss-2" placeholder="Nom/ID" onchange="updateTeamSprite('hgss', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-hgss-3"><br><input type="text" id="team-hgss-3" placeholder="Nom/ID" onchange="updateTeamSprite('hgss', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-hgss-4"><br><input type="text" id="team-hgss-4" placeholder="Nom/ID" onchange="updateTeamSprite('hgss', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-hgss-5"><br><input type="text" id="team-hgss-5" placeholder="Nom/ID" onchange="updateTeamSprite('hgss', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-hgss-6"><br><input type="text" id="team-hgss-6" placeholder="Nom/ID" onchange="updateTeamSprite('hgss', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-hgss" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('hgss', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-hgss" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-hgss" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('hgss', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-hgss" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px;">Génération 3</h3>
+
+            <div class="game-card" id="game-emerald">
+                <div class="game-title" style="color: #2ecc71;">🟢 Émeraude 🟢</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-emerald" onchange="saveAchievement('emerald', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-emerald" onchange="saveAchievement('emerald', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-emerald-1"><br><input type="text" id="team-emerald-1" placeholder="Nom/ID" onchange="updateTeamSprite('emerald', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-emerald-2"><br><input type="text" id="team-emerald-2" placeholder="Nom/ID" onchange="updateTeamSprite('emerald', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-emerald-3"><br><input type="text" id="team-emerald-3" placeholder="Nom/ID" onchange="updateTeamSprite('emerald', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-emerald-4"><br><input type="text" id="team-emerald-4" placeholder="Nom/ID" onchange="updateTeamSprite('emerald', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-emerald-5"><br><input type="text" id="team-emerald-5" placeholder="Nom/ID" onchange="updateTeamSprite('emerald', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-emerald-6"><br><input type="text" id="team-emerald-6" placeholder="Nom/ID" onchange="updateTeamSprite('emerald', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-emerald" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('emerald', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-emerald" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-emerald" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('emerald', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-emerald" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card" id="game-oras">
+                <div class="game-title" style="color: #e74c3c;">🔴 Rubis Oméga / Saphir Alpha 🔵</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-oras" onchange="saveAchievement('oras', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-oras" onchange="saveAchievement('oras', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-oras-1"><br><input type="text" id="team-oras-1" placeholder="Nom/ID" onchange="updateTeamSprite('oras', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-oras-2"><br><input type="text" id="team-oras-2" placeholder="Nom/ID" onchange="updateTeamSprite('oras', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-oras-3"><br><input type="text" id="team-oras-3" placeholder="Nom/ID" onchange="updateTeamSprite('oras', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-oras-4"><br><input type="text" id="team-oras-4" placeholder="Nom/ID" onchange="updateTeamSprite('oras', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-oras-5"><br><input type="text" id="team-oras-5" placeholder="Nom/ID" onchange="updateTeamSprite('oras', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-oras-6"><br><input type="text" id="team-oras-6" placeholder="Nom/ID" onchange="updateTeamSprite('oras', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-oras" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('oras', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-oras" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-oras" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('oras', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-oras" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px;">Génération 4</h3>
+
+            <div class="game-card" id="game-platinum">
+                <div class="game-title" style="color: #8e44ad;">👻 Platine 👻</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-platinum" onchange="saveAchievement('platinum', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-platinum" onchange="saveAchievement('platinum', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-platinum-1"><br><input type="text" id="team-platinum-1" placeholder="Nom/ID" onchange="updateTeamSprite('platinum', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-platinum-2"><br><input type="text" id="team-platinum-2" placeholder="Nom/ID" onchange="updateTeamSprite('platinum', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-platinum-3"><br><input type="text" id="team-platinum-3" placeholder="Nom/ID" onchange="updateTeamSprite('platinum', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-platinum-4"><br><input type="text" id="team-platinum-4" placeholder="Nom/ID" onchange="updateTeamSprite('platinum', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-platinum-5"><br><input type="text" id="team-platinum-5" placeholder="Nom/ID" onchange="updateTeamSprite('platinum', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-platinum-6"><br><input type="text" id="team-platinum-6" placeholder="Nom/ID" onchange="updateTeamSprite('platinum', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-platinum" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('platinum', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-platinum" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-platinum" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('platinum', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-platinum" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card" id="game-bdsp">
+                <div class="game-title" style="color: #3498db;">💎 Diamant Étincelant / Perle Scintillante 🔮</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-bdsp" onchange="saveAchievement('bdsp', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-bdsp" onchange="saveAchievement('bdsp', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-bdsp-1"><br><input type="text" id="team-bdsp-1" placeholder="Nom/ID" onchange="updateTeamSprite('bdsp', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-bdsp-2"><br><input type="text" id="team-bdsp-2" placeholder="Nom/ID" onchange="updateTeamSprite('bdsp', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-bdsp-3"><br><input type="text" id="team-bdsp-3" placeholder="Nom/ID" onchange="updateTeamSprite('bdsp', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-bdsp-4"><br><input type="text" id="team-bdsp-4" placeholder="Nom/ID" onchange="updateTeamSprite('bdsp', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-bdsp-5"><br><input type="text" id="team-bdsp-5" placeholder="Nom/ID" onchange="updateTeamSprite('bdsp', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-bdsp-6"><br><input type="text" id="team-bdsp-6" placeholder="Nom/ID" onchange="updateTeamSprite('bdsp', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-bdsp" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('bdsp', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-bdsp" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-bdsp" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('bdsp', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-bdsp" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin:-top: 30px; color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px;">Génération 5</h3>
+
+            <div class="game-card" id="game-b2w2">
+                <div class="game-title" style="color: #34495e;">⚪ Noir 2 / Blanc 2 ⚫</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-b2w2" onchange="saveAchievement('b2w2', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-b2w2" onchange="saveAchievement('b2w2', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-b2w2-1"><br><input type="text" id="team-b2w2-1" placeholder="Nom/ID" onchange="updateTeamSprite('b2w2', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-b2w2-2"><br><input type="text" id="team-b2w2-2" placeholder="Nom/ID" onchange="updateTeamSprite('b2w2', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-b2w2-3"><br><input type="text" id="team-b2w2-3" placeholder="Nom/ID" onchange="updateTeamSprite('b2w2', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-b2w2-4"><br><input type="text" id="team-b2w2-4" placeholder="Nom/ID" onchange="updateTeamSprite('b2w2', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-b2w2-5"><br><input type="text" id="team-b2w2-5" placeholder="Nom/ID" onchange="updateTeamSprite('b2w2', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-b2w2-6"><br><input type="text" id="team-b2w2-6" placeholder="Nom/ID" onchange="updateTeamSprite('b2w2', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-b2w2" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('b2w2', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-b2w2" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-b2w2" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('b2w2', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-b2w2" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px;">Génération 6</h3>
+
+            <div class="game-card" id="game-xy">
+                <div class="game-title" style="color: #e67e22;">🔵 X / Y 🔴</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-xy" onchange="saveAchievement('xy', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-xy" onchange="saveAchievement('xy', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-xy-1"><br><input type="text" id="team-xy-1" placeholder="Nom/ID" onchange="updateTeamSprite('xy', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-xy-2"><br><input type="text" id="team-xy-2" placeholder="Nom/ID" onchange="updateTeamSprite('xy', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-xy-3"><br><input type="text" id="team-xy-3" placeholder="Nom/ID" onchange="updateTeamSprite('xy', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-xy-4"><br><input type="text" id="team-xy-4" placeholder="Nom/ID" onchange="updateTeamSprite('xy', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-xy-5"><br><input type="text" id="team-xy-5" placeholder="Nom/ID" onchange="updateTeamSprite('xy', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-xy-6"><br><input type="text" id="team-xy-6" placeholder="Nom/ID" onchange="updateTeamSprite('xy', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-xy" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('xy', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-xy" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-xy" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('xy', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-xy" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px;">Génération 7</h3>
+
+            <div class="game-card" id="game-usum">
+                <div class="game-title" style="color: #f39c12;">☀️ Ultra-Soleil / Ultra-Lune 🌙</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-usum" onchange="saveAchievement('usum', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-usum" onchange="saveAchievement('usum', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-usum-1"><br><input type="text" id="team-usum-1" placeholder="Nom/ID" onchange="updateTeamSprite('usum', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-usum-2"><br><input type="text" id="team-usum-2" placeholder="Nom/ID" onchange="updateTeamSprite('usum', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-usum-3"><br><input type="text" id="team-usum-3" placeholder="Nom/ID" onchange="updateTeamSprite('usum', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-usum-4"><br><input type="text" id="team-usum-4" placeholder="Nom/ID" onchange="updateTeamSprite('usum', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-usum-5"><br><input type="text" id="team-usum-5" placeholder="Nom/ID" onchange="updateTeamSprite('usum', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-usum-6"><br><input type="text" id="team-usum-6" placeholder="Nom/ID" onchange="updateTeamSprite('usum', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-usum" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('usum', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-usum" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-usum" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('usum', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-usum" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px;">Génération 8</h3>
+
+            <div class="game-card" id="game-swsh">
+                <div class="game-title" style="color: #1abc9c;">🗡️ Épée / Bouclier 🛡️</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-swsh" onchange="saveAchievement('swsh', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-swsh" onchange="saveAchievement('swsh', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-swsh-1"><br><input type="text" id="team-swsh-1" placeholder="Nom/ID" onchange="updateTeamSprite('swsh', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-swsh-2"><br><input type="text" id="team-swsh-2" placeholder="Nom/ID" onchange="updateTeamSprite('swsh', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-swsh-3"><br><input type="text" id="team-swsh-3" placeholder="Nom/ID" onchange="updateTeamSprite('swsh', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-swsh-4"><br><input type="text" id="team-swsh-4" placeholder="Nom/ID" onchange="updateTeamSprite('swsh', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-swsh-5"><br><input type="text" id="team-swsh-5" placeholder="Nom/ID" onchange="updateTeamSprite('swsh', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-swsh-6"><br><input type="text" id="team-swsh-6" placeholder="Nom/ID" onchange="updateTeamSprite('swsh', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 PC :</h4><input type="text" id="input-pc-swsh" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('swsh', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-swsh" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-swsh" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('swsh', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-swsh" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card" id="game-pla">
+                <div class="game-title" style="color: #8B4513;">🌋 Légendes Pokémon : Arceus 🪵</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-pla" onchange="saveAchievement('pla', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-pla" onchange="saveAchievement('pla', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-pla-1"><br><input type="text" id="team-pla-1" placeholder="Nom/ID" onchange="updateTeamSprite('pla', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-pla-2"><br><input type="text" id="team-pla-2" placeholder="Nom/ID" onchange="updateTeamSprite('pla', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-pla-3"><br><input type="text" id="team-pla-3" placeholder="Nom/ID" onchange="updateTeamSprite('pla', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-pla-4"><br><input type="text" id="team-pla-4" placeholder="Nom/ID" onchange="updateTeamSprite('pla', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-pla-5"><br><input type="text" id="team-pla-5" placeholder="Nom/ID" onchange="updateTeamSprite('pla', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-pla-6"><br><input type="text" id="team-pla-6" placeholder="Nom/ID" onchange="updateTeamSprite('pla', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 Pâturages :</h4><input type="text" id="input-pc-pla" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('pla', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-pla" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-pla" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('pla', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-pla" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #2c3e50; border-bottom: 2px solid #ccc; padding-bottom: 5px;">Génération 9</h3>
+
+            <div class="game-card" id="game-sv">
+                <div class="game-title" style="color: #9b59b6;">🔴 Écarlate / Violet 🟣</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-sv" onchange="saveAchievement('sv', 'nuzlocke')"> 💀 Nuzlocke</label><br><br>
+                    <label><input type="checkbox" id="pokedex-sv" onchange="saveAchievement('sv', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-sv-1"><br><input type="text" id="team-sv-1" placeholder="Nom/ID" onchange="updateTeamSprite('sv', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-sv-2"><br><input type="text" id="team-sv-2" placeholder="Nom/ID" onchange="updateTeamSprite('sv', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-sv-3"><br><input type="text" id="team-sv-3" placeholder="Nom/ID" onchange="updateTeamSprite('sv', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-sv-4"><br><input type="text" id="team-sv-4" placeholder="Nom/ID" onchange="updateTeamSprite('sv', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-sv-5"><br><input type="text" id="team-sv-5" placeholder="Nom/ID" onchange="updateTeamSprite('sv', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-sv-6"><br><input type="text" id="team-sv-6" placeholder="Nom/ID" onchange="updateTeamSprite('sv', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 Boîtes :</h4><input type="text" id="input-pc-sv" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('sv', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-sv" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-sv" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('sv', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-sv" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-card" id="game-plza">
+                <div class="game-title" style="color: #2c3e50;">🧬 Légendes Pokémon : Z-A 🏙️</div>
+                <div class="achievements">
+                    <label><input type="checkbox" id="nuzlocke-plza" onchange="saveAchievement('plza', 'nuzlocke')"> 💀 Nuzlocke (À venir !)</label><br><br>
+                    <label><input type="checkbox" id="pokedex-plza" onchange="saveAchievement('plza', 'pokedex')"> 📖 Pokédex</label>
+                </div>
+                <h4>Mon Équipe :</h4>
+                <div class="team-container">
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-plza-1"><br><input type="text" id="team-plza-1" placeholder="Nom/ID" onchange="updateTeamSprite('plza', 1)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-plza-2"><br><input type="text" id="team-plza-2" placeholder="Nom/ID" onchange="updateTeamSprite('plza', 2)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-plza-3"><br><input type="text" id="team-plza-3" placeholder="Nom/ID" onchange="updateTeamSprite('plza', 3)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-plza-4"><br><input type="text" id="team-plza-4" placeholder="Nom/ID" onchange="updateTeamSprite('plza', 4)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-plza-5"><br><input type="text" id="team-plza-5" placeholder="Nom/ID" onchange="updateTeamSprite('plza', 5)"></div>
+                    <div class="team-member"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="sprite-plza-6"><br><input type="text" id="team-plza-6" placeholder="Nom/ID" onchange="updateTeamSprite('plza', 6)"></div>
+                </div>
+                <hr style="margin: 20px 0; border: 1px solid #eee;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>💻 Boîtes :</h4><input type="text" id="input-pc-plza" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('plza', 'pc')">Ajouter</button>
+                        <div class="extra-container" id="container-pc-plza" style="margin-top: 5px;"></div>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <h4>🪦 Cimetière :</h4><input type="text" id="input-grave-plza" placeholder="Nom/ID" style="width: 80px;"> <button onclick="addExtraPokemon('plza', 'grave')">Enterrer</button>
+                        <div class="extra-container graveyard" id="container-grave-plza" style="margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
