@@ -70,6 +70,10 @@ function createPokemonCard(id, name) {
 
     const isShiny = localStorage.getItem(`shiny-${id}`) === 'true'; 
     const savedEncounters = localStorage.getItem(`encounters-${id}`) || '';
+    
+    // NOUVEAU : Récupérer le jeu et la méthode sauvegardés
+    const savedGame = localStorage.getItem(`game-${id}`) || '';
+    const savedMethod = localStorage.getItem(`method-${id}`) || '';
 
     const imgClass = isShiny ? '' : 'not-caught';
     const imgSrc = isShiny 
@@ -81,15 +85,54 @@ function createPokemonCard(id, name) {
         <img src="${imgSrc}" id="img-${id}" class="${imgClass}" alt="${capitalizedName}">
         <h3>#${id} ${capitalizedName}</h3>
         
-        <label style="cursor: pointer; font-weight: bold; color: #d4af37;">
+        <label style="cursor: pointer; font-weight: 800; color: var(--accent-orange);">
             <input type="checkbox" id="shiny-${id}" onchange="toggleShiny(${id})" ${checkedAttr}> ✨ Shiny
         </label>
-        <br>
-        <div style="margin-top: 10px;">
-            <label style="font-size: 12px; color: #666;">Rencontres :</label><br>
-            <input type="number" id="encounters-${id}" value="${savedEncounters}" oninput="saveEncounters(${id})" min="0" placeholder="0" style="width: 60px; text-align: center; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+        
+        <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; text-align: left;">
+            <div>
+                <label style="color: #666; font-weight: 600;">Rencontres :</label>
+                <input type="number" id="encounters-${id}" value="${savedEncounters}" oninput="saveEncounters(${id})" min="0" placeholder="0" style="width: 100%; text-align: center; margin-top: 4px; box-sizing: border-box;">
+            </div>
+            
+            <div>
+                <label style="color: #666; font-weight: 600;">Jeu :</label>
+                <select id="game-${id}" onchange="saveSelectData(${id}, 'game')" class="hunt-select">
+                    <option value="">-- Choisir --</option>
+                    <option value="Gen 1 (RBJ)" ${savedGame === 'Gen 1 (RBJ)' ? 'selected' : ''}>Gen 1 (Rouge/Bleu/Jaune)</option>
+                    <option value="Gen 2 (OAC)" ${savedGame === 'Gen 2 (OAC)' ? 'selected' : ''}>Gen 2 (Or/Argent/Cristal)</option>
+                    <option value="Gen 3 (RSE/RFVF)" ${savedGame === 'Gen 3 (RSE/RFVF)' ? 'selected' : ''}>Gen 3 (RSE / RFVF)</option>
+                    <option value="Gen 4 (DPP/HGSS)" ${savedGame === 'Gen 4 (DPP/HGSS)' ? 'selected' : ''}>Gen 4 (DPP / HGSS)</option>
+                    <option value="Gen 5 (NB/NB2)" ${savedGame === 'Gen 5 (NB/NB2)' ? 'selected' : ''}>Gen 5 (Noir/Blanc 1&2)</option>
+                    <option value="Gen 6 (XY/ROSA)" ${savedGame === 'Gen 6 (XY/ROSA)' ? 'selected' : ''}>Gen 6 (XY / ROSA)</option>
+                    <option value="Gen 7 (SL/USUL/LGPE)" ${savedGame === 'Gen 7 (SL/USUL/LGPE)' ? 'selected' : ''}>Gen 7 (SL / USUL / LGPE)</option>
+                    <option value="Gen 8 (EB/DEPS/LPA)" ${savedGame === 'Gen 8 (EB/DEPS/LPA)' ? 'selected' : ''}>Gen 8 (EB / DEPS / LPA)</option>
+                    <option value="Gen 9 (EV)" ${savedGame === 'Gen 9 (EV)' ? 'selected' : ''}>Gen 9 (Écarlate/Violet)</option>
+                    <option value="Pokemon GO" ${savedGame === 'Pokemon GO' ? 'selected' : ''}>Pokémon GO</option>
+                </select>
+            </div>
+
+            <div>
+                <label style="color: #666; font-weight: 600;">Méthode :</label>
+                <select id="method-${id}" onchange="saveSelectData(${id}, 'method')" class="hunt-select">
+                    <option value="">-- Choisir --</option>
+                    <option value="Hasard" ${savedMethod === 'Hasard' ? 'selected' : ''}>Hasard (Full Odds)</option>
+                    <option value="Masuda" ${savedMethod === 'Masuda' ? 'selected' : ''}>Masuda (Œufs)</option>
+                    <option value="Reset" ${savedMethod === 'Reset' ? 'selected' : ''}>Resets (SR)</option>
+                    <option value="Radar" ${savedMethod === 'Radar' ? 'selected' : ''}>Poké Radar</option>
+                    <option value="Peche" ${savedMethod === 'Peche' ? 'selected' : ''}>Pêche à la chaîne</option>
+                    <option value="Hordes" ${savedMethod === 'Hordes' ? 'selected' : ''}>Hordes</option>
+                    <option value="Navidex" ${savedMethod === 'Navidex' ? 'selected' : ''}>Navi-Dex</option>
+                    <option value="SOS" ${savedMethod === 'SOS' ? 'selected' : ''}>Appel SOS</option>
+                    <option value="Massive" ${savedMethod === 'Massive' ? 'selected' : ''}>Apparition Massive</option>
+                    <option value="Sandwich" ${savedMethod === 'Sandwich' ? 'selected' : ''}>Sandwich / Aura</option>
+                    <option value="Dynamax" ${savedMethod === 'Dynamax' ? 'selected' : ''}>Antre Dynamax</option>
+                    <option value="Event" ${savedMethod === 'Event' ? 'selected' : ''}>Événement / Cadeau</option>
+                </select>
+            </div>
         </div>
-        <button onclick="showTip(${id}, '${capitalizedName}')" style="margin-top: 10px; background-color: #4CAF50; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+        
+        <button onclick="showTip(${id}, '${capitalizedName}')" style="margin-top: 15px; width: 100%; background-color: var(--accent-green); color: white; border: none; padding: 8px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; font-family: 'Plus Jakarta Sans', sans-serif;">
             💡 Où shasser ?
         </button>
     `;
@@ -176,6 +219,11 @@ function saveEncounters(id) {
     const input = document.getElementById(`encounters-${id}`);
     localStorage.setItem(`encounters-${id}`, input.value);
     updateDashboard();
+}
+// Sauvegarder le jeu et la méthode de shasse
+function saveSelectData(id, type) {
+    const selectBox = document.getElementById(`${type}-${id}`);
+    localStorage.setItem(`${type}-${id}`, selectBox.value);
 }
 
 function showTip(id, name) {

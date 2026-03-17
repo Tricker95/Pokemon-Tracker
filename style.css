@@ -368,3 +368,29 @@ input[type="number"]:focus, input[type="text"]:focus {
 .shiny-stat { background: linear-gradient(135deg, #f1c40f, #f39c12); } /* Doré */
 .encounter-stat { background: linear-gradient(135deg, #9b59b6, #8e44ad); } /* Violet */
 .longest-stat { background: linear-gradient(135deg, #e74c3c, #c0392b); } /* Rouge */
+
+/* Style des listes déroulantes (Jeu & Méthode) */
+.hunt-select {
+    width: 100%;
+    padding: 6px;
+    margin-top: 4px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.3s ease;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    box-sizing: border-box;
+}
+
+.hunt-select:focus {
+    border-color: var(--accent-orange);
+}
+
+/* Ajustement pour le Dark Mode */
+body.dark-mode .hunt-select {
+    border-color: #2c3e50;
+    background-color: #0f3460;
+    color: white;
+}
