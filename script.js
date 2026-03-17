@@ -117,6 +117,7 @@ function createPokemonCard(id, name) {
                 <select id="method-${id}" onchange="saveSelectData(${id}, 'method')" class="hunt-select">
                     <option value="">-- Choisir --</option>
                     <option value="Hasard" ${savedMethod === 'Hasard' ? 'selected' : ''}>Hasard (Full Odds)</option>
+                    <option value="ComboCapture" ${savedMethod === 'ComboCapture' ? 'selected' : ''}>Combo Capture</option>
                     <option value="Masuda" ${savedMethod === 'Masuda' ? 'selected' : ''}>Masuda (Œufs)</option>
                     <option value="Reset" ${savedMethod === 'Reset' ? 'selected' : ''}>Resets (SR)</option>
                     <option value="Radar" ${savedMethod === 'Radar' ? 'selected' : ''}>Poké Radar</option>
