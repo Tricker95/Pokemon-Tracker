@@ -99,7 +99,7 @@ function createPokemonCard(id, name) {
                 <label style="color: #666; font-weight: 600;">Jeu :</label>
                 <select id="game-${id}" onchange="saveSelectData(${id}, 'game')" class="hunt-select">
                     <option value="">-- Choisir --</option>
-                    <option value="Gen 1 (RBJ)" ${savedGame === 'Gen 1 (RBJ)' ? 'selected' : ''}>Gen 1 (Rouge/Bleu/Jaune)</option>
+                    <option value="Gen 1 (RBJ)" ${savedGame === 'Gen 1 (RBJ)' ? 'selected' : ''}>Gen 1 (Let's Go)</option>
                     <option value="Gen 2 (OAC)" ${savedGame === 'Gen 2 (OAC)' ? 'selected' : ''}>Gen 2 (Or/Argent/Cristal)</option>
                     <option value="Gen 3 (RSE/RFVF)" ${savedGame === 'Gen 3 (RSE/RFVF)' ? 'selected' : ''}>Gen 3 (RSE / RFVF)</option>
                     <option value="Gen 4 (DPP/HGSS)" ${savedGame === 'Gen 4 (DPP/HGSS)' ? 'selected' : ''}>Gen 4 (DPP / HGSS)</option>
