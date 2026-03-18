@@ -295,7 +295,7 @@ function loadTheme() { const isDark = localStorage.getItem('darkMode') === 'true
 function updateThemeButton(isDark) { const btn = document.getElementById('btn-theme'); btn.textContent = isDark ? '☀️' : '🌙'; btn.style.backgroundColor = isDark ? '#f39c12' : '#2c3e50'; btn.style.borderColor = isDark ? '#f39c12' : '#2c3e50'; }
 
 // ==========================================
-// 11. HALL OF FAME V6 (Hackroms, Recherche, MVP, Épitaphes)
+// 11. HALL OF FAME V6 (ONGLETS, Hackroms, Recherche, MVP, Épitaphes)
 // ==========================================
 const nuzlockeGames = [
     { id: 'gen1', name: 'Kanto (Rouge/Bleu/Jaune/RFVF)' }, { id: 'gen2', name: 'Johto (Or/Argent/Cristal/HGSS)' },
@@ -310,22 +310,51 @@ function loadHallOfFame() {
     // On évite de recharger si les jeux sont déjà affichés
     if (officialGrid && officialGrid.children.length > 0) return; 
     renderHallOfFame();
+    showHofTab('official'); // On force l'affichage du premier onglet par défaut
 }
 
+// CORRECTION MOBILE : La fonction de rendu est maintenant plus robuste
 function renderHallOfFame() {
     const officialGrid = document.getElementById('hof-official-grid');
     const hackromGrid = document.getElementById('hof-hackrom-grid');
     
     // On nettoie les grilles avant de les (re)dessiner
-    officialGrid.innerHTML = '';
-    hackromGrid.innerHTML = '';
+    if (officialGrid) officialGrid.innerHTML = '';
+    if (hackromGrid) hackromGrid.innerHTML = '';
 
-    // 1. Dessiner les jeux officiels
-    nuzlockeGames.forEach(game => createGameCard(game, officialGrid, false));
+    // 1. Dessiner les jeux officiels (si la grille existe)
+    if (officialGrid) {
+        nuzlockeGames.forEach(game => createGameCard(game, officialGrid, false));
+    }
 
-    // 2. Dessiner les Hackroms (depuis la sauvegarde)
-    let hackroms = JSON.parse(localStorage.getItem('custom-hackroms')) || [];
-    hackroms.forEach(game => createGameCard(game, hackromGrid, true));
+    // 2. Dessiner les Hackroms (depuis la sauvegarde, si la grille existe)
+    if (hackromGrid) {
+        let hackroms = JSON.parse(localStorage.getItem('custom-hackroms')) || [];
+        hackroms.forEach(game => createGameCard(game, hackromGrid, true));
+    }
+}
+
+// GESTION DU SYSTÈME D'ONGLETS
+function showHofTab(tabName) {
+    const officialContent = document.getElementById('hof-official-content');
+    const hackromContent = document.getElementById('hof-hackrom-content');
+    const officialTab = document.getElementById('tab-official');
+    const hackromTab = document.getElementById('tab-hackrom');
+    
+    // On cache tout et on enlève les styles "actifs"
+    officialContent.style.display = 'none';
+    hackromContent.style.display = 'none';
+    officialTab.style.backgroundColor = 'rgba(0,0,0,0.1)'; officialTab.style.fontWeight = 'bold'; officialTab.style.color = 'var(--text-color)';
+    hackromTab.style.backgroundColor = 'rgba(0,0,0,0.1)'; hackromTab.style.fontWeight = 'bold'; hackromTab.style.color = 'var(--text-color)';
+    
+    // On affiche l'onglet demandé et on lui met son style "actif"
+    if (tabName === 'official') {
+        officialContent.style.display = 'block';
+        officialTab.style.backgroundColor = 'var(--accent-blue)'; officialTab.style.fontWeight = '900'; officialTab.style.color = 'white';
+    } else {
+        hackromContent.style.display = 'block';
+        hackromTab.style.backgroundColor = 'var(--accent-orange)'; hackromTab.style.fontWeight = '900'; hackromTab.style.color = 'white';
+    }
 }
 
 // LE GÉNÉRATEUR DE CARTES UNIVERSEL
@@ -370,7 +399,7 @@ function createGameCard(game, gridElement, isHackrom) {
     loadExtraPokemon(game.id, 'pc'); loadExtraPokemon(game.id, 'grave');
 }
 
-// NOUVEAU : SYSTÈME D'AJOUT ET SUPPRESSION DE HACKROM
+// SYSTÈME D'AJOUT ET SUPPRESSION DE HACKROM
 function addHackrom() {
     const input = document.getElementById('new-hackrom-name');
     const name = input.value.trim();
@@ -400,122 +429,60 @@ function deleteHackrom(id) {
 // LE RESTE DES FONCTIONS NE CHANGE PAS ! (Recherche, MVP, etc.)
 // --------------------------------------------------------
 async function updateHoFSprite(gameId, memberNum, isInitialLoad = false) {
-    const inputId = `team-${gameId}-${memberNum}-id`; 
-    const imgId = `team-${gameId}-${memberNum}-img`;
-    const input = document.getElementById(inputId); 
-    const img = document.getElementById(imgId);
-    
-    if (isInitialLoad) { 
-        const savedId = localStorage.getItem(inputId); 
-        if (savedId) { input.value = savedId; img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${savedId}.png`; } 
-        return; 
-    }
-    
+    const inputId = `team-${gameId}-${memberNum}-id`; const imgId = `team-${gameId}-${memberNum}-img`;
+    const input = document.getElementById(inputId); const img = document.getElementById(imgId);
+    if (isInitialLoad) { const savedId = localStorage.getItem(inputId); if (savedId) { input.value = savedId; img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${savedId}.png`; } return; }
     const query = input.value.toLowerCase().trim();
-    if (!query) {
-        img.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png";
-        localStorage.removeItem(inputId);
-        return;
-    }
-
+    if (!query) { img.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"; localStorage.removeItem(inputId); return; }
     let pokemonId = query;
     if (isNaN(query)) {
         try {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query}`);
-            if (response.ok) {
-                const data = await response.json();
-                pokemonId = data.id;
-                input.value = pokemonId; 
-            } else {
-                alert("❌ Pokémon introuvable ! Vérifie l'orthographe (en anglais).");
-                input.value = ""; return;
-            }
+            if (response.ok) { const data = await response.json(); pokemonId = data.id; input.value = pokemonId; } 
+            else { alert("❌ Pokémon introuvable ! Vérifie l'orthographe (en anglais)."); input.value = ""; return; }
         } catch (e) { return; }
     }
-
-    if (pokemonId && pokemonId > 0 && pokemonId <= 1025) { 
-        img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`; 
-        localStorage.setItem(inputId, pokemonId); 
-    } else { 
-        img.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"; 
-        localStorage.removeItem(inputId); 
-    }
+    if (pokemonId && pokemonId > 0 && pokemonId <= 1025) { img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`; localStorage.setItem(inputId, pokemonId); } 
+    else { img.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"; localStorage.removeItem(inputId); }
 }
-
 function saveHoFNickname(gameId, memberNum) { localStorage.setItem(`team-${gameId}-${memberNum}-nick`, document.getElementById(`team-${gameId}-${memberNum}-nick`).value); }
-
 function toggleMVP(gameId, num) {
     const crown = document.getElementById(`crown-${gameId}-${num}`);
-    if (crown.classList.contains('active')) {
-        crown.classList.remove('active'); localStorage.setItem(`team-${gameId}-${num}-mvp`, 'false');
-    } else {
-        for(let i=1; i<=6; i++) { document.getElementById(`crown-${gameId}-${i}`).classList.remove('active'); localStorage.setItem(`team-${gameId}-${i}-mvp`, 'false'); }
-        crown.classList.add('active'); localStorage.setItem(`team-${gameId}-${num}-mvp`, 'true');
-    }
+    if (crown.classList.contains('active')) { crown.classList.remove('active'); localStorage.setItem(`team-${gameId}-${num}-mvp`, 'false'); } 
+    else { for(let i=1; i<=6; i++) { document.getElementById(`crown-${gameId}-${i}`).classList.remove('active'); localStorage.setItem(`team-${gameId}-${i}-mvp`, 'false'); } crown.classList.add('active'); localStorage.setItem(`team-${gameId}-${num}-mvp`, 'true'); }
 }
-
 async function addExtraPokemon(gameId, type) {
-    const input = document.getElementById(`${type}-${gameId}-input`); 
-    const query = input.value.toLowerCase().trim();
+    const input = document.getElementById(`${type}-${gameId}-input`); const query = input.value.toLowerCase().trim();
     if (!query) return;
-
     let pokemonId = query;
     if (isNaN(query)) {
         try {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query}`);
-            if (response.ok) {
-                const data = await response.json();
-                pokemonId = data.id;
-            } else {
-                alert("❌ Pokémon introuvable ! Vérifie l'orthographe (en anglais)."); return;
-            }
+            if (response.ok) { const data = await response.json(); pokemonId = data.id; } 
+            else { alert("❌ Pokémon introuvable ! Vérifie l'orthographe (en anglais)."); return; }
         } catch (e) { return; }
     }
-
     if (!pokemonId || pokemonId <= 0 || pokemonId > 1025) return;
-    
-    let list = JSON.parse(localStorage.getItem(`${type}-list-${gameId}`)) || []; 
-    list.push(pokemonId);
-    localStorage.setItem(`${type}-list-${gameId}`, JSON.stringify(list)); 
-    input.value = ''; 
-    loadExtraPokemon(gameId, type);
+    let list = JSON.parse(localStorage.getItem(`${type}-list-${gameId}`)) || []; list.push(pokemonId);
+    localStorage.setItem(`${type}-list-${gameId}`, JSON.stringify(list)); input.value = ''; loadExtraPokemon(gameId, type);
 }
-
 function loadExtraPokemon(gameId, type) {
     const container = document.getElementById(`${type}-container-${gameId}`); container.innerHTML = '';
     let list = JSON.parse(localStorage.getItem(`${type}-list-${gameId}`)) || [];
     list.forEach((pokeId, index) => {
         const img = document.createElement('img'); img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokeId}.png`; img.className = 'extra-sprite';
-        if (type === 'grave') {
-            const deathNote = localStorage.getItem(`grave-note-${gameId}-${index}`) || "Cause inconnue. Clic Droit pour ajouter une note.";
-            img.title = `${deathNote} (Double-clic pour supprimer)`;
-            img.oncontextmenu = (e) => { e.preventDefault(); addDeathNote(gameId, index); }; 
-        } else {
-            img.title = "Double-cliquez pour supprimer";
-        }
+        if (type === 'grave') { const deathNote = localStorage.getItem(`grave-note-${gameId}-${index}`) || "Cause inconnue. Clic Droit pour ajouter une note."; img.title = `${deathNote} (Double-clic pour supprimer)`; img.oncontextmenu = (e) => { e.preventDefault(); addDeathNote(gameId, index); }; } 
+        else { img.title = "Double-cliquez pour supprimer"; }
         img.ondblclick = () => removeExtraPokemon(gameId, type, index); container.appendChild(img);
     });
 }
-
-function addDeathNote(gameId, index) {
-    const currentNote = localStorage.getItem(`grave-note-${gameId}-${index}`) || "";
-    const newNote = prompt("✍️ Racontez la cause du décès de ce Pokémon :", currentNote);
-    if (newNote !== null) { localStorage.setItem(`grave-note-${gameId}-${index}`, newNote); loadExtraPokemon(gameId, 'grave'); }
-}
-
+function addDeathNote(gameId, index) { const currentNote = localStorage.getItem(`grave-note-${gameId}-${index}`) || ""; const newNote = prompt("✍️ Racontez la cause du décès de ce Pokémon :", currentNote); if (newNote !== null) { localStorage.setItem(`grave-note-${gameId}-${index}`, newNote); loadExtraPokemon(gameId, 'grave'); } }
 function removeExtraPokemon(gameId, type, index) {
     let list = JSON.parse(localStorage.getItem(`${type}-list-${gameId}`)) || []; list.splice(index, 1);
     localStorage.setItem(`${type}-list-${gameId}`, JSON.stringify(list));
-    if(type === 'grave') {
-        for(let i = index; i < list.length; i++) {
-            let nextNote = localStorage.getItem(`grave-note-${gameId}-${i+1}`);
-            if (nextNote) localStorage.setItem(`grave-note-${gameId}-${i}`, nextNote); else localStorage.removeItem(`grave-note-${gameId}-${i}`);
-        }
-        localStorage.removeItem(`grave-note-${gameId}-${list.length}`);
-    }
+    if(type === 'grave') { for(let i = index; i < list.length; i++) { let nextNote = localStorage.getItem(`grave-note-${gameId}-${i+1}`); if (nextNote) localStorage.setItem(`grave-note-${gameId}-${i}`, nextNote); else localStorage.removeItem(`grave-note-${gameId}-${i}`); } localStorage.removeItem(`grave-note-${gameId}-${list.length}`); }
     loadExtraPokemon(gameId, type);
 }
-
 function clearExtra(gameId, type) { if(confirm("Es-tu sûr de vouloir vider cette boîte ?")) { localStorage.removeItem(`${type}-list-${gameId}`); loadExtraPokemon(gameId, type); } }
 // ==========================================
 // 12. ROULETTE DE SHASSE ALÉATOIRE (CIBLES INÉDITES)

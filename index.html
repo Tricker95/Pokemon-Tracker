@@ -123,22 +123,32 @@
 
         <section id="hof-section" style="display: none;">
             <h2>Mon Hall of Fame (Nuzlockes & Pokédex)</h2>
-            
-            <h3 style="margin-top: 30px; border-bottom: 3px solid var(--accent-blue); padding-bottom: 10px;">🎮 Jeux de la Licence Principale</h3>
-            <div id="hof-official-grid" class="hof-grid">
-                </div>
 
-            <h3 style="margin-top: 50px; border-bottom: 3px solid var(--accent-orange); padding-bottom: 10px;">👾 Hackroms & Fan Games</h3>
-            
-            <div style="margin-bottom: 25px; display: flex; gap: 10px; flex-wrap: wrap;">
-                <input type="text" id="new-hackrom-name" placeholder="Nom de la Hackrom (ex: Radical Red)..." style="flex-grow: 1; max-width: 400px; padding: 12px; border-radius: 8px; border: 2px solid #eee; font-family: 'Plus Jakarta Sans', sans-serif;">
-                <button onclick="addHackrom()" style="background-color: var(--accent-orange); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;">
-                    + Ajouter ce jeu
+            <div style="display: flex; justify-content: center; gap: 10px; margin: 25px 0; flex-wrap: wrap;">
+                <button id="tab-official" onclick="showHofTab('official')" style="background-color: var(--accent-blue); color: white; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 900; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s;">
+                    🎮 Jeux Officiels
+                </button>
+                <button id="tab-hackrom" onclick="showHofTab('hackrom')" style="background-color: rgba(0,0,0,0.1); color: var(--text-color); border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: background 0.2s;">
+                    👾 Hackroms & Fan Games
                 </button>
             </div>
+            
+            <div id="hof-official-content">
+                <div id="hof-official-grid" class="hof-grid">
+                    </div>
+            </div>
 
-            <div id="hof-hackrom-grid" class="hof-grid">
+            <div id="hof-hackrom-content" style="display: none;">
+                <div style="margin-bottom: 25px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="text" id="new-hackrom-name" placeholder="Nom de la Hackrom (ex: Radical Red)..." style="flex-grow: 1; max-width: 400px; padding: 12px; border-radius: 8px; border: 2px solid #eee; font-family: 'Plus Jakarta Sans', sans-serif;">
+                    <button onclick="addHackrom()" style="background-color: var(--accent-orange); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;">
+                        + Ajouter ce jeu
+                    </button>
                 </div>
+
+                <div id="hof-hackrom-grid" class="hof-grid">
+                    </div>
+            </div>
         </section>
         <div id="random-hunt-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
             <div style="background: var(--card-bg); padding: 40px; border-radius: var(--radius); text-align: center; width: 90%; max-width: 350px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 4px solid #9b59b6; position: relative;">
