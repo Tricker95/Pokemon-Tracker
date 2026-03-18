@@ -16,9 +16,9 @@
 
 /* THÈME SOMBRE (DARK MODE) */
 body.dark-mode {
-    --bg-color: #121225; /* Bleu nuit très sombre */
-    --text-color: #e0e0e0; /* Texte clair */
-    --card-bg: #1a1a30; /* Cartes un peu moins sombres */
+    --bg-color: #121225;
+    --text-color: #e0e0e0;
+    --card-bg: #1a1a30;
     --shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
@@ -48,192 +48,103 @@ header {
 
 header h1 { margin: 0 0 15px 0; font-size: 28px; }
 
+nav { display: flex; justify-content: center; align-items: center; gap: 15px; }
+
 nav button {
-    padding: 10px 25px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.15);
-    color: white;
-    border: 2px solid white;
-    border-radius: 50px;
-    transition: all 0.2s ease;
+    padding: 10px 25px; font-size: 15px; font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.15); color: white;
+    border: 2px solid white; border-radius: 50px; transition: all 0.2s ease;
 }
 
-nav button:hover {
-    background-color: white;
-    color: var(--pokedex-red);
-    transform: translateY(-2px);
-}
+nav button:hover { background-color: white; color: var(--pokedex-red); transform: translateY(-2px); }
+
 /* Bouton Mode Sombre en icône ronde */
 .theme-icon-btn {
-    width: 45px;
-    height: 45px;
-    padding: 0 !important; /* Annule le padding par défaut des boutons */
-    margin-left: 15px;
-    border-radius: 50% !important; /* Cercle parfait */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px !important; /* Icône plus grande */
-    background-color: #2c3e50;
-    border-color: #2c3e50;
+    width: 45px; height: 45px; padding: 0 !important;
+    border-radius: 50% !important; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 22px !important; background-color: #2c3e50; border-color: #2c3e50;
 }
 
-main {
-    padding: 20px 40px;
-    max-width: 1300px;
-    margin: 0 auto;
-}
+main { padding: 20px 40px; max-width: 1300px; margin: 0 auto; }
 
 /* ==========================================
-   2. SHINY TRACKER (Grille et Cartes)
+   2. RECHERCHE ET GESTION DES DONNÉES
    ========================================== */
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 25px;
-    margin-top: 25px;
+.data-management { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; align-items: center; }
+
+.btn-save, .btn-load {
+    font-family: 'Plus Jakarta Sans', sans-serif; color: white; padding: 10px 20px;
+    border: none; border-radius: 50px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: all 0.2s ease;
 }
+.btn-save { background-color: var(--accent-green); }
+.btn-save:hover { background-color: #27ae60; transform: translateY(-2px); }
+.btn-load { background-color: var(--accent-orange); }
+.btn-load:hover { background-color: #e67e22; transform: translateY(-2px); }
+
+.search-bar { background-color: var(--card-bg); padding: 8px 15px; border-radius: 50px; box-shadow: var(--shadow); display: flex; align-items: center; }
+.search-bar label { font-weight: bold; margin-right: 10px; color: var(--text-color); }
+.search-bar input { padding: 8px 15px; width: 200px; border: 2px solid #eee; border-radius: 50px; font-family: 'Plus Jakarta Sans', sans-serif; outline: none; background: transparent; color: var(--text-color); }
+.search-bar input:focus { border-color: var(--accent-blue); }
+
+.btn-search { padding: 8px 15px; background-color: var(--pokedex-red); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin-left: 10px; font-family: 'Plus Jakarta Sans', sans-serif; }
+.btn-reset { padding: 8px 15px; background-color: #95a5a6; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin-left: 5px; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* ==========================================
+   3. SHINY TRACKER (Grille et Cartes)
+   ========================================== */
+.grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 25px; margin-top: 25px; }
 
 .pokemon-card {
-    background-color: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 25px 20px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 2px solid transparent;
+    background-color: var(--card-bg); border-radius: var(--radius); padding: 25px 20px;
+    text-align: center; box-shadow: var(--shadow); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid transparent;
 }
-
-.pokemon-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    border-color: #eee;
-}
-
-/* Ajustement spécifique Dark Mode pour le hover des cartes */
-body.dark-mode .pokemon-card:hover {
-    border-color: #2c2c4a;
-}
+.pokemon-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); border-color: #eee; }
+body.dark-mode .pokemon-card:hover { border-color: #2c2c4a; }
 
 .pokemon-card img {
-    width: 100px;
-    height: 100px;
-    background-color: rgba(0,0,0,0.03);
-    border-radius: 50%;
-    padding: 10px;
-    margin-bottom: 15px;
-    transition: filter 0.3s ease;
+    width: 100px; height: 100px; background-color: rgba(0,0,0,0.03);
+    border-radius: 50%; padding: 10px; margin-bottom: 15px; transition: filter 0.3s ease;
 }
+.not-caught { filter: grayscale(100%) opacity(30%); }
+.pokemon-card h3 { font-size: 17px; margin: 0 0 10px 0; font-weight: 800; }
 
-/* Filtre gris pour les Pokémon non capturés */
-.not-caught {
-    filter: grayscale(100%) opacity(30%);
-}
-
-.pokemon-card h3 {
-    font-size: 17px;
-    margin: 0 0 10px 0;
-    color: var(--text-color);
-    font-weight: 800;
-}
-
-/* Inputs modernes (Nombres et Surnoms) */
 input[type="number"], input[type="text"] {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    padding: 10px;
-    border: 2px solid #eee;
-    border-radius: 12px;
-    outline: none;
-    transition: all 0.2s;
-    background-color: #f9f9f9;
+    font-family: 'Plus Jakarta Sans', sans-serif; padding: 10px; border: 2px solid #eee;
+    border-radius: 12px; outline: none; transition: all 0.2s; background-color: #f9f9f9; color: var(--text-color);
 }
+input[type="number"]:focus, input[type="text"]:focus { border-color: var(--accent-blue); background-color: transparent; }
 
-input[type="number"]:focus, input[type="text"]:focus {
-    border-color: var(--accent-blue);
-    background-color: white;
-}
-
-/* ==========================================
-   3. MENUS DÉROULANTS (Hunt Selects)
-   ========================================== */
 .hunt-select {
-    width: 100%;
-    padding: 8px;
-    border: 2px solid #eee;
-    border-radius: 10px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
-    outline: none;
-    background-color: #f9f9f9;
-    color: var(--text-color);
-    box-sizing: border-box;
-    cursor: pointer;
+    width: 100%; padding: 8px; border: 2px solid #eee; border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; outline: none;
+    background-color: #f9f9f9; color: var(--text-color); box-sizing: border-box; cursor: pointer;
 }
+.hunt-select:focus { border-color: var(--accent-orange); }
 
-.hunt-select:focus {
-    border-color: var(--accent-orange);
-}
-
-/* Ajustements inputs/selects pour le Dark Mode */
-body.dark-mode input, body.dark-mode select {
-    background-color: #121225;
-    border-color: #2c2c4a;
-    color: white;
-}
-body.dark-mode input:focus, body.dark-mode select:focus {
-    background-color: #1a1a30;
-}
+body.dark-mode input, body.dark-mode select { background-color: #121225; border-color: #2c2c4a; }
+body.dark-mode input:focus, body.dark-mode select:focus { background-color: #1a1a30; }
 
 /* ==========================================
    4. BOUTONS DE GÉNÉRATIONS
    ========================================== */
 .gen-buttons { margin-bottom: 30px; text-align: center; }
-
 .gen-buttons button {
-    padding: 10px 22px;
-    margin: 5px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: var(--card-bg);
-    color: var(--text-color);
-    border: 2px solid #eee;
-    border-radius: 50px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: all 0.2s ease;
-    font-size: 14px;
+    padding: 10px 22px; margin: 5px; font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--card-bg); color: var(--text-color); border: 2px solid #eee;
+    border-radius: 50px; cursor: pointer; font-weight: 700; transition: all 0.2s ease; font-size: 14px;
 }
+.gen-buttons button:hover { background-color: var(--text-color) !important; color: white !important; border-color: var(--text-color) !important; transform: scale(1.05); }
 
-.gen-buttons button:hover {
-    background-color: var(--text-color);
-    color: white;
-    transform: scale(1.05);
-}
+.special-forms-container { width: 100%; display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.special-forms-container button { font-size: 13px; }
 
 /* ==========================================
-   5. TABLEAU DE BORD (Statistiques)
+   5. TABLEAU DE BORD ET SHASSE EN DIRECT
    ========================================== */
-.dashboard-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 35px;
-    flex-wrap: wrap;
-}
+.dashboard-container { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 35px; flex-wrap: wrap; }
 
-.stat-card {
-    flex: 1;
-    min-width: 250px;
-    color: white;
-    padding: 25px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
+.stat-card { flex: 1; min-width: 250px; color: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; transition: transform 0.3s ease; }
 .stat-card h4 { margin: 0 0 10px 0; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
 .stat-card p { margin: 0; font-size: 32px; font-weight: 900; letter-spacing: -1px; }
 
@@ -241,40 +152,30 @@ body.dark-mode input:focus, body.dark-mode select:focus {
 .encounter-stat { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
 .longest-stat { background: linear-gradient(135deg, #e74c3c, #c0392b); }
 
-/* ==========================================
-   6. MODULE CLICKER (Shasse en direct)
-   ========================================== */
-.btn-clicker {
-    background-color: var(--accent-green);
-    color: white;
-    border: none;
-    padding: 20px 50px;
-    border-radius: 50px;
-    font-size: 26px;
-    font-weight: 900;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    cursor: pointer;
-    box-shadow: 0 6px 0 #27ae60;
-    transition: all 0.1s ease;
-}
+.live-hunt-container { background: var(--card-bg); padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 30px; text-align: center; border: 4px solid var(--accent-blue); }
+.live-hunt-container h2 { margin-top: 0; color: var(--accent-blue); font-weight: 900; }
+.live-hunt-content { display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; margin-top: 20px; }
+.live-hunt-info { flex: 1; min-width: 200px; }
+.live-hunt-info img { width: 150px; height: 150px; background: var(--bg-color); border-radius: 50%; padding: 10px; border: 4px solid #eee; }
+.live-hunt-info h3 { font-size: 28px; margin: 10px 0 5px 0; font-weight: 800; }
+.live-hunt-info p#live-hunt-nickname { font-style: italic; color: #888; margin: 0 0 10px 0; }
+.live-hunt-info p#live-hunt-odds { font-weight: bold; color: var(--accent-orange); font-size: 18px; background: rgba(243, 156, 18, 0.1); padding: 5px 10px; border-radius: 50px; display: inline-block; }
 
-.btn-clicker:active {
-    transform: translateY(3px);
-    box-shadow: 0 3px 0 #27ae60;
-}
+.live-hunt-actions { flex: 1; min-width: 250px; display: flex; flex-direction: column; align-items: center; border-left: 2px solid #eee; padding-left: 40px; }
+body.dark-mode .live-hunt-actions { border-color: #2c2c4a; }
+.live-hunt-actions p { font-size: 18px; color: #666; margin-bottom: 5px; font-weight: bold; }
+.live-hunt-actions div { font-size: 80px; font-weight: 900; margin-bottom: 20px; font-family: monospace; letter-spacing: -2px; }
+
+.btn-clicker { background-color: var(--accent-green); color: white; border: none; padding: 20px 50px; border-radius: 50px; font-size: 26px; font-weight: 900; font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; box-shadow: 0 6px 0 #27ae60; transition: all 0.1s ease; }
+.btn-clicker:active { transform: translateY(3px); box-shadow: 0 3px 0 #27ae60; }
+.btn-close-hunt { margin-top: 25px; background: transparent; color: #999; border: none; text-decoration: underline; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; }
 
 /* ==========================================
-   7. HALL OF FAME
+   6. HALL OF FAME ET NUZLOCKE
    ========================================== */
 .hof-grid { display: flex; flex-direction: column; gap: 30px; }
 
-.game-card {
-    background-color: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 30px;
-    box-shadow: var(--shadow);
-}
-
+.game-card { background-color: var(--card-bg); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); }
 .game-title { font-size: 26px; font-weight: 900; border-bottom: 3px solid #eee; padding-bottom: 12px; margin-bottom: 25px; letter-spacing: -1px; }
 body.dark-mode .game-title { border-color: #2c2c4a; }
 
@@ -285,32 +186,11 @@ body.dark-mode .game-title { border-color: #2c2c4a; }
     border-radius: 50%; border: 3px solid #eee; object-fit: contain; transition: transform 0.3s ease;
 }
 .team-member img:hover { transform: scale(1.1) rotate(5deg); border-color: var(--accent-blue); }
+body.dark-mode .team-member img { border-color: #2c2c4a; }
 
-.extra-container {
-    min-height: 70px; background-color: rgba(0,0,0,0.02);
-    padding: 15px; border-radius: 15px; border: 2px dashed #ccc; gap: 10px;
-}
+.extra-container { min-height: 70px; background-color: rgba(0,0,0,0.02); padding: 15px; border-radius: 15px; border: 2px dashed #ccc; gap: 10px; }
 body.dark-mode .extra-container { background-color: rgba(255,255,255,0.02); border-color: #444; }
 
 .extra-sprite { width: 60px; height: 60px; cursor: pointer; transition: transform 0.2s; }
 .extra-sprite:hover { transform: scale(1.2) translateY(-5px); }
 .graveyard .extra-sprite { filter: grayscale(100%) opacity(50%); }
-
-/* ==========================================
-   8. GESTION DES DONNÉES
-   ========================================== */
-.data-management { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; align-items: center; }
-
-.btn-save, .btn-load {
-    font-family: 'Plus Jakarta Sans', sans-serif; color: white; padding: 12px 25px;
-    border: none; border-radius: 50px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: all 0.2s ease;
-}
-.btn-save { background-color: var(--accent-green); }
-.btn-save:hover { background-color: #27ae60; transform: translateY(-2px); }
-
-.btn-load { background-color: var(--accent-orange); }
-.btn-load:hover { background-color: #e67e22; transform: translateY(-2px); }
-
-/* Barre de recherche spécifique pour Dark Mode */
-body.dark-mode .search-bar { background-color: #1a1a30 !important; }
-body.dark-mode .search-bar label { color: #aaa !important; }

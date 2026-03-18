@@ -24,92 +24,31 @@
 
     <main>
         <div class="data-management">
-            <button onclick="exportData()" class="btn-save">💾 Sauvegarder mes données (.json)</button>
-            <button onclick="importData()" class="btn-load">📂 Charger une sauvegarde</button>
+            <button onclick="exportData()" class="btn-save">💾 Sauvegarder (.json)</button>
+            <button onclick="importData()" class="btn-load">📂 Charger</button>
             
-            <div class="search-bar" style="margin-left: 20px; background-color: white; padding: 10px 15px; border-radius: 50px; box-shadow: var(--shadow); display: inline-block;">
-                <label style="font-weight: bold; margin-right: 10px; color: #333;">🔍</label>
-                <input type="text" id="search-shiny-input" placeholder="Nom (anglais) ou ID..." onkeypress="if(event.key === 'Enter') searchShiny()" style="padding: 8px; width: 200px; border: 1px solid #ccc; border-radius: 50px; font-family: 'Plus Jakarta Sans', sans-serif;">
-                <button onclick="searchShiny()" style="padding: 8px 15px; background-color: var(--pokedex-red); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin-left: 5px; font-family: 'Plus Jakarta Sans', sans-serif;">Chercher</button>
-                <button onclick="resetSearch()" style="padding: 8px 15px; background-color: #95a5a6; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin-left: 5px; font-family: 'Plus Jakarta Sans', sans-serif;">❌</button>
+            <div class="search-bar">
+                <label>🔍</label>
+                <input type="text" id="search-shiny-input" placeholder="Nom (anglais) ou ID..." onkeypress="if(event.key === 'Enter') searchShiny()">
+                <button onclick="searchShiny()" class="btn-search">Chercher</button>
+                <button onclick="resetSearch()" class="btn-reset">❌</button>
             </div>
         </div>
 
         <section id="shiny-section">
             
-            <div id="live-hunt-module" style="display: none; background: var(--card-bg); padding: 30px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 30px; text-align: center; border: 4px solid var(--accent-blue);">
-                <h2 style="margin-top: 0; color: var(--accent-blue); font-weight: 900;">🔴 Shasse en cours</h2>
+            <div id="live-hunt-module" class="live-hunt-container" style="display: none;">
+                <h2>🔴 Shasse en cours</h2>
                 
-                <div style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; margin-top: 20px;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <img id="live-hunt-img" src="" style="width: 150px; height: 150px; background: var(--bg-color); border-radius: 50%; padding: 10px; border: 4px solid #eee;">
-                        <h3 id="live-hunt-name" style="font-size: 28px; margin: 10px 0 5px 0; font-weight: 800;">Nom</h3>
-                        <p id="live-hunt-nickname" style="font-style: italic; color: #888; margin: 0 0 10px 0;">(Surnom)</p>
-                        <p id="live-hunt-odds" style="font-weight: bold; color: var(--accent-orange); font-size: 18px; background: rgba(243, 156, 18, 0.1); padding: 5px 10px; border-radius: 50px; display: inline-block;">Probabilité : ?</p>
+                <div class="live-hunt-content">
+                    <div class="live-hunt-info">
+                        <img id="live-hunt-img" src="">
+                        <h3 id="live-hunt-name">Nom</h3>
+                        <p id="live-hunt-nickname">(Surnom)</p>
+                        <p id="live-hunt-odds">Probabilité : ?</p>
                     </div>
 
-                    <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; align-items: center; border-left: 2px solid #eee; padding-left: 40px;">
-                        <p style="font-size: 18px; color: #666; margin-bottom: 5px; font-weight: bold;">Rencontres / Resets</p>
-                        <div id="live-hunt-counter" style="font-size: 80px; font-weight: 900; margin-bottom: 20px; color: var(--text-color); font-family: monospace; letter-spacing: -2px;">0</div>
-                        
-                        <button onclick="incrementLiveHunt()" class="btn-clicker">
-                            +1 RENCONTRE
-                        </button>
-                    </div>
-                </div>
-                
-                <button onclick="closeLiveHunt()" style="margin-top: 25px; background: transparent; color: #999; border: none; text-decoration: underline; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;">Annuler la shasse en direct</button>
-            </div>
-
-            <div id="dashboard" class="dashboard-container">
-                <div class="stat-card shiny-stat">
-                    <h4>✨ Total Shiny</h4>
-                    <p id="stat-total-shiny">0</p>
-                </div>
-                <div class="stat-card encounter-stat">
-                    <h4>🎲 Total Rencontres</h4>
-                    <p id="stat-total-encounters">0</p>
-                </div>
-                <div class="stat-card longest-stat">
-                    <h4>🏆 Shasse la plus longue</h4>
-                    <p id="stat-longest-hunt">- (0)</p>
-                </div>
-            </div>
-
-            <h2 id="gen-title">Génération 1 (Kanto)</h2>
-            
-            <div class="gen-buttons">
-                <button onclick="loadGeneration(151, 0, 'Kanto', 1)" style="background-color: var(--pokedex-red); color: white; border: none;">Gen 1</button>
-                <button onclick="loadGeneration(100, 151, 'Johto', 2)" style="background-color: #f1c40f;">Gen 2</button>
-                <button onclick="loadGeneration(135, 251, 'Hoenn', 3)" style="background-color: #2ecc71;">Gen 3</button>
-                <button onclick="loadGeneration(107, 386, 'Sinnoh', 4)" style="background-color: #3498db;">Gen 4</button>
-                <button onclick="loadGeneration(156, 493, 'Unys', 5)" style="background-color: #9b59b6;">Gen 5</button>
-                <button onclick="loadGeneration(72, 649, 'Kalos', 6)" style="background-color: #ff9f43;">Gen 6</button>
-                <button onclick="loadGeneration(88, 721, 'Alola', 7)" style="background-color: #ff6b6b;">Gen 7</button>
-                <button onclick="loadGeneration(96, 809, 'Galar', 8)" style="background-color: #222f3e;">Gen 8</button>
-                <button onclick="loadGeneration(120, 905, 'Paldea', 9)" style="background-color: #00d2d3;">Gen 9</button>
-                
-                <div style="width: 100%; display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
-                    <button onclick="loadCustomList('Formes d\'Alola', specialForms.alola)" style="background-color: #f39c12; color: white; border: none; font-size: 13px;">🌴 Alola</button>
-                    <button onclick="loadCustomList('Formes de Galar', specialForms.galar)" style="background-color: #e74c3c; color: white; border: none; font-size: 13px;">🚂 Galar</button>
-                    <button onclick="loadCustomList('Formes de Hisui', specialForms.hisui)" style="background-color: #8B4513; color: white; border: none; font-size: 13px;">🪵 Hisui</button>
-                    <button onclick="loadCustomList('Formes de Paldea', specialForms.paldea)" style="background-color: #9b59b6; color: white; border: none; font-size: 13px;">🍇 Paldea</button>
-                    <button onclick="loadCustomList('Formes Spéciales', specialForms.speciales)" style="background-color: #34495e; color: white; border: none; font-size: 13px;">✨ Spéciales</button>
-                </div>
-            </div>
-
-            <div id="pokedex-grid" class="grid-container">
-                </div>
-        </section>
-
-        <section id="hof-section" style="display: none;">
-            <h2>Mon Hall of Fame (Nuzlockes & Pokédex)</h2>
-            <div id="hof-grid" class="hof-grid">
-                </div>
-        </section>
-
-    </main>
-
-    <script src="script.js"></script>
-</body>
-</html>
+                    <div class="live-hunt-actions">
+                        <p>Rencontres / Resets</p>
+                        <div id="live-hunt-counter">0</div>
+                        <button onclick="incrementLiveHunt()" class="btn-clicker">+1
