@@ -389,26 +389,32 @@ function updateThemeButton(isDark) {
 }
 
 // ==========================================
-// 11. HALL OF FAME (Logique simplifiée)
+// 11. HALL OF FAME (VERSION COMPLÈTE NUZLOCKE)
 // ==========================================
-const gamesList = [
-    { id: 'rbj', name: 'Rouge/Bleu/Jaune', region: 'Kanto' },
-    { id: 'hgss', name: 'HeartGold/SoulSilver', region: 'Johto' },
-    { id: 'oras', name: 'Rubis Oméga/Saphir Alpha', region: 'Hoenn' },
-    { id: 'usul', name: 'Ultra-Soleil/Ultra-Lune', region: 'Alola' },
-    { id: 'ev', name: 'Écarlate/Violet', region: 'Paldea' }
+const nuzlockeGames = [
+    { id: 'gen1', name: 'Kanto (Rouge/Bleu/Jaune/RFVF)' },
+    { id: 'gen2', name: 'Johto (Or/Argent/Cristal/HGSS)' },
+    { id: 'gen3', name: 'Hoenn (Rubis/Saphir/Émeraude/ROSA)' },
+    { id: 'gen4', name: 'Sinnoh (Diamant/Perle/Platine/DEPS)' },
+    { id: 'gen5', name: 'Unys (Noir/Blanc 1 & 2)' },
+    { id: 'gen6', name: 'Kalos (X/Y)' },
+    { id: 'gen7', name: 'Alola (Soleil/Lune/USUL)' },
+    { id: 'gen8', name: 'Galar (Épée/Bouclier)' },
+    { id: 'gen9', name: 'Paldea (Écarlate/Violet)' }
 ];
 
 function loadHallOfFame() {
     const grid = document.getElementById('hof-grid');
     if (grid.innerHTML !== '') return; // Ne pas recharger si déjà fait
     
-    gamesList.forEach(game => {
+    nuzlockeGames.forEach(game => {
         const card = document.createElement('div');
         card.className = 'game-card';
+        
         card.innerHTML = `
-            <div class="game-title">${game.name} (${game.region})</div>
-            <p style="font-size: 14px; color: #666; margin-top:-15px; margin-bottom:20px;">Entrez les IDs de vos Pokémon (ex: 6 pour Dracaufeu)</p>
+            <div class="game-title">${game.name}</div>
+            
+            <h4 style="margin-bottom: 5px;">🏆 Mon Équipe Finale</h4>
             <div class="team-container">
                 ${[1,2,3,4,5,6].map(num => `
                     <div class="team-member">
@@ -417,34 +423,96 @@ function loadHallOfFame() {
                     </div>
                 `).join('')}
             </div>
+
+            <h4 style="margin-top: 25px; margin-bottom: 5px; color: var(--accent-blue);">💻 Boîte PC (Réserve)</h4>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <input type="number" id="pc-${game.id}-input" placeholder="ID du Pokémon..." style="width: 150px;">
+                <button onclick="addExtraPokemon('${game.id}', 'pc')" style="background-color: var(--accent-blue); color: white; border: none; padding: 5px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">Ajouter</button>
+                <button onclick="clearExtra('${game.id}', 'pc')" style="background-color: #95a5a6; color: white; border: none; padding: 5px 15px; border-radius: 8px; cursor: pointer;">Vider</button>
+            </div>
+            <div id="pc-container-${game.id}" class="extra-container"></div>
+
+            <h4 style="margin-top: 25px; margin-bottom: 5px; color: #e74c3c;">🪦 Cimetière (Morts)</h4>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <input type="number" id="grave-${game.id}-input" placeholder="ID du Pokémon..." style="width: 150px;">
+                <button onclick="addExtraPokemon('${game.id}', 'grave')" style="background-color: #e74c3c; color: white; border: none; padding: 5px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">Ajouter</button>
+                <button onclick="clearExtra('${game.id}', 'grave')" style="background-color: #333; color: white; border: none; padding: 5px 15px; border-radius: 8px; cursor: pointer;">Vider</button>
+            </div>
+            <div id="grave-container-${game.id}" class="extra-container graveyard"></div>
         `;
         grid.appendChild(card);
-        // Charger les sprites sauvegardés
+        
+        // Charger les sprites au démarrage
         for(let i=1; i<=6; i++) updateHoFSprite(game.id, i, true);
+        loadExtraPokemon(game.id, 'pc');
+        loadExtraPokemon(game.id, 'grave');
     });
 }
 
 function updateHoFSprite(gameId, memberNum, isInitialLoad = false) {
     const inputId = `team-${gameId}-${memberNum}-id`;
     const imgId = `team-${gameId}-${memberNum}-img`;
-    const pokemonId = document.getElementById(inputId).value;
+    const input = document.getElementById(inputId);
     const img = document.getElementById(imgId);
 
     if (isInitialLoad) {
         const savedId = localStorage.getItem(inputId);
         if (savedId) {
-            document.getElementById(inputId).value = savedId;
+            input.value = savedId;
             img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${savedId}.png`;
         }
         return;
     }
 
+    const pokemonId = input.value;
     if (pokemonId && pokemonId > 0 && pokemonId <= 1025) {
         img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`;
         localStorage.setItem(inputId, pokemonId);
     } else {
         img.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png";
         localStorage.removeItem(inputId);
+    }
+}
+
+function addExtraPokemon(gameId, type) {
+    const input = document.getElementById(`${type}-${gameId}-input`);
+    const id = input.value;
+    if (!id || id <= 0 || id > 1025) return;
+
+    let list = JSON.parse(localStorage.getItem(`${type}-list-${gameId}`)) || [];
+    list.push(id);
+    localStorage.setItem(`${type}-list-${gameId}`, JSON.stringify(list));
+
+    input.value = ''; 
+    loadExtraPokemon(gameId, type);
+}
+
+function loadExtraPokemon(gameId, type) {
+    const container = document.getElementById(`${type}-container-${gameId}`);
+    container.innerHTML = '';
+    let list = JSON.parse(localStorage.getItem(`${type}-list-${gameId}`)) || [];
+
+    list.forEach((pokeId, index) => {
+        const img = document.createElement('img');
+        img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokeId}.png`;
+        img.className = 'extra-sprite';
+        img.title = "Double-cliquez pour supprimer";
+        img.ondblclick = () => removeExtraPokemon(gameId, type, index);
+        container.appendChild(img);
+    });
+}
+
+function removeExtraPokemon(gameId, type, index) {
+    let list = JSON.parse(localStorage.getItem(`${type}-list-${gameId}`)) || [];
+    list.splice(index, 1);
+    localStorage.setItem(`${type}-list-${gameId}`, JSON.stringify(list));
+    loadExtraPokemon(gameId, type);
+}
+
+function clearExtra(gameId, type) {
+    if(confirm("Es-tu sûr de vouloir vider cette boîte ?")) {
+        localStorage.removeItem(`${type}-list-${gameId}`);
+        loadExtraPokemon(gameId, type);
     }
 }
 
