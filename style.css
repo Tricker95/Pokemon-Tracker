@@ -126,12 +126,48 @@ body.dark-mode .extra-container { background-color: rgba(255,255,255,0.02); bord
     nav button { padding: 8px 15px; font-size: 13px; flex-grow: 1; }
     .theme-icon-btn { width: 40px; height: 40px; font-size: 18px !important; flex-grow: 0; }
 
-    /* 3. Sauvegarde et Recherche */
-    .data-management { flex-direction: column; width: 100%; gap: 10px; }
-    .btn-save, .btn-load { width: 100%; box-sizing: border-box; }
-    .search-bar { width: 100%; box-sizing: border-box; flex-wrap: wrap; justify-content: center; gap: 8px; }
-    .search-bar input { width: 100%; margin: 0; flex-grow: 1; }
-    .btn-search, .btn-reset { margin: 0; flex-grow: 1; text-align: center; }
+    /* 3. Sauvegarde et Recherche (Ultra Opti Mobile) */
+    .data-management { 
+        flex-direction: row; /* On repasse en ligne */
+        flex-wrap: wrap; 
+        width: 100%; 
+        gap: 10px; 
+    }
+    
+    /* Boutons côte à côte (50/50) */
+    .btn-save, .btn-load { 
+        flex: 1; 
+        min-width: 130px; 
+        padding: 12px 5px; 
+        font-size: 13px; 
+        margin: 0; 
+        box-sizing: border-box; 
+    }
+
+    /* Barre de recherche format "Pilule" native */
+    .search-bar { 
+        width: 100%; 
+        box-sizing: border-box; 
+        flex-wrap: nowrap !important; /* Force l'alignement sur une seule ligne */
+        padding: 6px 8px; 
+        gap: 5px;
+    }
+    .search-bar label { margin-right: 0; font-size: 16px; }
+    
+    /* L'input s'écrase et prend l'espace restant sans casser la ligne */
+    .search-bar input { 
+        flex-grow: 1; 
+        width: 50px; 
+        min-width: 0; 
+        padding: 8px 5px; 
+        font-size: 14px;
+        border: none; 
+        background: transparent;
+    }
+    
+    /* Boutons de recherche rétrécis pour s'intégrer parfaitement */
+    .btn-search { padding: 8px 12px; font-size: 12px; margin: 0; }
+    .btn-reset { padding: 8px 10px; font-size: 12px; margin: 0; }
 
     /* 4. Tableau de Bord (Stats) */
     .dashboard-container { flex-direction: column; gap: 15px; }
