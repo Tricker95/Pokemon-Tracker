@@ -470,3 +470,88 @@ function removeExtraPokemon(gameId, type, index) {
 }
 
 function clearExtra(gameId, type) { if(confirm("Es-tu sûr de vouloir vider cette boîte ?")) { localStorage.removeItem(`${type}-list-${gameId}`); loadExtraPokemon(gameId, type); } }
+
+// ==========================================
+// 12. ROULETTE DE SHASSE ALÉATOIRE (CIBLES INÉDITES)
+// ==========================================
+
+function openRandomHuntModal() {
+    document.getElementById('random-hunt-modal').style.display = 'flex';
+    generateRandomHunt();
+}
+
+function closeRandomModal() {
+    document.getElementById('random-hunt-modal').style.display = 'none';
+}
+
+async function generateRandomHunt() {
+    const content = document.getElementById('random-hunt-content');
+    const loading = document.getElementById('random-hunt-loading');
+    const errorMsg = document.getElementById('random-hunt-error');
+    const btnAccept = document.getElementById('btn-accept-random');
+    
+    // Animation de chargement
+    content.style.display = 'none';
+    loading.style.display = 'block';
+    errorMsg.style.display = 'none';
+    btnAccept.style.display = 'block';
+    
+    // 1. On scanne le Pokédex pour trouver ceux NON capturés
+    let uncaughtIds = [];
+    for (let i = 1; i <= 1025; i++) {
+        if (localStorage.getItem(`shiny-${i}`) !== 'true') {
+            uncaughtIds.push(i);
+        }
+    }
+    
+    // Sécurité : Si tu as absolument TOUT attrapé (Le rêve !)
+    if (uncaughtIds.length === 0) {
+        loading.style.display = 'none';
+        content.style.display = 'block';
+        document.getElementById('random-hunt-img').src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png";
+        document.getElementById('random-hunt-name').textContent = "Incroyable !";
+        errorMsg.textContent = "Tu as déjà obtenu tous les Shinys du Pokédex !";
+        errorMsg.style.display = 'block';
+        btnAccept.style.display = 'none';
+        return;
+    }
+
+    // 2. Tirage au sort intelligent parmi les ID restants
+    const randomIndex = Math.floor(Math.random() * uncaughtIds.length);
+    const randomId = uncaughtIds[randomIndex];
+    
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+        
+        // 3. Affichage du Pokémon tiré au sort (directement en Shiny pour hyper !)
+        document.getElementById('random-hunt-img').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${data.id}.png`;
+        document.getElementById('random-hunt-name').textContent = `#${data.id} ${capitalized(data.name)}`;
+        
+        // 4. Action si le joueur accepte le défi
+        btnAccept.onclick = () => {
+            closeRandomModal();
+            // On nettoie la grille et on affiche uniquement le Pokémon tiré au sort
+            document.getElementById('gen-title').textContent = "🎯 Défi Aléatoire Accepté !";
+            pokedexGrid.innerHTML = '';
+            createPokemonCard(data.id, data.name);
+            
+            // On lance automatiquement le module de Shasse en Direct !
+            setTimeout(() => {
+                setAsCurrentHunt(data.id, data.name);
+            }, 100);
+        };
+        
+        // Fin du chargement
+        loading.style.display = 'none';
+        content.style.display = 'block';
+        
+        // Petit cri du Pokémon pour l'immersion (optionnel)
+        playCry(data.id);
+        
+    } catch (error) {
+        loading.textContent = 'Erreur réseau...';
+        setTimeout(generateRandomHunt, 1000); // Réessaie si le fetch bugge
+    }
+}

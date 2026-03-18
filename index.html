@@ -91,7 +91,11 @@
                     <p id="stat-longest-hunt">- (0)</p>
                 </div>
             </div>
-
+            <div style="text-align: center; margin-bottom: 25px;">
+                <button onclick="openRandomHuntModal()" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; border: none; padding: 12px 30px; border-radius: 50px; font-size: 16px; font-weight: 900; cursor: pointer; box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4); font-family: 'Plus Jakarta Sans', sans-serif; transition: transform 0.2s;">
+                    🎲 Proposer une Shasse Aléatoire
+                </button>
+            </div>
             <h2 id="gen-title">Génération 1 (Kanto)</h2>
             
             <div class="gen-buttons">
@@ -121,7 +125,31 @@
             <h2>Mon Hall of Fame (Nuzlockes & Pokédex)</h2>
             <div id="hof-grid" class="hof-grid"></div>
         </section>
-
+        <div id="random-hunt-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+            <div style="background: var(--card-bg); padding: 40px; border-radius: var(--radius); text-align: center; width: 90%; max-width: 350px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 4px solid #9b59b6; position: relative;">
+                <h2 style="margin-top: 0; color: #9b59b6; font-weight: 900;">Ta prochaine cible...</h2>
+                
+                <div id="random-hunt-loading" style="font-size: 50px; margin: 30px 0; display: none;">🎲</div>
+                
+                <div id="random-hunt-content">
+                    <img id="random-hunt-img" src="" style="width: 150px; height: 150px; background: rgba(0,0,0,0.05); border-radius: 50%; padding: 15px; margin-bottom: 15px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2));">
+                    <h3 id="random-hunt-name" style="font-size: 26px; margin: 0 0 10px 0; font-weight: 900;">Nom</h3>
+                    <p id="random-hunt-error" style="color: #e74c3c; font-weight: bold; margin-bottom: 15px; display: none;"></p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button id="btn-accept-random" style="background-color: var(--accent-green); color: white; border: none; padding: 15px; border-radius: 50px; font-weight: 900; cursor: pointer; font-size: 16px; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 4px 0 #27ae60;">
+                            🎯 Accepter ce défi !
+                        </button>
+                        <button onclick="generateRandomHunt()" style="background-color: var(--accent-orange); color: white; border: none; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;">
+                            🎲 Relancer
+                        </button>
+                        <button onclick="closeRandomModal()" style="background: transparent; color: #999; border: none; text-decoration: underline; cursor: pointer; margin-top: 10px; font-family: 'Plus Jakarta Sans', sans-serif;">
+                            Fermer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script src="script.js"></script>
