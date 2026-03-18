@@ -295,7 +295,7 @@ function loadTheme() { const isDark = localStorage.getItem('darkMode') === 'true
 function updateThemeButton(isDark) { const btn = document.getElementById('btn-theme'); btn.textContent = isDark ? '☀️' : '🌙'; btn.style.backgroundColor = isDark ? '#f39c12' : '#2c3e50'; btn.style.borderColor = isDark ? '#f39c12' : '#2c3e50'; }
 
 // ==========================================
-// 11. HALL OF FAME V5 (Surnoms, MVP, Épitaphes & RECHERCHE PAR NOM)
+// 11. HALL OF FAME V6 (Hackroms, Recherche, MVP, Épitaphes)
 // ==========================================
 const nuzlockeGames = [
     { id: 'gen1', name: 'Kanto (Rouge/Bleu/Jaune/RFVF)' }, { id: 'gen2', name: 'Johto (Or/Argent/Cristal/HGSS)' },
@@ -306,48 +306,99 @@ const nuzlockeGames = [
 ];
 
 function loadHallOfFame() {
-    const grid = document.getElementById('hof-grid');
-    if (grid.children.length > 0) return; 
-    
-    nuzlockeGames.forEach(game => {
-        const card = document.createElement('div'); card.className = 'game-card';
-        
-        let teamHTML = '';
-        for(let num=1; num<=6; num++) {
-            const savedNick = localStorage.getItem(`team-${game.id}-${num}-nick`) || '';
-            const isMVP = localStorage.getItem(`team-${game.id}-${num}-mvp`) === 'true';
-            const crownClass = isMVP ? 'mvp-crown active' : 'mvp-crown';
-            
-            teamHTML += `
-                <div class="team-member">
-                    <div class="${crownClass}" id="crown-${game.id}-${num}" onclick="toggleMVP('${game.id}', ${num})" title="Élire MVP de la partie">👑</div>
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="team-${game.id}-${num}-img">
-                    <input type="text" id="team-${game.id}-${num}-nick" placeholder="Surnom" value="${savedNick}" oninput="saveHoFNickname('${game.id}', ${num})" style="width: 85px; text-align: center; margin: 8px 0 4px 0; font-size: 11px; font-style: italic; border-radius: 6px; padding: 4px; box-sizing: border-box;">
-                    <input type="text" id="team-${game.id}-${num}-id" placeholder="Nom ou ID" onchange="updateHoFSprite('${game.id}', ${num})" style="width: 85px; text-align: center; border-radius: 6px; padding: 4px; font-size: 11px; box-sizing: border-box;">
-                </div>
-            `;
-        }
-
-        card.innerHTML = `
-            <div class="game-title">${game.name}</div>
-            <h4 style="margin-bottom: 15px;">🏆 Mon Équipe Finale</h4>
-            <div class="team-container" style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: flex-start;">${teamHTML}</div>
-            
-            <h4 style="margin-top: 30px; margin-bottom: 5px; color: var(--accent-blue);">💻 Boîte PC (Réserve)</h4>
-            <div style="display: flex; gap: 10px; margin-bottom: 10px;"><input type="text" id="pc-${game.id}-input" placeholder="Nom ou ID..." style="width: 150px; text-align: center; border-radius: 8px;"><button onclick="addExtraPokemon('${game.id}', 'pc')" style="background-color: var(--accent-blue); color: white; border: none; padding: 5px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">Ajouter</button><button onclick="clearExtra('${game.id}', 'pc')" style="background-color: #95a5a6; color: white; border: none; padding: 5px 15px; border-radius: 8px; cursor: pointer;">Vider</button></div>
-            <div id="pc-container-${game.id}" class="extra-container"></div>
-            
-            <h4 style="margin-top: 25px; margin-bottom: 5px; color: #e74c3c;">🪦 Cimetière (Clic droit = Épitaphe)</h4>
-            <div style="display: flex; gap: 10px; margin-bottom: 10px;"><input type="text" id="grave-${game.id}-input" placeholder="Nom ou ID..." style="width: 150px; text-align: center; border-radius: 8px;"><button onclick="addExtraPokemon('${game.id}', 'grave')" style="background-color: #e74c3c; color: white; border: none; padding: 5px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">Ajouter</button><button onclick="clearExtra('${game.id}', 'grave')" style="background-color: #333; color: white; border: none; padding: 5px 15px; border-radius: 8px; cursor: pointer;">Vider</button></div>
-            <div id="grave-container-${game.id}" class="extra-container graveyard"></div>
-        `;
-        grid.appendChild(card);
-        for(let i=1; i<=6; i++) updateHoFSprite(game.id, i, true);
-        loadExtraPokemon(game.id, 'pc'); loadExtraPokemon(game.id, 'grave');
-    });
+    const officialGrid = document.getElementById('hof-official-grid');
+    // On évite de recharger si les jeux sont déjà affichés
+    if (officialGrid && officialGrid.children.length > 0) return; 
+    renderHallOfFame();
 }
 
-// NOUVEAU : Fonction asynchrone pour gérer la recherche par nom
+function renderHallOfFame() {
+    const officialGrid = document.getElementById('hof-official-grid');
+    const hackromGrid = document.getElementById('hof-hackrom-grid');
+    
+    // On nettoie les grilles avant de les (re)dessiner
+    officialGrid.innerHTML = '';
+    hackromGrid.innerHTML = '';
+
+    // 1. Dessiner les jeux officiels
+    nuzlockeGames.forEach(game => createGameCard(game, officialGrid, false));
+
+    // 2. Dessiner les Hackroms (depuis la sauvegarde)
+    let hackroms = JSON.parse(localStorage.getItem('custom-hackroms')) || [];
+    hackroms.forEach(game => createGameCard(game, hackromGrid, true));
+}
+
+// LE GÉNÉRATEUR DE CARTES UNIVERSEL
+function createGameCard(game, gridElement, isHackrom) {
+    const card = document.createElement('div'); card.className = 'game-card';
+    
+    let teamHTML = '';
+    for(let num=1; num<=6; num++) {
+        const savedNick = localStorage.getItem(`team-${game.id}-${num}-nick`) || '';
+        const isMVP = localStorage.getItem(`team-${game.id}-${num}-mvp`) === 'true';
+        const crownClass = isMVP ? 'mvp-crown active' : 'mvp-crown';
+        
+        teamHTML += `
+            <div class="team-member">
+                <div class="${crownClass}" id="crown-${game.id}-${num}" onclick="toggleMVP('${game.id}', ${num})" title="Élire MVP de la partie">👑</div>
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" id="team-${game.id}-${num}-img">
+                <input type="text" id="team-${game.id}-${num}-nick" placeholder="Surnom" value="${savedNick}" oninput="saveHoFNickname('${game.id}', ${num})" style="width: 85px; text-align: center; margin: 8px 0 4px 0; font-size: 11px; font-style: italic; border-radius: 6px; padding: 4px; box-sizing: border-box;">
+                <input type="text" id="team-${game.id}-${num}-id" placeholder="Nom ou ID" onchange="updateHoFSprite('${game.id}', ${num})" style="width: 85px; text-align: center; border-radius: 6px; padding: 4px; font-size: 11px; box-sizing: border-box;">
+            </div>
+        `;
+    }
+
+    // Le bouton supprimer n'existe QUE pour les Hackroms
+    const deleteBtn = isHackrom ? `<button onclick="deleteHackrom('${game.id}')" style="float: right; background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold; font-family: 'Plus Jakarta Sans', sans-serif;">❌ Supprimer</button>` : '';
+
+    card.innerHTML = `
+        ${deleteBtn}
+        <div class="game-title">${game.name}</div>
+        <h4 style="margin-bottom: 15px;">🏆 Mon Équipe Finale</h4>
+        <div class="team-container" style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: flex-start;">${teamHTML}</div>
+        
+        <h4 style="margin-top: 30px; margin-bottom: 5px; color: var(--accent-blue);">💻 Boîte PC (Réserve)</h4>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;"><input type="text" id="pc-${game.id}-input" placeholder="Nom ou ID..." style="width: 150px; text-align: center; border-radius: 8px; flex-grow: 1;"><button onclick="addExtraPokemon('${game.id}', 'pc')" style="background-color: var(--accent-blue); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">Ajouter</button><button onclick="clearExtra('${game.id}', 'pc')" style="background-color: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">Vider</button></div>
+        <div id="pc-container-${game.id}" class="extra-container"></div>
+        
+        <h4 style="margin-top: 25px; margin-bottom: 5px; color: #e74c3c;">🪦 Cimetière (Clic droit = Épitaphe)</h4>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;"><input type="text" id="grave-${game.id}-input" placeholder="Nom ou ID..." style="width: 150px; text-align: center; border-radius: 8px; flex-grow: 1;"><button onclick="addExtraPokemon('${game.id}', 'grave')" style="background-color: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">Ajouter</button><button onclick="clearExtra('${game.id}', 'grave')" style="background-color: #333; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer;">Vider</button></div>
+        <div id="grave-container-${game.id}" class="extra-container graveyard"></div>
+    `;
+    gridElement.appendChild(card);
+    for(let i=1; i<=6; i++) updateHoFSprite(game.id, i, true);
+    loadExtraPokemon(game.id, 'pc'); loadExtraPokemon(game.id, 'grave');
+}
+
+// NOUVEAU : SYSTÈME D'AJOUT ET SUPPRESSION DE HACKROM
+function addHackrom() {
+    const input = document.getElementById('new-hackrom-name');
+    const name = input.value.trim();
+    if(!name) return; // Ne rien faire si la case est vide
+
+    // Créer un identifiant unique (ex: hackrom-163456789)
+    let hackroms = JSON.parse(localStorage.getItem('custom-hackroms')) || [];
+    const newId = 'hackrom-' + Date.now();
+    hackroms.push({ id: newId, name: name });
+    
+    // Sauvegarder et redessiner l'écran
+    localStorage.setItem('custom-hackroms', JSON.stringify(hackroms));
+    input.value = '';
+    renderHallOfFame(); 
+}
+
+function deleteHackrom(id) {
+    if(confirm("❌ Es-tu sûr de vouloir supprimer cette Hackrom ? Toute son équipe et son cimetière disparaîtront.")) {
+        let hackroms = JSON.parse(localStorage.getItem('custom-hackroms')) || [];
+        hackroms = hackroms.filter(h => h.id !== id); // Retire le jeu de la liste
+        localStorage.setItem('custom-hackroms', JSON.stringify(hackroms));
+        renderHallOfFame(); 
+    }
+}
+
+// --------------------------------------------------------
+// LE RESTE DES FONCTIONS NE CHANGE PAS ! (Recherche, MVP, etc.)
+// --------------------------------------------------------
 async function updateHoFSprite(gameId, memberNum, isInitialLoad = false) {
     const inputId = `team-${gameId}-${memberNum}-id`; 
     const imgId = `team-${gameId}-${memberNum}-img`;
@@ -368,18 +419,16 @@ async function updateHoFSprite(gameId, memberNum, isInitialLoad = false) {
     }
 
     let pokemonId = query;
-    // Si c'est du texte (pas un nombre), on interroge l'API
     if (isNaN(query)) {
         try {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query}`);
             if (response.ok) {
                 const data = await response.json();
                 pokemonId = data.id;
-                input.value = pokemonId; // On remplace le nom par l'ID officiel pour plus de clarté
+                input.value = pokemonId; 
             } else {
                 alert("❌ Pokémon introuvable ! Vérifie l'orthographe (en anglais).");
-                input.value = "";
-                return;
+                input.value = ""; return;
             }
         } catch (e) { return; }
     }
@@ -405,7 +454,6 @@ function toggleMVP(gameId, num) {
     }
 }
 
-// NOUVEAU : Asynchrone pour le PC et le Cimetière
 async function addExtraPokemon(gameId, type) {
     const input = document.getElementById(`${type}-${gameId}-input`); 
     const query = input.value.toLowerCase().trim();
@@ -419,8 +467,7 @@ async function addExtraPokemon(gameId, type) {
                 const data = await response.json();
                 pokemonId = data.id;
             } else {
-                alert("❌ Pokémon introuvable ! Vérifie l'orthographe (en anglais).");
-                return;
+                alert("❌ Pokémon introuvable ! Vérifie l'orthographe (en anglais)."); return;
             }
         } catch (e) { return; }
     }
@@ -470,7 +517,6 @@ function removeExtraPokemon(gameId, type, index) {
 }
 
 function clearExtra(gameId, type) { if(confirm("Es-tu sûr de vouloir vider cette boîte ?")) { localStorage.removeItem(`${type}-list-${gameId}`); loadExtraPokemon(gameId, type); } }
-
 // ==========================================
 // 12. ROULETTE DE SHASSE ALÉATOIRE (CIBLES INÉDITES)
 // ==========================================
