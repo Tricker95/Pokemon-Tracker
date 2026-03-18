@@ -100,3 +100,67 @@ body.dark-mode .extra-container { background-color: rgba(255,255,255,0.02); bord
 .extra-sprite { width: 60px; height: 60px; cursor: pointer; transition: transform 0.2s; }
 .extra-sprite:hover { transform: scale(1.2) translateY(-5px); }
 .graveyard .extra-sprite { filter: grayscale(100%) opacity(50%); }
+
+/* ==========================================
+   📱 ADAPTATION MOBILE (RESPONSIVE)
+   ========================================== */
+@media (max-width: 768px) {
+    /* 1. Marges générales réduites */
+    main { padding: 15px 10px; }
+    header { padding: 15px 10px; }
+    header h1 { font-size: 22px; }
+
+    /* 2. Menu de navigation */
+    nav { flex-wrap: wrap; gap: 8px; }
+    nav button { padding: 8px 15px; font-size: 13px; flex-grow: 1; }
+    .theme-icon-btn { width: 40px; height: 40px; font-size: 18px !important; flex-grow: 0; }
+
+    /* 3. Sauvegarde et Recherche */
+    .data-management { flex-direction: column; width: 100%; gap: 10px; }
+    .btn-save, .btn-load { width: 100%; box-sizing: border-box; }
+    .search-bar { width: 100%; box-sizing: border-box; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .search-bar input { width: 100%; margin: 0; flex-grow: 1; }
+    .btn-search, .btn-reset { margin: 0; flex-grow: 1; text-align: center; }
+
+    /* 4. Tableau de Bord (Stats) */
+    .dashboard-container { flex-direction: column; gap: 15px; }
+    .stat-card { min-width: 100%; padding: 15px; box-sizing: border-box; }
+    .stat-card p { font-size: 28px; }
+
+    /* 5. Boutons des Générations */
+    .gen-buttons button { padding: 8px 12px; font-size: 12px; margin: 3px; }
+    .special-forms-container button { padding: 6px 10px; font-size: 11px; }
+
+    /* 6. Grille des Pokémon et Cartes */
+    .grid-container { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; }
+    .pokemon-card { padding: 15px 10px; }
+    .pokemon-card img { width: 80px; height: 80px; }
+    
+    /* 7. Module Shasse en Direct (Réorganisation verticale) */
+    .live-hunt-container { padding: 15px; }
+    .live-hunt-content { flex-direction: column; gap: 20px; }
+    
+    /* On transforme les barres de séparation verticales en horizontales */
+    .live-hunt-actions { 
+        border-left: none !important; 
+        padding-left: 0 !important; 
+        border-top: 2px dashed #ccc; 
+        padding-top: 20px; 
+        width: 100%; 
+    }
+    body.dark-mode .live-hunt-actions { border-top-color: #2c2c4a; }
+    
+    /* On réduit la taille des compteurs géants */
+    .live-hunt-actions div[id^="live-hunt-"] { font-size: 45px !important; }
+    .btn-clicker { padding: 15px; font-size: 20px; width: 100%; box-sizing: border-box; }
+
+    /* 8. Hall of Fame */
+    .game-card { padding: 15px; }
+    .game-title { font-size: 22px; }
+    .team-container { justify-content: center !important; gap: 10px; }
+    
+    /* Rendre les zones PC/Cimetière plus fluides */
+    .game-card > div[style*="display: flex"] { flex-wrap: wrap; }
+    .game-card > div[style*="display: flex"] input { width: 100% !important; margin-bottom: 5px; }
+    .game-card > div[style*="display: flex"] button { flex-grow: 1; padding: 8px; }
+}
