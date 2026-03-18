@@ -16,7 +16,7 @@ const huntMethods = {
     'MasudaCharme': { name: 'Masuda + Charme', odds: { 8192: 1024, 4096: 512 } },
     'Reset': { name: 'Resets (SR)', odds: { 8192: 8192, 4096: 4096 } },
     'Radar': { name: 'Poké Radar (Chaîne 40)', odds: { 8192: 200, 4096: 200 } },
-    'Peche': { name: 'Pêche à la chaîne', odds: { 8192: 100, 4096: 100 } }, // Taux très variable
+    'Peche': { name: 'Pêche à la chaîne', odds: { 8192: 100, 4096: 100 } },
     'SOS': { name: 'Appel SOS (Chaîne 31+)', odds: { 8192: 315, 4096: 315 } },
     'Massive': { name: 'Apparition Massive (LPA/EV)', odds: { 8192: 158, 4096: 158 } },
     'MassiveCharme': { name: 'Massive + Charme + Sandwich', odds: { 4096: 512 } },
@@ -36,9 +36,9 @@ const specialForms = {
 // 2. INITIALISATION ET NAVIGATION
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    showSection('shiny'); // Afficher le tracker par défaut
-    loadTheme();         // Charger le mode sombre si activé
-    updateDashboard();   // Calculer les stats globales
+    showSection('shiny'); 
+    loadTheme();         
+    updateDashboard();   
 });
 
 function showSection(sectionName) {
@@ -46,7 +46,7 @@ function showSection(sectionName) {
         shinySection.style.display = 'block';
         hofSection.style.display = 'none';
         setActiveButton('btn-shiny');
-        if (pokedexGrid.innerHTML === '') loadGeneration(151, 0, 'Kanto', 1); // Charger Gen 1 si vide
+        if (pokedexGrid.innerHTML === '') loadGeneration(151, 0, 'Kanto', 1); 
     } else {
         shinySection.style.display = 'none';
         hofSection.style.display = 'block';
@@ -59,6 +59,12 @@ function setActiveButton(activeId) {
     document.getElementById('btn-shiny').style.backgroundColor = '';
     document.getElementById('btn-hof').style.backgroundColor = '';
     document.getElementById(activeId).style.backgroundColor = 'rgba(255,255,255,0.4)';
+}
+
+// Outil pratique pour les majuscules
+function capitalized(str) { 
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1); 
 }
 
 // ==========================================
@@ -90,7 +96,7 @@ async function updateDashboard() {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${hardestPokemonId}`);
             if (response.ok) {
                 const data = await response.json();
-                const name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+                const name = capitalized(data.name);
                 longestHuntElement.textContent = `${name} (${maxEncounters})`;
             }
         } catch (e) { console.error(e); }
@@ -105,7 +111,7 @@ async function updateDashboard() {
 async function loadGeneration(limit, offset, name, genNumber) {
     document.getElementById('gen-title').textContent = `Génération ${genNumber} (${name})`;
     pokedexGrid.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">Chargement du Pokédex...</p>';
-    currentHuntId = null; closeLiveHunt(); // Fermer la shasse en cours si on change de gen
+    currentHuntId = null; closeLiveHunt(); 
     
     try {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`);
@@ -136,21 +142,19 @@ async function loadCustomList(listName, pokemonNames) {
 }
 
 // ==========================================
-// 5. CRÉATION DES CARTES POKÉMON (v3.0)
+// 5. CRÉATION DES CARTES POKÉMON
 // ==========================================
 function createPokemonCard(id, name) {
     const card = document.createElement('div');
     card.className = 'pokemon-card';
-    const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+    const capitalizedName = capitalized(name);
 
-    // Récupérer données sauvegardées
     const isShiny = localStorage.getItem(`shiny-${id}`) === 'true'; 
     const savedEncounters = localStorage.getItem(`encounters-${id}`) || '';
     const savedGame = localStorage.getItem(`game-${id}`) || '';
     const savedMethod = localStorage.getItem(`method-${id}`) || '';
     const savedNickname = localStorage.getItem(`nickname-${id}`) || '';
 
-    // Définir image et style
     const imgClass = isShiny ? '' : 'not-caught';
     const imgSrc = isShiny 
         ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`
@@ -205,7 +209,7 @@ function createPokemonCard(id, name) {
 }
 
 // ==========================================
-// 6. INTERACTIONS ET SAUVEGARDE (v3.0)
+// 6. INTERACTIONS ET SAUVEGARDE
 // ==========================================
 function toggleShiny(id) {
     const checkbox = document.getElementById(`shiny-${id}`);
@@ -214,7 +218,7 @@ function toggleShiny(id) {
     if (checkbox.checked) {
         img.classList.remove('not-caught');
         img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`;
-        playCry(id); // Jouer le cri
+        playCry(id); 
     } else {
         img.classList.add('not-caught');
         img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
@@ -225,10 +229,9 @@ function toggleShiny(id) {
 
 function saveEncounters(id) {
     const input = document.getElementById(`encounters-${id}`);
-    if (input.value > 100000) input.value = 100000; // Limite raisonnable
+    if (input.value > 100000) input.value = 100000; 
     localStorage.setItem(`encounters-${id}`, input.value);
     
-    // Synchro si c'est la shasse en cours
     if (currentHuntId === id) {
         document.getElementById('live-hunt-counter').textContent = input.value || 0;
     }
@@ -244,7 +247,6 @@ function saveSelectData(id, type) {
     const val = document.getElementById(`${type}-${id}`).value;
     localStorage.setItem(`${type}-${id}`, val);
     
-    // Synchro probabilités si shasse en cours
     if (currentHuntId === id) {
         const game = document.getElementById(`game-${id}`).value;
         const method = document.getElementById(`method-${id}`).value;
@@ -363,7 +365,7 @@ function importData() {
 }
 
 // ==========================================
-// 10. MODE SOMBRE (DARK MODE)
+// 10. MODE SOMBRE (DARK MODE) EN ICÔNE
 // ==========================================
 function toggleTheme() {
     document.body.classList.toggle('dark-mode');
@@ -380,16 +382,13 @@ function loadTheme() {
 
 function updateThemeButton(isDark) {
     const btn = document.getElementById('btn-theme');
-    // On n'affiche plus que l'emoji
     btn.textContent = isDark ? '☀️' : '🌙';
-    
-    // Changement de couleur du fond
     btn.style.backgroundColor = isDark ? '#f39c12' : '#2c3e50';
     btn.style.borderColor = isDark ? '#f39c12' : '#2c3e50';
 }
 
 // ==========================================
-// 11. HALL OF FAME (VERSION COMPLÈTE NUZLOCKE)
+// 11. HALL OF FAME COMPLET (NUZLOCKE & PC)
 // ==========================================
 const nuzlockeGames = [
     { id: 'gen1', name: 'Kanto (Rouge/Bleu/Jaune/RFVF)' },
@@ -515,6 +514,3 @@ function clearExtra(gameId, type) {
         loadExtraPokemon(gameId, type);
     }
 }
-
-// Outil pratique
-function capitalized(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
