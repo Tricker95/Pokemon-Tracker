@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Tracker Pokémon Pro</title>
+    <title>Mon Tracker Pokémon Pro V4</title>
     
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -49,6 +50,80 @@
                     </div>
 
                     <div class="live-hunt-actions">
-                        <p>Rencontres / Resets</p>
+                        <p>Total Rencontres</p>
                         <div id="live-hunt-counter">0</div>
-                        <button onclick="incrementLiveHunt()" class="btn-clicker">+1
+                        <button onclick="incrementLiveHunt()" class="btn-clicker">+1 RENCONTRE</button>
+                    </div>
+
+                    <div id="live-hunt-chain-container" class="live-hunt-actions" style="display: none; border-left: 2px dashed #ccc; padding-left: 40px;">
+                        <p style="color: var(--accent-orange);">🔥 Chaîne</p>
+                        <div id="live-hunt-chain" style="color: var(--accent-orange);">0</div>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button onclick="incrementChain()" style="background-color: var(--accent-orange); color: white; border: none; padding: 15px 25px; border-radius: 50px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 5px 0 #d35400;">+1 CHAÎNE</button>
+                            <button onclick="breakChain()" style="background-color: #e74c3c; color: white; border: none; padding: 15px 20px; border-radius: 50px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 0 #c0392b;">Briser ❌</button>
+                        </div>
+                    </div>
+
+                    <div class="live-hunt-actions" style="border-left: 2px dashed #ccc; padding-left: 40px;">
+                        <p>⏱️ Chrono</p>
+                        <div id="live-hunt-timer" style="font-size: 50px; font-weight: 900; font-family: monospace; margin-bottom: 20px;">00:00:00</div>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <button id="btn-timer-toggle" onclick="toggleTimer()" style="background-color: var(--accent-blue); color: white; border: none; padding: 12px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s;">▶️ Démarrer</button>
+                            <button onclick="resetTimer()" style="background-color: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold;">🔄 Reset</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="closeLiveHunt()" class="btn-close-hunt">Annuler la shasse en direct</button>
+            </div>
+
+            <div id="dashboard" class="dashboard-container">
+                <div class="stat-card shiny-stat">
+                    <h4>✨ Total Shiny</h4>
+                    <p id="stat-total-shiny">0</p>
+                </div>
+                <div class="stat-card encounter-stat">
+                    <h4>🎲 Total Rencontres</h4>
+                    <p id="stat-total-encounters">0</p>
+                </div>
+                <div class="stat-card longest-stat">
+                    <h4>🏆 Shasse la plus longue</h4>
+                    <p id="stat-longest-hunt">- (0)</p>
+                </div>
+            </div>
+
+            <h2 id="gen-title">Génération 1 (Kanto)</h2>
+            
+            <div class="gen-buttons">
+                <button onclick="loadGeneration(151, 0, 'Kanto', 1)" style="background-color: var(--pokedex-red); color: white; border: none;">Gen 1</button>
+                <button onclick="loadGeneration(100, 151, 'Johto', 2)" style="background-color: #f1c40f;">Gen 2</button>
+                <button onclick="loadGeneration(135, 251, 'Hoenn', 3)" style="background-color: #2ecc71;">Gen 3</button>
+                <button onclick="loadGeneration(107, 386, 'Sinnoh', 4)" style="background-color: #3498db;">Gen 4</button>
+                <button onclick="loadGeneration(156, 493, 'Unys', 5)" style="background-color: #9b59b6;">Gen 5</button>
+                <button onclick="loadGeneration(72, 649, 'Kalos', 6)" style="background-color: #ff9f43;">Gen 6</button>
+                <button onclick="loadGeneration(88, 721, 'Alola', 7)" style="background-color: #ff6b6b;">Gen 7</button>
+                <button onclick="loadGeneration(96, 809, 'Galar', 8)" style="background-color: #222f3e; color: white;">Gen 8</button>
+                <button onclick="loadGeneration(120, 905, 'Paldea', 9)" style="background-color: #00d2d3;">Gen 9</button>
+                
+                <div class="special-forms-container">
+                    <button onclick="loadCustomList('Formes Alola', specialForms.alola)" style="background-color: #f39c12; color: white; border: none;">🌴 Alola</button>
+                    <button onclick="loadCustomList('Formes de Galar', specialForms.galar)" style="background-color: #e74c3c; color: white; border: none;">🚂 Galar</button>
+                    <button onclick="loadCustomList('Formes de Hisui', specialForms.hisui)" style="background-color: #8B4513; color: white; border: none;">🪵 Hisui</button>
+                    <button onclick="loadCustomList('Formes de Paldea', specialForms.paldea)" style="background-color: #9b59b6; color: white; border: none;">🍇 Paldea</button>
+                    <button onclick="loadCustomList('Formes Spéciales', specialForms.speciales)" style="background-color: #34495e; color: white; border: none;">✨ Spéciales</button>
+                </div>
+            </div>
+
+            <div id="pokedex-grid" class="grid-container"></div>
+        </section>
+
+        <section id="hof-section" style="display: none;">
+            <h2>Mon Hall of Fame (Nuzlockes & Pokédex)</h2>
+            <div id="hof-grid" class="hof-grid"></div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
