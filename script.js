@@ -380,7 +380,10 @@ function loadTheme() {
 
 function updateThemeButton(isDark) {
     const btn = document.getElementById('btn-theme');
-    btn.textContent = isDark ? '☀️ Mode Clair' : '🌙 Mode Sombre';
+    // On n'affiche plus que l'emoji
+    btn.textContent = isDark ? '☀️' : '🌙';
+    
+    // Changement de couleur du fond
     btn.style.backgroundColor = isDark ? '#f39c12' : '#2c3e50';
     btn.style.borderColor = isDark ? '#f39c12' : '#2c3e50';
 }
