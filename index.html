@@ -166,8 +166,44 @@
             
             <div id="hof-official-content">
                 <div style="margin-bottom: 25px; display: flex; gap: 10px; flex-wrap: wrap; background: var(--card-bg); padding: 15px; border-radius: var(--radius); box-shadow: var(--shadow); border: 2px dashed var(--accent-blue);">
-                    <select id="new-official-game" style="padding: 10px; border-radius: 8px; border: 2px solid #eee; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: bold; color: var(--text-color); background: var(--bg-color); outline: none;">
-                        <option value="Rouge/Bleu/Jaune">Rouge/Bleu/Jaune</option> <option value="Or/Argent/Cristal">Or/Argent/Cristal</option> <option value="Rubis/Saphir/Émeraude">Rubis/Saphir/Émeraude</option> <option value="Diamant/Perle/Platine">Diamant/Perle/Platine</option> <option value="Noir/Blanc (1 & 2)">Noir/Blanc (1 & 2)</option> <option value="X/Y">X/Y</option> <option value="Soleil/Lune/USUL">Soleil/Lune/USUL</option> <option value="Let's Go Pikachu/Évoli">Let's Go Pikachu/Évoli</option> <option value="Épée/Bouclier">Épée/Bouclier</option> <option value="Légendes Arceus">Légendes Arceus</option> <option value="Écarlate/Violet">Écarlate/Violet</option> <option value="Légendes Z-A">Légendes Z-A</option>
+                    <select id="new-official-game" class="hunt-select" style="max-width: 250px; margin: 0;">
+                        <option value="">Sélectionner un jeu...</option>
+                        <optgroup label="Kanto">
+                            <option value="Rouge">Rouge</option><option value="Bleu">Bleu</option><option value="Jaune">Jaune</option><option value="Rouge Feu">Rouge Feu</option><option value="Vert Feuille">Vert Feuille</option><option value="Let's Go Pikachu">Let's Go Pikachu</option><option value="Let's Go Évoli">Let's Go Évoli</option>
+                        </optgroup>
+                        <optgroup label="Johto">
+                            <option value="Or">Or</option><option value="Argent">Argent</option><option value="Cristal">Cristal</option><option value="HeartGold">HeartGold</option><option value="SoulSilver">SoulSilver</option>
+                        </optgroup>
+                        <optgroup label="Hoenn">
+                            <option value="Rubis">Rubis</option><option value="Saphir">Saphir</option><option value="Émeraude">Émeraude</option><option value="Rubis Oméga">Rubis Oméga</option><option value="Saphir Alpha">Saphir Alpha</option>
+                        </optgroup>
+                        <optgroup label="Sinnoh">
+                            <option value="Diamant">Diamant</option><option value="Perle">Perle</option><option value="Platine">Platine</option><option value="Diamant Étincelant">Diamant Étincelant</option><option value="Perle Scintillante">Perle Scintillante</option>
+                        </optgroup>
+                        <optgroup label="Unys">
+                            <option value="Noir">Noir</option><option value="Blanc">Blanc</option><option value="Noir 2">Noir 2</option><option value="Blanc 2">Blanc 2</option>
+                        </optgroup>
+                        <optgroup label="Kalos">
+                            <option value="X">X</option><option value="Y">Y</option>
+                        </optgroup>
+                        <optgroup label="Alola">
+                            <option value="Soleil">Soleil</option><option value="Lune">Lune</option><option value="Ultra-Soleil">Ultra-Soleil</option><option value="Ultra-Lune">Ultra-Lune</option>
+                        </optgroup>
+                        <optgroup label="Galar">
+                            <option value="Épée">Épée</option><option value="Bouclier">Bouclier</option>
+                        </optgroup>
+                        <optgroup label="Hisui">
+                            <option value="Légendes Arceus">Légendes Arceus</option>
+                        </optgroup>
+                        <optgroup label="Paldea">
+                            <option value="Écarlate">Écarlate</option><option value="Violet">Violet</option>
+                        </optgroup>
+                        <optgroup label="Illumis">
+                            <option value="Légendes Z-A">Légendes Z-A</option>
+                        </optgroup>
+                        <optgroup label="Autres">
+                            <option value="Pokémon GO">Pokémon GO</option>
+                        </optgroup>
                     </select>
                     <input type="text" id="new-official-rule" placeholder="Règles (ex: Hardcore Nuzlocke...)" style="flex-grow: 1; min-width: 200px; padding: 10px; border-radius: 8px; border: 2px solid #eee; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-color); color: var(--text-color); outline: none;">
                     <button onclick="addOfficialRun()" style="background-color: var(--accent-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer;">+ Nouvelle Partie</button>

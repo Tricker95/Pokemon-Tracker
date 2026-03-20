@@ -192,27 +192,42 @@ function createPokemonCard(id, name) {
             <div><label>Date:</label><input type="date" id="date-${id}" value="${sD}" onchange="saveSelect(${id},'date')" class="hunt-select"></div>
             <div><label>Jeu:</label><select id="game-${id}" onchange="saveSelect(${id},'game')" class="hunt-select">
                 <option value="">--</option>
-                <optgroup label="Anciens (1/8192)">
-                    <option value="Rouge/Bleu/Jaune" ${sG==='Rouge/Bleu/Jaune'?'selected':''}>Rouge/Bleu/Jaune</option>
-                    <option value="Or/Argent/Cristal" ${sG==='Or/Argent/Cristal'?'selected':''}>Or/Argent/Cristal</option>
-                    <option value="Rubis/Saphir/Émeraude" ${sG==='Rubis/Saphir/Émeraude'?'selected':''}>Rubis/Saphir/Émeraude</option>
-                    <option value="Rouge Feu/Vert Feuille" ${sG==='Rouge Feu/Vert Feuille'?'selected':''}>Rouge Feu/Vert Feuille</option>
-                    <option value="Diamant/Perle/Platine" ${sG==='Diamant/Perle/Platine'?'selected':''}>Diamant/Perle/Platine</option>
-                    <option value="HG/SS" ${sG==='HG/SS'?'selected':''}>HeartGold/SoulSilver</option>
-                    <option value="Noir/Blanc (1 & 2)" ${sG==='Noir/Blanc (1 & 2)'?'selected':''}>Noir/Blanc (1 & 2)</option>
+                <optgroup label="Kanto">
+                    <option value="Rouge" ${sG==='Rouge'?'selected':''}>Rouge</option><option value="Bleu" ${sG==='Bleu'?'selected':''}>Bleu</option><option value="Jaune" ${sG==='Jaune'?'selected':''}>Jaune</option><option value="Rouge Feu" ${sG==='Rouge Feu'?'selected':''}>Rouge Feu</option><option value="Vert Feuille" ${sG==='Vert Feuille'?'selected':''}>Vert Feuille</option><option value="Let's Go Pikachu" ${sG==="Let's Go Pikachu"?'selected':''}>Let's Go Pikachu</option><option value="Let's Go Évoli" ${sG==="Let's Go Évoli"?'selected':''}>Let's Go Évoli</option>
                 </optgroup>
-                <optgroup label="Récents (1/4096)">
-                    <option value="X/Y" ${sG==='X/Y'?'selected':''}>X/Y</option>
-                    <option value="RO/SA" ${sG==='RO/SA'?'selected':''}>Rubis Oméga/Saphir Alpha</option>
-                    <option value="Soleil/Lune/USUL" ${sG==='Soleil/Lune/USUL'?'selected':''}>Soleil/Lune/USUL</option>
-                    <option value="Let's Go Pikachu/Évoli" ${sG==="Let's Go Pikachu/Évoli"?'selected':''}>Let's Go Pikachu/Évoli</option>
-                    <option value="Épée/Bouclier" ${sG==='Épée/Bouclier'?'selected':''}>Épée/Bouclier</option>
-                    <option value="DEPS" ${sG==='DEPS'?'selected':''}>Diamant É. / Perle S.</option>
+                <optgroup label="Johto">
+                    <option value="Or" ${sG==='Or'?'selected':''}>Or</option><option value="Argent" ${sG==='Argent'?'selected':''}>Argent</option><option value="Cristal" ${sG==='Cristal'?'selected':''}>Cristal</option><option value="HeartGold" ${sG==='HeartGold'?'selected':''}>HeartGold</option><option value="SoulSilver" ${sG==='SoulSilver'?'selected':''}>SoulSilver</option>
+                </optgroup>
+                <optgroup label="Hoenn">
+                    <option value="Rubis" ${sG==='Rubis'?'selected':''}>Rubis</option><option value="Saphir" ${sG==='Saphir'?'selected':''}>Saphir</option><option value="Émeraude" ${sG==='Émeraude'?'selected':''}>Émeraude</option><option value="Rubis Oméga" ${sG==='Rubis Oméga'?'selected':''}>Rubis Oméga</option><option value="Saphir Alpha" ${sG==='Saphir Alpha'?'selected':''}>Saphir Alpha</option>
+                </optgroup>
+                <optgroup label="Sinnoh">
+                    <option value="Diamant" ${sG==='Diamant'?'selected':''}>Diamant</option><option value="Perle" ${sG==='Perle'?'selected':''}>Perle</option><option value="Platine" ${sG==='Platine'?'selected':''}>Platine</option><option value="Diamant Étincelant" ${sG==='Diamant Étincelant'?'selected':''}>Diamant Étincelant</option><option value="Perle Scintillante" ${sG==='Perle Scintillante'?'selected':''}>Perle Scintillante</option>
+                </optgroup>
+                <optgroup label="Unys">
+                    <option value="Noir" ${sG==='Noir'?'selected':''}>Noir</option><option value="Blanc" ${sG==='Blanc'?'selected':''}>Blanc</option><option value="Noir 2" ${sG==='Noir 2'?'selected':''}>Noir 2</option><option value="Blanc 2" ${sG==='Blanc 2'?'selected':''}>Blanc 2</option>
+                </optgroup>
+                <optgroup label="Kalos">
+                    <option value="X" ${sG==='X'?'selected':''}>X</option><option value="Y" ${sG==='Y'?'selected':''}>Y</option>
+                </optgroup>
+                <optgroup label="Alola">
+                    <option value="Soleil" ${sG==='Soleil'?'selected':''}>Soleil</option><option value="Lune" ${sG==='Lune'?'selected':''}>Lune</option><option value="Ultra-Soleil" ${sG==='Ultra-Soleil'?'selected':''}>Ultra-Soleil</option><option value="Ultra-Lune" ${sG==='Ultra-Lune'?'selected':''}>Ultra-Lune</option>
+                </optgroup>
+                <optgroup label="Galar">
+                    <option value="Épée" ${sG==='Épée'?'selected':''}>Épée</option><option value="Bouclier" ${sG==='Bouclier'?'selected':''}>Bouclier</option>
+                </optgroup>
+                <optgroup label="Hisui">
                     <option value="Légendes Arceus" ${sG==='Légendes Arceus'?'selected':''}>Légendes Arceus</option>
-                    <option value="Écarlate/Violet" ${sG==='Écarlate/Violet'?'selected':''}>Écarlate/Violet</option>
+                </optgroup>
+                <optgroup label="Paldea">
+                    <option value="Écarlate" ${sG==='Écarlate'?'selected':''}>Écarlate</option><option value="Violet" ${sG==='Violet'?'selected':''}>Violet</option>
+                </optgroup>
+                <optgroup label="Illumis">
                     <option value="Légendes Z-A" ${sG==='Légendes Z-A'?'selected':''}>Légendes Z-A</option>
                 </optgroup>
-                <optgroup label="Autres"><option value="Pokémon GO" ${sG==='Pokémon GO'?'selected':''}>Pokémon GO</option></optgroup>
+                <optgroup label="Autres">
+                    <option value="Pokémon GO" ${sG==='Pokémon GO'?'selected':''}>Pokémon GO</option>
+                </optgroup>
             </select></div>
             <div><label>Méthode:</label><select id="method-${id}" onchange="saveSelect(${id},'method')" class="hunt-select">
                 <option value="">--</option>
@@ -420,8 +435,20 @@ function loadHallOfFame() { const g = document.getElementById('hof-official-grid
 function renderHallOfFame() {
     const og = document.getElementById('hof-official-grid'); const hg = document.getElementById('hof-hackrom-grid');
     if(og) og.innerHTML = ''; if(hg) hg.innerHTML = '';
-    if(og) nuzlockeGames.forEach(g => createGameCard(g, og, false, false));
+    
+    // RÉTROCOMPATIBILITÉ : On n'affiche les vieux jeux pré-configurés QUE s'ils contiennent des Pokémon.
+    nuzlockeGames.forEach(g => {
+        let hasData = false;
+        for(let i=1; i<=6; i++) { if(localStorage.getItem(`team-${g.id}-${i}-id`)) hasData = true; }
+        let gl = JSON.parse(localStorage.getItem(`grave-list-${g.id}`)) || []; if(gl.length > 0) hasData = true;
+        let pc = JSON.parse(localStorage.getItem(`pc-list-${g.id}`)) || []; if(pc.length > 0) hasData = true;
+        if(hasData) createGameCard(g, og, false, false);
+    });
+    
+    // Affichage des nouvelles parties officielles créées dynamiquement
     let co = JSON.parse(localStorage.getItem('custom-official-runs')) || []; if(og) co.forEach(r => createGameCard(r, og, true, true));
+    
+    // Affichage des Hackroms
     let ch = JSON.parse(localStorage.getItem('custom-hackroms')) || []; if(hg) ch.forEach(h => createGameCard(h, hg, true, false));
 }
 
@@ -483,8 +510,22 @@ function createGameCard(g, grid, isC = false, isOC = false) {
     loadExtra(g.id, 'pc'); loadExtra(g.id, 'grave');
 }
 
-function addOfficialRun() { const s = document.getElementById('new-official-game').value; const r = document.getElementById('new-official-rule').value.trim(); if(!r) return; let c = JSON.parse(localStorage.getItem('custom-official-runs')) || []; c.push({id: 'offrun-' + Date.now(), name: `${s} - ${r}`}); localStorage.setItem('custom-official-runs', JSON.stringify(c)); renderHallOfFame(); checkAchievements(); }
-function deleteOfficialRun(id) { let c = JSON.parse(localStorage.getItem('custom-official-runs')) || []; c = c.filter(r => r.id !== id); localStorage.setItem('custom-official-runs', JSON.stringify(c)); renderHallOfFame(); checkAchievements(); }
+function addOfficialRun() { 
+    const select = document.getElementById('new-official-game');
+    const game = select.value; 
+    if(!game) return; // Empêche l'ajout si rien n'est sélectionné
+    
+    const region = select.options[select.selectedIndex].parentNode.label; // Récupère "Johto", "Kanto", etc.
+    const rule = document.getElementById('new-official-rule').value.trim(); 
+    
+    let c = JSON.parse(localStorage.getItem('custom-official-runs')) || []; 
+    // Format de sauvegarde : "Région - Jeu - Règles"
+    c.push({id: 'offrun-' + Date.now(), name: `${region} - ${game}${rule ? ' - ' + rule : ''}`}); 
+    localStorage.setItem('custom-official-runs', JSON.stringify(c)); 
+    
+    select.value = ''; document.getElementById('new-official-rule').value = '';
+    renderHallOfFame(); checkAchievements(); 
+}function deleteOfficialRun(id) { let c = JSON.parse(localStorage.getItem('custom-official-runs')) || []; c = c.filter(r => r.id !== id); localStorage.setItem('custom-official-runs', JSON.stringify(c)); renderHallOfFame(); checkAchievements(); }
 function addHackrom() { const n = document.getElementById('new-hackrom-name').value.trim(); if(!n) return; let c = JSON.parse(localStorage.getItem('custom-hackroms')) || []; c.push({id: 'hackrom-' + Date.now(), name: n}); localStorage.setItem('custom-hackroms', JSON.stringify(c)); renderHallOfFame(); checkAchievements(); }
 function deleteHackrom(id) { let c = JSON.parse(localStorage.getItem('custom-hackroms')) || []; c = c.filter(h => h.id !== id); localStorage.setItem('custom-hackroms', JSON.stringify(c)); renderHallOfFame(); checkAchievements(); }
 
@@ -512,13 +553,24 @@ async function renderSuperHoF() {
     gc.innerHTML = ''; sc.innerHTML = '';
     let a = nuzlockeGames.concat(JSON.parse(localStorage.getItem('custom-official-runs')) || []).concat(JSON.parse(localStorage.getItem('custom-hackroms')) || []);
     let l = [];
-    for(let r of a) for(let i = 1; i <= 6; i++) { const p = localStorage.getItem(`team-${r.id}-${i}-id`); const b = localStorage.getItem(`ribbon-${r.id}-${i}`) || 'none'; if(p && b !== 'none') l.push({ rId: r.id, rN: r.name.split(' (')[0], s: i, p, b, n: localStorage.getItem(`team-${r.id}-${i}-nick`) || 'Sans nom' }); }
+    for(let r of a) {
+        // Magie du Tag : On récupère "Région - Jeu" pour le badge
+        let parts = r.name.split(' - ');
+        let displayName = parts.length > 1 ? `${parts[0]} - ${parts[1]}` : r.name.split(' (')[0];
+        
+        for(let i = 1; i <= 6; i++) { 
+            const p = localStorage.getItem(`team-${r.id}-${i}-id`); const b = localStorage.getItem(`ribbon-${r.id}-${i}`) || 'none'; 
+            if(p && b !== 'none') l.push({ rId: r.id, rN: displayName, s: i, p, b, n: localStorage.getItem(`team-${r.id}-${i}-nick`) || 'Sans nom' }); 
+        }
+    }
+    
     if(l.length === 0) { gc.innerHTML = '<p style="width:100%;text-align:center;color:#888;">Aucun nominé.</p>'; sc.innerHTML = '<p style="width:100%;text-align:center;color:#888;">Podium vide.</p>'; return; }
     const cats = ['mvp', 'slayer', 'survivor', 'hero']; const cols = { 'mvp': '#f1c40f', 'slayer': '#e74c3c', 'survivor': '#2ecc71', 'hero': '#3498db' };
+    
     for(let c of cats) {
         const sk = localStorage.getItem(`supreme-${c}`); const e = l.find(x => `${x.rId}-${x.s}` === sk && x.b === c);
         if(e) { 
-            let sn = getPokemonName(e.p, "Inconnu"); // TRADUCTION INSTANTANÉE SANS API !
+            let sn = getPokemonName(e.p, "Inconnu");
             sc.innerHTML += `<div class="super-hof-card border-${c}" style="transform:scale(1.15);margin:10px;box-shadow:0 10px 25px ${cols[c]}40;"><div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:white;padding:4px 12px;border-radius:50px;border:2px solid ${cols[c]};font-size:10px;font-weight:900;color:${cols[c]};">L'ULTIME</div><button onclick="removeSupreme('${c}')" style="position:absolute;top:8px;right:8px;background:rgba(231,76,60,0.1);color:#e74c3c;border:none;border-radius:50%;cursor:pointer;">❌</button><div style="font-size:35px;margin-bottom:5px;">${ribbonIcons[c]}</div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${e.p}.png"><div class="game-tag">${e.rN}</div><h4>"${e.n}"</h4><div class="species">${sn}</div></div>`; 
         } else { 
             sc.innerHTML += `<div style="width:160px;padding:20px;border-radius:15px;border:2px dashed ${cols[c]};display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0.5;margin:10px;"><div style="font-size:40px;filter:grayscale(100%);">${ribbonIcons[c]}</div><div style="font-size:12px;font-weight:bold;text-align:center;margin-top:10px;">Aucun<br>${ribbonTitles[c]}</div></div>`; 
@@ -526,7 +578,7 @@ async function renderSuperHoF() {
     }
     for(let e of l) {
         const sk = localStorage.getItem(`supreme-${e.b}`); if(sk === `${e.rId}-${e.s}`) continue;
-        let sn = getPokemonName(e.p, "Inconnu"); // TRADUCTION ICI
+        let sn = getPokemonName(e.p, "Inconnu");
         gc.innerHTML += `<div class="super-hof-card border-${e.b}"><div style="font-size:24px;margin-bottom:5px;">${ribbonIcons[e.b]}</div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${e.p}.png"><div class="game-tag">${e.rN}</div><h4>"${e.n}"</h4><div class="species">${sn}</div><button onclick="electSupreme('${e.rId}',${e.s},'${e.b}')" style="background:var(--bg-color);color:var(--text-color);border:2px solid #eee;border-radius:50px;padding:6px;width:100%;margin-top:10px;cursor:pointer;font-weight:bold;font-size:10px;">Élire l'Ultime 🏆</button></div>`;
     }
 }
@@ -536,11 +588,16 @@ async function renderGlobalGraveyard() {
     c.innerHTML = '<p style="width:100%;text-align:center;">Réveil des âmes...</p>';
     let a = nuzlockeGames.concat(JSON.parse(localStorage.getItem('custom-official-runs')) || []).concat(JSON.parse(localStorage.getItem('custom-hackroms')) || []);
     let dl = [];
-    for(let r of a) { let gl = JSON.parse(localStorage.getItem(`grave-list-${r.id}`)) || []; for(let i = 0; i < gl.length; i++) { dl.push({ rn: r.name.split(' (')[0], p: gl[i], n: localStorage.getItem(`grave-note-${r.id}-${i}`) || "Sans cause" }); } }
+    for(let r of a) { 
+        let parts = r.name.split(' - ');
+        let displayName = parts.length > 1 ? `${parts[0]} - ${parts[1]}` : r.name.split(' (')[0];
+        let gl = JSON.parse(localStorage.getItem(`grave-list-${r.id}`)) || []; 
+        for(let i = 0; i < gl.length; i++) { dl.push({ rn: displayName, p: gl[i], n: localStorage.getItem(`grave-note-${r.id}-${i}`) || "Sans cause" }); } 
+    }
     if(dl.length === 0) { c.innerHTML = '<p style="width:100%;text-align:center;color:#888;">Aucun mort.</p>'; return; }
     c.innerHTML = '';
     for(let d of dl) { 
-        let sn = getPokemonName(d.p, "Inconnu"); // TRADUCTION ICI (Instantanée !)
+        let sn = getPokemonName(d.p, "Inconnu");
         c.innerHTML += `<div class="grave-card"><div style="position:absolute;top:-12px;left:-10px;font-size:26px;">🪦</div><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${d.p}.png"><h4>${sn}</h4><div class="game-tag">${d.rn}</div><div class="death-note">"${d.n}"</div></div>`; 
     }
 }
@@ -701,16 +758,39 @@ const achievementsList = {
 };
 
 function computeAllBadges() {
-    let s = {ts:0,maxP:1,maxC:parseInt(localStorage.getItem('max_chain'))||0,h:0,b:false,l:false,p:false,ab:false,mas:0,com:0,msv:0,g1:0,g2:0,g3:0,g4:0,g5:0,g6:0,g7:0,g8:0,hi:0,g9:0};
-    const og = ['Rouge/Bleu/Jaune','Or/Argent/Cristal','Rubis/Saphir/Émeraude','Rouge Feu/Vert Feuille','Diamant/Perle/Platine','HG/SS','Noir/Blanc (1 & 2)'];
-    for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('shiny-')&&localStorage.getItem(k)==='true'){s.ts++;const id=parseInt(k.split('-')[1]);const e=parseInt(localStorage.getItem(`encounters-${id}`))||0;const p=parseInt(localStorage.getItem(`phases-${id}`))||1;const g=localStorage.getItem(`game-${id}`);const m=localStorage.getItem(`method-${id}`);if(e>0){if(e<5)s.b=true;if(e<50)s.l=true;if(e>=10000)s.p=true;if(e>=20000)s.ab=true;}if(p>s.maxP)s.maxP=p;if(m==='Masuda'||m==='MasudaCharme')s.mas++;if(og.includes(g)&&m==='Hasard')s.h++;if(m&&m.startsWith('LG_Combo'))s.com++;if(m&&m.startsWith('Massive'))s.msv++;if(id<=151)s.g1++;else if(id<=251)s.g2++;else if(id<=386)s.g3++;else if(id<=493)s.g4++;else if(id<=649)s.g5++;else if(id<=721)s.g6++;else if(id<=809)s.g7++;else if(id<=898)s.g8++;else if(id<=905)s.hi++;else if(id<=1025)s.g9++;}}
-    let h = {t:false,d:false,td:0,mvp:0,hc:false,nh:false,mi:false,or:0,hk:false};
-    let a = nuzlockeGames.map(x=>x.id).concat((JSON.parse(localStorage.getItem('custom-official-runs'))||[]).map(x=>x.id));
-    let all = a.concat((JSON.parse(localStorage.getItem('custom-hackroms'))||[]).map(x=>x.id));
+    // --- NOUVEAU CALCUL DES SUCCÈS HOoF (Globe-Trotter & Hackroms) ---
+    let customRuns = JSON.parse(localStorage.getItem('custom-official-runs'))||[];
+    let hackroms = JSON.parse(localStorage.getItem('custom-hackroms'))||[];
+    let allRuns = nuzlockeGames.concat(customRuns).concat(hackroms);
+    
     let rs = new Set();
-    all.forEach(g=>{let tc=0;for(let i=1;i<=6;i++){if(localStorage.getItem(`team-${g}-${i}-id`)){tc++;h.t=true;}if(localStorage.getItem(`ribbon-${g}-${i}`)==='mvp')h.mvp++;}let gl=JSON.parse(localStorage.getItem(`grave-list-${g}`))||[];let d=gl.length;h.td+=d;if(d>0)h.d=true;if(d>=10)h.hc=true;if(tc>0&&d===0)h.nh=true;if(tc===1)h.mi=true;if(tc>0){if(!a.includes(g))h.hk=true;else rs.add(g);}});
-    h.or = rs.size; if(currentChainLength>s.maxC)localStorage.setItem('max_chain',currentChainLength);
-    return {first_shiny:s.ts>=1,shiny_10:s.ts>=10,shiny_50:s.ts>=50,shiny_100:s.ts>=100,shiny_250:s.ts>=250,shiny_500:s.ts>=500,shiny_all:s.ts>=1025,master_kanto:s.g1===151,master_johto:s.g2===100,master_hoenn:s.g3===135,master_sinnoh:s.g4===107,master_unys:s.g5===156,master_kalos:s.g6===72,master_alola:s.g7===88,master_galar:s.g8===89,master_hisui:s.hi===7,master_paldea:s.g9===120,beni:s.b,lucky:s.l,pain:s.p,abyss:s.ab,curse:s.maxP>=5,stubborn:s.maxP>=10,purist:s.h>=1,archaeologist:s.h>=5,masuda_master:s.mas>=5,masuda_god:s.mas>=20,combo_master:s.com>=5,massive_master:s.msv>=5,chain_master:s.maxC>=40,hof_first:h.t,hof_nohit:h.nh,hof_miracle:h.mi,hof_mvp:h.mvp>=1,hof_emperor:h.mvp>=10,hof_death:h.d,hof_hecatombe:h.hc,hof_gravedigger:h.td>=30,hof_globe:h.or>=5,hof_multiverse:h.or>=9,hof_hackrom:h.hk};
+    allRuns.forEach(run => {
+        let tc=0;
+        for(let i=1;i<=6;i++) { 
+            if(localStorage.getItem(`team-${run.id}-${i}-id`)) { tc++; h.t=true; }
+            if(localStorage.getItem(`ribbon-${run.id}-${i}`)==='mvp') h.mvp++;
+        }
+        let gl=JSON.parse(localStorage.getItem(`grave-list-${run.id}`))||[];
+        let d=gl.length; h.td+=d;
+        if(d>0) h.d=true;
+        if(d>=10) h.hc=true;
+        if(tc>0 && d===0) h.nh=true;
+        if(tc===1) h.mi=true;
+        
+        if(tc>0) {
+            // Si c'est une hackrom
+            if(hackroms.find(x => x.id === run.id)) {
+                h.hk=true; 
+            } else {
+                // Si officiel, on extrait la région ("Kanto", "Johto"...) pour les badges globe-trotter
+                let parts = run.name.split(' - ');
+                let region = parts.length > 1 ? parts[0] : run.name.split(' (')[0];
+                rs.add(region);
+            }
+        }
+    });
+    h.or = rs.size;
+    // -----------------------------------------------------------------
 }
 
 function checkAchievements() { let n=[]; const s=computeAllBadges(); Object.keys(achievementsList).forEach(c=>{const w=localStorage.getItem(`badge_state_${c}`)==='true';const is=s[c]||false;if(!w&&is){n.push(c);localStorage.setItem(`badge_state_${c}`,'true');}else if(w&&!is)localStorage.setItem(`badge_state_${c}`,'false');}); if(n.length>0)n.forEach(c=>showBadgeToast(c)); const b=document.getElementById('badges-section'); if(b&&b.style.display==='block')renderBadges(); }
