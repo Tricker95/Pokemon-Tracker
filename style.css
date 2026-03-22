@@ -1,22 +1,49 @@
+/* =========================================
+   VARIABLES DE THEME (LIGHT MODE PAR DÉFAUT)
+   ========================================= */
+
+/* 1. Thème par défaut (Light Mode) */
 :root {
-    --bg-color: #f4f7f6;
-    --text-color: #2c3e50;
-    --card-bg: #ffffff;
-    --accent-blue: #3498db;
-    --accent-orange: #f39c12;
-    --shadow: 0 4px 15px rgba(0,0,0,0.05);
-    --radius: 15px;
+    --bg-color: #F4F7F9;         
+    --text-color: #1E293B;       
+    --card-bg: #FFFFFF;          
+    --border-color: rgba(0, 0, 0, 0.1);
+    
+    /* Le bleu cyan lumineux et éclatant du logo NovaDex */
+    --accent-blue: #00A6E5; 
+    --radius-card: 16px;
 }
+
+/* 2. Thème Sombre (Dark Mode) - S'active au clic */
 body.dark-mode {
-    --bg-color: #121212;
-    --text-color: #e0e0e0;
-    --card-bg: #1e1e24;
-    --shadow: 0 4px 15px rgba(0,0,0,0.5);
-    --accent-blue: #2980b9;
+    --bg-color: #0B0F19;         
+    --text-color: #E2E8F0;       
+    --card-bg: #1A2235;          
+    --border-color: rgba(255, 255, 255, 0.1);
+    --accent-blue: #00A6E5; /* On garde ce beau bleu clair même la nuit ! */
 }
-body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
-header { background-color: #e74c3c; color: white; text-align: center; padding: 25px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
-header h1 { margin: 0; font-size: 32px; font-weight: 900; letter-spacing: 1px; }
+
+/* 2. Thème Clair (Light Mode) */
+body.light-mode {
+    --bg-color: #F4F7F9;         
+    --text-color: #1E293B;       
+    --card-bg: #FFFFFF;          
+    --border-color: rgba(0, 0, 0, 0.1);
+    
+    /* On garde le bleu de la marque, ou on le met un poil plus sombre pour la lisibilité sur fond clair */
+    --accent-blue: #0077B6; 
+}
+
+/* =========================================
+   APPLICATION AU CORPS DU SITE
+   ========================================= */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease; /* Pour que le changement soit fluide */
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif; /* Assure-toi d'avoir ta typo ici */
+}
 .theme-switch { position: absolute; top: 25px; right: 25px; background: #2c3e50; border: 2px solid #2c3e50; color: white; font-size: 20px; cursor: pointer; border-radius: 50%; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
 nav { display: flex; justify-content: center; background: #c0392b; padding: 10px; gap: 15px; flex-wrap: wrap; }
 nav button { background: transparent; color: white; border: none; padding: 10px 20px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 20px; transition: background 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -430,4 +457,1040 @@ body.dark-mode .ribbon-icon { background: #2c2c4a; border-color: #444; }
 }
 @media (max-width: 768px) { 
     .charts-grid { grid-template-columns: 1fr; } /* 1 par ligne sur mobile */
+}
+/* ==========================================
+   POKÉDEX NATIONAL (Sous-Onglets & Animations)
+   ========================================== */
+.dex-tab-btn { 
+    background: transparent; 
+    border: none; 
+    color: var(--text-color); 
+    font-size: 14px; 
+    font-weight: 900; 
+    cursor: pointer; 
+    padding: 12px 20px; 
+    border-radius: 12px; 
+    transition: all 0.2s ease; 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+}
+.dex-tab-btn:hover { 
+    background: rgba(0,0,0,0.05); 
+    transform: translateY(-2px); 
+}
+body.dark-mode .dex-tab-btn:hover { 
+    background: rgba(255,255,255,0.05); 
+}
+.dex-tab-btn.active { 
+    background: var(--card-bg); 
+    color: var(--accent-blue); 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08); 
+}
+
+/* Animation douce pour le changement d'onglet */
+.dex-tab-content { 
+    animation: fadeInTab 0.3s ease-in-out; 
+}
+@keyframes fadeInTab { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+/* Boutons de navigation Précédent/Suivant */
+.dex-nav-btn {
+    background: var(--bg-color);
+    border: 2px solid #eee;
+    border-radius: 12px;
+    padding: 5px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.2s ease;
+    flex: 1;
+    max-width: 250px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+.dex-nav-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.08);
+    border-color: var(--accent-blue);
+}
+body.dark-mode .dex-nav-btn {
+    border-color: #333;
+}
+body.dark-mode .dex-nav-btn:hover {
+    border-color: var(--accent-blue);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+
+/* ==========================================
+   POKÉDEX ÉTAPE 2 (Types, Faiblesses, Évolutions)
+   ========================================== */
+.type-badge {
+    padding: 5px 15px;
+    border-radius: 50px;
+    color: white;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: inline-block;
+    letter-spacing: 1px;
+}
+
+.weakness-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.weakness-col {
+    background: var(--bg-color);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    text-align: center;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+}
+body.dark-mode .weakness-col { border-color: #333; }
+
+.evo-chain {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    background: rgba(0,0,0,0.02);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px dashed #ccc;
+}
+body.dark-mode .evo-chain { border-color: #444; }
+
+.evo-item {
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.evo-item:hover { transform: scale(1.1); }
+.evo-item img {
+    width: 80px;
+    height: 80px;
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+    background: var(--card-bg);
+    border-radius: 50%;
+    padding: 5px;
+    box-shadow: var(--shadow);
+}
+.evo-arrow { color: #ccc; font-weight: bold; font-size: 24px; }
+
+/* Tableaux des Attaques */
+.moves-table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; background: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.moves-table th { background: var(--accent-blue); color: white; padding: 10px; font-weight: 900; }
+.moves-table td { padding: 8px 10px; border-bottom: 1px solid #eee; color: var(--text-color); font-weight: bold; }
+body.dark-mode .moves-table td { border-bottom-color: #333; }
+
+/* Cartes de Localisation */
+.location-card { background: var(--bg-color); padding: 15px; border-radius: 12px; border-left: 4px solid #2ecc71; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
+body.dark-mode .location-card { border-color: #333; border-left-color: #2ecc71; }
+.location-game { font-weight: 900; color: var(--text-color); text-transform: capitalize; margin-bottom: 5px; font-size: 15px; }
+.location-area { font-size: 12px; color: #7f8c8d; line-height: 1.5; }
+
+/* =========================================
+   UI DU HEADER NOVADEX (Logo Centré)
+   ========================================= */
+
+.novadex-header {
+    position: relative; /* Indispensable pour centrer le logo en absolu */
+    background: linear-gradient(135deg, #020C26 0%, #053075 100%);
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(5, 48, 117, 0.4);
+    border-bottom: 2px solid #00A6E5;
+    min-height: 70px; /* Assure une bonne hauteur au header */
+}
+
+/* --- LE CENTRAGE MAGIQUE DU LOGO --- */
+.logo-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* Le décale de la moitié de sa propre taille pour un centrage parfait */
+    display: flex;
+    align-items: center;
+}
+
+.header-logo {
+    height: 55px; /* Ajuste la taille ici si besoin */
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+    transition: transform 0.3s ease;
+}
+
+.header-logo:hover {
+    transform: scale(1.05);
+}
+
+/* --- BOUTONS DE NAVIGATION (Poussés à droite) --- */
+.header-nav {
+    margin-left: auto; /* Pousse la navigation tout à droite pour laisser le centre libre */
+    display: flex;
+    gap: 15px;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: #A3C6FF;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+}
+
+/* Responsive : Si on est sur téléphone, on empile le logo et les boutons */
+@media (max-width: 768px) {
+    .novadex-header {
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        gap: 15px;
+    }
+    .logo-container {
+        position: relative;
+        left: 0;
+        transform: none;
+    }
+    .header-nav {
+        margin-left: 0;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+/* =========================================
+   BARRE DE NAVIGATION NOVADEX (Onglets)
+   ========================================= */
+
+/* Le conteneur de ta barre de navigation */
+.main-nav {
+    background: #04163D; /* Un bleu nuit subtilement plus clair que le header */
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Pour que ça passe bien sur mobile */
+    gap: 15px;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0, 166, 229, 0.15); /* Ligne de séparation subtile cyan */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Le style des boutons (Tracker, HoF, Pokédex...) */
+.main-nav button {
+    background: transparent;
+    color: #A3C6FF; /* Un bleu-gris clair, élégant et lisible */
+    border: 1px solid transparent;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Effet au survol (Hover) */
+.main-nav button:hover {
+    background: rgba(0, 166, 229, 0.08); /* Voile cyan très léger */
+    color: #FFFFFF; /* Le texte s'illumine en blanc pur */
+    border: 1px solid rgba(0, 166, 229, 0.3);
+    transform: translateY(-2px); /* Petit effet de soulèvement */
+}
+
+/* L'onglet Actif - Cible absolue */
+nav.main-nav > button.active,
+.main-nav .active,
+button.nav-btn.active {
+    background: rgba(0, 166, 229, 0.12) !important; 
+    background-color: rgba(0, 166, 229, 0.12) !important; /* On force aussi le background-color spécifique */
+    color: #FFFFFF !important; 
+    border: 1px solid rgba(0, 166, 229, 0.4) !important; 
+    box-shadow: inset 0 0 10px rgba(0, 166, 229, 0.15) !important; 
+    transform: translateY(-2px) !important; 
+}
+
+/* =========================================
+   BOUTON LIGHT/DARK MODE (Header)
+   ========================================= */
+
+.header-actions {
+    margin-left: auto; /* Pousse magiquement le bouton tout à droite */
+    z-index: 10; /* S'assure qu'il reste cliquable au-dessus du logo si besoin */
+}
+
+.theme-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    font-size: 20px; /* Taille de l'émoji/icône */
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-btn:hover {
+    background: rgba(0, 166, 229, 0.2); /* Petit reflet cyan */
+    border-color: #00A6E5;
+    transform: scale(1.05);
+}
+
+/* =========================================
+   RESTAURATION DES ARRONDIS ET DU BLEU
+   ========================================= */
+
+/* 1. Les coins arrondis pour toutes les cartes, modales et tableaux */
+.card, 
+.modal, 
+.modal-content, /* Pour le journal de bord */
+table, 
+.pokedex-card, 
+.shasse-card, 
+#dashboard-cards > div {
+    border-radius: var(--radius-card) !important;
+}
+
+/* Astuce pour les tableaux : s'assurer que les coins ne dépassent pas */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden; 
+}
+
+/* 2. Le retour du bleu pour les boutons d'action (Shasser, +1, Play) */
+/* Remplace les noms de classes par ceux que tu utilises si besoin, mais voici les plus probables : */
+button.btn-shasser, 
+button.btn-add, 
+button.btn-play,
+.btn-primary,
+button[onclick*="Shasse"], /* Cible les boutons qui déclenchent une shasse */
+button[onclick*="addEncounter"] {
+    background-color: var(--primary-blue) !important;
+    color: #FFFFFF !important;
+    border-radius: var(--radius-btn) !important;
+    border: none !important;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+/* Petit effet au survol pour tes boutons bleus */
+button.btn-shasser:hover, 
+button.btn-add:hover, 
+button.btn-play:hover,
+.btn-primary:hover {
+    background-color: #0077B6 !important; /* Un bleu un peu plus sombre */
+    transform: translateY(-2px);
+}
+
+/* Force les arrondis sur tes conteneurs principaux */
+.pokedex-card, .shasse-card, .modal-content, .card {
+    border-radius: 16px !important;
+}
+/* =========================================
+   FORCER LES ARRONDIS SUR TOUTES LES CARTES
+   ========================================= */
+
+div[class*="card"], 
+div[id*="card"],
+table {
+    border-radius: var(--radius-card) !important;
+    overflow: hidden !important; /* ULTRA IMPORTANT : coupe ce qui dépasse des coins */
+}
+
+/* Si jamais tes cartes utilisent une autre nomenclature, 
+   ajoute simplement leur classe ici (ex: .dashboard-item) */
+.dashboard-item {
+    border-radius: var(--radius-card) !important;
+    overflow: hidden !important;
+}
+/* =========================================
+   ONGLÉS DE PILULE HALL OF FAME (Filtres)
+   ========================================= */
+
+/* Cible tous les boutons de pilule de filtre HoF pour l'état actif */
+#hofSection .filter-nav button.active,
+#btn-jeux-officiels.active,
+#btn-hackroms.active,
+button[onclick*="Hackroms"].active,
+button[onclick*="Jeux Officiels"].active {
+    background-color: var(--accent-blue, #00A6E5) !important; /* Le cyan lumineux NovaDex */
+    color: #FFFFFF !important; /* Texte blanc pur */
+    border-radius: 50px !important; /* Force la forme pilule */
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 166, 229, 0.3);
+}
+
+/* Style inactif par défaut pour tous les boutons de pilule HoF */
+#hofSection .filter-nav button,
+#btn-jeux-officiels,
+#btn-hackroms,
+button[onclick*="Hackroms"] {
+    background-color: var(--border-color, #E2E8F0); /* Gris clair par défaut (style light) */
+    color: var(--text-color, #1E293B);
+    border: none;
+    border-radius: 50px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: normal;
+    transition: background-color 0.2s, color 0.2s;
+}
+/* =========================================
+   BOUTON SUPPRIMER LA PARTIE (Rouge)
+   ========================================= */
+
+/* Cible spécifiquement le bouton "Supprimer" dans la section HoF */
+#hofSection .partie-card .btn-supprimer, /* Sélecteurs probables */
+#hofSection .shasse-card button[onclick*="supprimerPartie"],
+button.btn-danger, /* Si une classe de danger est utilisée */
+button[onclick*="supprimerPartie"] {
+    background-color: #E74C3C !important; /* Un rouge "danger" vibrant */
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: var(--radius-btn, 8px) !important; /* Utilise radius btn standard de NovaDex */
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* Effet au survol (un rouge plus sombre) */
+#hofSection .partie-card .btn-supprimer:hover,
+button.btn-danger:hover,
+button[onclick*="supprimerPartie"]:hover {
+    background-color: #C0392B !important;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   ONGLET HACKROM ACTIF (Violet NovaDex)
+   ========================================= */
+
+button[onclick*="Hackrom"].active,
+button[onclick*="HackRom"].active,
+#btn-hackroms.active,
+.btn-hackrom.active {
+    /* Un beau dégradé violet tiré de l'étoile de ton logo */
+    background: linear-gradient(135deg, #B582D2 0%, #8A2BE2 100%) !important; 
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 50px !important; /* Toujours en forme de pilule */
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4) !important; /* Petit halo violet */
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   UI MODALE (Shasse Aléatoire & Autres)
+   ========================================= */
+
+/* On cible la boîte blanche/sombre à l'intérieur de la modale */
+.modal-content, 
+.modal-box,
+div[id*="modal"] > div, /* Attrape-tout pour les modales */
+#randomHuntModal .modal-content {
+    border-radius: 20px !important; /* Des angles bien arrondis et modernes */
+    border: 2px solid var(--accent-blue, #00A6E5) !important; /* Le contour cyan franc */
+    box-shadow: 0 10px 40px rgba(0, 166, 229, 0.2) !important; /* Une belle aura lumineuse autour */
+    overflow: hidden !important; /* Coupe tout ce qui dépasserait des angles */
+    
+    /* Optionnel : petite animation d'apparition douce si elle n'y est pas déjà */
+    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+/* L'animation d'apparition fluide (effet rebond) */
+@keyframes modalPop {
+    0% { transform: scale(0.9); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Petit bonus : arrondir aussi le bouton "Fermer" (la croix) s'il y en a un */
+.close, .close-modal {
+    border-radius: 50% !important;
+    transition: all 0.2s ease;
+}
+.close:hover, .close-modal:hover {
+    background-color: rgba(231, 76, 60, 0.1); /* Fond légèrement rouge au survol */
+    color: #E74C3C;
+}
+
+/* =========================================
+   BOUTON DE VALIDATION MODALE HOFRANDOM (Jaune)
+   ========================================= */
+
+/* Cible chirurgicalement le bouton de validation dans la modale de shasse aléatoire */
+#hofSection .modal-actions button[onclick*="confirm"], 
+#hofSection .modal-actions button:last-child, /* Probablement le bouton de droite */
+#hofRandomModal button[onclick*="validate"] {
+    background-color: #f1c40f !important; /* Le beau jaune "étoile shiny" */
+    color: #FFFFFF !important; /* Texte blanc pur */
+    border: none !important;
+    border-radius: var(--radius-btn, 8px) !important; /* Arrondi standard des boutons */
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(241, 196, 15, 0.3) !important; /* Le halo jaune franc */
+    transition: all 0.2s ease;
+}
+
+/* Effet au survol (un jaune un poil plus profond) */
+#hofSection .modal-actions button:last-child:hover,
+#hofRandomModal button[onclick*="validate"]:hover {
+    background-color: #f39c12 !important; 
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   BOUTON ACCEPTER LE DÉFI (Nuzlocke Modale)
+   ========================================= */
+
+/* On cible chirurgicalement l'ID du bouton de ton HTML */
+#btn-accept-challenge {
+    /* Force le fond jaune (Yellow Shiny #f1c40f) par-dessus l'inline style */
+    background-color: #f1c40f !important;
+    background: #f1c40f !important; /* Double sécurité pour le raccourci */
+    color: #FFFFFF !important; /* Force le texte blanc pur */
+    border: none !important;
+    font-weight: 900 !important;
+    box-shadow: 0 5px 15px rgba(241, 196, 15, 0.4) !important; /* Halo jaune franc */
+}
+
+/* Effet au survol (un jaune un poil plus profond) */
+#btn-accept-challenge:hover {
+    background-color: #f39c12 !important; 
+    transform: translateY(-2px);
+}
+/* =========================================
+   HARMONISATION GLOBALE UI D'AJOUT HoF (Style image_11.png)
+   ========================================= */
+
+/* Le conteneur avec la bordure pointillée cyan */
+.hof-add-container {
+    border: 2px dashed #00A6E5; /* Bordure pointillée cyan (NovaDex) */
+    border-radius: 16px; /* Bords arrondis premium */
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    background-color: var(--card-bg, #fff); /* Utilise ton fond de card standard */
+    align-items: center;
+    box-sizing: border-box; /* Pour que le padding ne casse pas la largeur */
+    width: 100%; /* S'assurer qu'elle prend toute la largeur */
+    margin-bottom: 25px; /* Espace avant les parties */
+}
+
+/* Le style des champs (Select et Text) d'image_11.png */
+.styled-input-hof {
+    background-color: #f8f9fa; /* Gris clair très propre */
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif; /* Rétablir ta police NovaDex si nécessaire */
+    flex: 1; /* Remplit l'espace */
+    transition: border-color 0.2s;
+}
+
+/* Ajustement des proportions : select un peu plus large (image_11.png) */
+select.styled-input-hof {
+    flex: 1.4;
+}
+
+.styled-input-hof:focus {
+    outline: none;
+    border-color: var(--accent-blue, #00A6E5);
+}
+
+/* Le bouton bleu cyan d'image_11.png et image_10.png */
+.btn-cyan-new-party {
+    background-color: var(--accent-blue, #00A6E5); /* Cyan standard NovaDex */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 166, 229, 0.3);
+    white-space: nowrap; /* Empêche le texte de passer à la ligne */
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-cyan-new-party:hover {
+    transform: translateY(-2px);
+    background-color: #008fcc;
+}
+/* =========================================
+   COULEURS DES ONGLETS HALL OF FAME
+   ========================================= */
+
+/* 1. État inactif par défaut (Gris clair) pour tous les onglets */
+#tab-official, #tab-hackrom, #tab-super, #tab-graveyard {
+    background-color: rgba(0, 0, 0, 0.05) !important; /* Ou var(--border-color) */
+    color: var(--text-color) !important;
+}
+
+/* 2. État ACTIF : Jeux Officiels (Bleu Cyan NovaDex) */
+#tab-official.active {
+    background: var(--accent-blue, #00A6E5) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 15px rgba(0, 166, 229, 0.3) !important;
+    transform: translateY(-2px);
+}
+
+/* 3. État ACTIF : Hackroms (Violet Cosmique) */
+#tab-hackrom.active {
+    background: linear-gradient(135deg, #B582D2 0%, #8A2BE2 100%) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4) !important;
+    transform: translateY(-2px);
+}
+/* 4. État ACTIF : Super Hall of Fame (Or / Jaune) */
+#tab-super.active {
+    background: linear-gradient(135deg, #f1c40f, #f39c12) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4) !important;
+    transform: translateY(-2px);
+}
+
+/* 5. État ACTIF : Cimetière Global (Gris Ardoise Sombre) */
+#tab-graveyard.active {
+    background: #2c3e50 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 15px rgba(44, 62, 80, 0.4) !important;
+    transform: translateY(-2px);
+}
+/* =========================================
+   UI : CARTES DU SUPER HALL OF FAME
+   ========================================= */
+
+/* On cible spécifiquement les cartes du Panthéon Suprême et des Nominés */
+#hof-supremes-grid > div,
+#hof-super-grid > div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important; /* Centre horizontalement TOUT le contenu */
+    justify-content: center !important; /* Centre verticalement */
+    text-align: center !important;
+    padding: 20px !important; /* Donne de l'air au texte */
+    box-sizing: border-box !important; /* Empêche la carte de gonfler */
+    min-width: 160px; /* Assure une largeur de base harmonieuse */
+    
+    /* LA MAGIE EST ICI : On annule les ciseaux pour ces cartes précises */
+    overflow: visible !important; 
+}
+
+/* On s'assure que le sprite du Pokémon est bien centré */
+#hof-supremes-grid > div img,
+#hof-super-grid > div img {
+    margin: 0 auto 10px auto !important;
+    display: block;
+    max-width: 100%;
+}
+
+/* On force les longs noms ou surnoms à passer à la ligne plutôt que d'être coupés */
+#hof-supremes-grid > div p,
+#hof-super-grid > div p,
+#hof-supremes-grid > div h4,
+#hof-super-grid > div h4,
+#hof-supremes-grid > div div {
+    word-wrap: break-word !important;
+    white-space: normal !important;
+    max-width: 100%;
+}
+/* =========================================
+   UI : RESPIRATION DES CARTES SUPER HOF
+   ========================================= */
+
+#hof-supremes-grid > div,
+#hof-super-grid > div {
+    min-width: 220px !important; /* On élargit la carte (avant c'était 160px) pour casser l'effet trop vertical */
+    max-width: 280px !important; /* On évite qu'elles s'étirent trop sur grand écran */
+    padding: 30px 20px !important; /* Plus d'air en haut et en bas (30px) et sur les côtés (20px) */
+    background: var(--card-bg) !important; /* S'assure que le fond de la carte est bien appliqué */
+    border-radius: var(--radius-card, 16px) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important; /* Ombre douce pour bien les détacher du fond */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Un petit effet sympa de soulèvement au survol pour le côté premium */
+#hof-supremes-grid > div:hover,
+#hof-super-grid > div:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* On donne de l'air autour de l'image du Pokémon */
+#hof-supremes-grid > div img,
+#hof-super-grid > div img {
+    margin-top: 10px !important;
+    margin-bottom: 20px !important; /* Plus d'espace entre l'image et le texte en dessous */
+    width: 90px !important; /* On s'assure que le sprite a une belle taille proportionnelle */
+    height: auto !important;
+}
+
+/* On aère un peu les textes (titres et paragraphes) */
+#hof-supremes-grid > div h4,
+#hof-super-grid > div h4 {
+    margin-bottom: 10px !important;
+    line-height: 1.4 !important;
+}
+/* S'assure que la barre a bien une couleur de remplissage et une animation fluide */
+#gen-progress-bar {
+    background: linear-gradient(90deg, #f1c40f, #f39c12) !important; /* Jaune/Orange shiny */
+    height: 100%;
+    border-radius: inherit;
+    transition: width 0.5s ease-in-out;
+}
+.gen-progress-container {
+    background-color: var(--border-color, #eee);
+    border-radius: 50px;
+    height: 15px; /* Hauteur de la barre */
+    overflow: hidden;
+}
+/* =========================================
+   BOUTONS DE CHAÎNE (+1 et ✖)
+   ========================================= */
+
+/* Le conteneur parent qui aligne les deux boutons */
+#live-hunt-chain-container div {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    align-items: stretch !important; /* FORCE la même hauteur pour les deux enfants */
+}
+
+/* Bouton +1 (Orange) */
+.btn-action.chain-add, 
+button[onclick*="incrementChain"] {
+    background-color: var(--accent-orange, #f39c12) !important; 
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: var(--radius-btn, 8px) !important;
+    padding: 8px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1; /* Il prendra plus de place en largeur que la croix */
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-action.chain-add:hover, 
+button[onclick*="incrementChain"]:hover {
+    background-color: #e67e22 !important;
+    transform: translateY(-2px);
+}
+
+/* Bouton Briser ✖ (Rouge) */
+.btn-action.chain-break, 
+button[onclick*="breakChain"] {
+    background-color: #E74C3C !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: var(--radius-btn, 8px) !important;
+    padding: 8px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-action.chain-break:hover, 
+button[onclick*="breakChain"]:hover {
+    background-color: #C0392B !important;
+    transform: translateY(-2px);
+}
+/* =========================================
+   CENTRAGE DU COMPTEUR DE CHAÎNE
+   ========================================= */
+
+#live-hunt-chain-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+#live-hunt-chain {
+    text-align: center !important;
+    width: 100% !important;
+    margin-bottom: 10px !important; /* Un peu d'espace avant les boutons orange et rouge */
+    display: flex !important;
+    justify-content: center !important;
+}
+/* =========================================
+   NOTIFICATIONS DE SUCCÈS (Toasts)
+   ========================================= */
+
+#toast-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 9999; /* Pour être toujours au-dessus du reste (même les modales) */
+    pointer-events: none; /* Ne bloque pas tes clics en arrière-plan */
+}
+
+.toast {
+    background: var(--card-bg, #ffffff);
+    border-left: 5px solid #f1c40f; /* Joli liseré doré "Shiny" */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transform: translateX(120%); /* Caché sur la droite au départ */
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Effet d'apparition avec rebond */
+    pointer-events: auto; 
+    min-width: 250px;
+}
+
+.toast.show {
+    transform: translateX(0); /* Glisse à sa position finale */
+    opacity: 1;
+}
+
+.toast-icon {
+    font-size: 30px;
+    background: rgba(241, 196, 15, 0.15);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.toast-content h4 {
+    margin: 0 0 5px 0;
+    color: #f39c12; /* Orange NovaDex */
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.toast-content p {
+    margin: 0;
+    color: var(--text-color, #1e293b);
+    font-weight: 900;
+    font-size: 16px;
+}
+/* =========================================
+   STYLE DES STATS HALL OF FAME
+   ========================================= */
+
+/* Grille de cartes HoF */
+.hof-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Style d'une carte HoF */
+.hof-stat-card {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #eee);
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.hof-stat-card h3 {
+    margin: 0 0 5px 0;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--accent-orange, #f39c12);
+}
+
+.hof-stat-card p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color, #1e293b);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Grille de graphiques double */
+.chart-grid-double {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Force 2 colonnes */
+    gap: 30px;
+    margin-bottom: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Une boîte de graphique HoF */
+.chart-box-hof {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #eee);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chart-box-hof h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-color);
+    text-align: center;
+}
+
+/* Conteneur pour Chart.js */
+.chart-container-hof {
+    position: relative;
+    flex-grow: 1; /* Il prend toute la hauteur disponible */
+    height: 300px; /* Hauteur fixe pour les donuts et bars */
+}
+
+/* Responsive pour tablettes et mobiles */
+@media (max-width: 900px) {
+    .chart-grid-double {
+        grid-template-columns: 1fr; /* Passe sur une colonne */
+    }
+}
+/* =========================================
+   MISE EN PAGE DES STATISTIQUES (GRILLES)
+   ========================================= */
+
+/* Titres de section (Shiny & HoF) */
+.stats-main-title {
+    text-align: center;
+    color: var(--text-color);
+    margin: 40px 0 25px 0;
+    width: 100%;
+    display: block !important;
+    /* On a supprimé le text-transform: uppercase et le letter-spacing */
+}
+
+/* Une ligne complète (Pour Timeline et Longest) */
+.stats-row-full {
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+/* Une ligne de 4 graphiques (Pour les stats Shiny) */
+.stats-row-quad {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+/* Une ligne pour les 4 cartes du HoF */
+.stats-row-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+/* Une ligne de 2 graphiques (Pour le HoF) */
+.stats-row-half {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+/* =========================================
+   DESIGN DES BOÎTES ET GRAPHIQUES
+   ========================================= */
+
+.chart-box {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #eee);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box; /* Crucial pour éviter le débordement */
+}
+
+.chart-box h3 {
+    margin: 0 0 15px 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-color);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* Le conteneur vital pour Chart.js */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px; /* Hauteur fixe pour forcer le graphique à s'adapter */
+    flex-grow: 1;
+}
+
+/* Les cartes de stats HoF */
+.hof-stat-card {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--border-color, #eee);
+    border-radius: 16px;
+    padding: 20px 15px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.hof-stat-card h3 {
+    margin: 0 0 5px 0;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--accent-orange, #f39c12);
+}
+
+.hof-stat-card p {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-color, #1e293b);
+    text-transform: uppercase;
 }
