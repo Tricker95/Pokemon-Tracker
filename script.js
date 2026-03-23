@@ -627,22 +627,29 @@ function toggleShiny(id) {
             confetti({particleCount: 150, spread: 80, origin: {y: 0.6}});
         }
         
-        // --- 2. LE CRI DU POKÉMON ---
-        // Ici on utilise directement 'id' car la fonction le reçoit en paramètre
-        let audio = new Audio(`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`);
+        // --- 2. LE CRI DU POKÉMON (Aiguillage Z-A vs Classique) ---
+        let audioSource = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`; // Source par défaut
+        
+        // Si c'est un nouveau Méga, on remplace la source par ton fichier local
+        if (id >= 20000 && typeof CUSTOM_MEGA_DATA !== 'undefined' && CUSTOM_MEGA_DATA[id] && CUSTOM_MEGA_DATA[id].cry) {
+            audioSource = CUSTOM_MEGA_DATA[id].cry;
+        }
+        
+        let audio = new Audio(audioSource);
         audio.volume = 0.5;
         audio.play().catch(e => console.log("Audio bloqué", e));
+        // ---------------------------------------------------------
 
-        // ... le reste de ton code qui sauvegarde le true dans le localStorage
+        // Sauvegarde dans le navigateur
         localStorage.setItem(`shiny-${id}`, 'true');
     } else {
         // Si on décoche la case
         localStorage.removeItem(`shiny-${id}`);
     }
 
-    // Le reste de tes mises à jour (barre de progression, etc.)
-    updateDashboard();
-    checkAchievements(); // N'oublie pas de vérifier les succès ici aussi !
+    // Mises à jour de l'interface et des succès
+    if (typeof updateDashboard === 'function') updateDashboard();
+    if (typeof checkAchievements === 'function') checkAchievements();
 }
 function openJournal(id, name) {
     document.getElementById('journal-poke-id').value = id; document.getElementById('journal-poke-name').textContent = `#${id} ${name}`;
@@ -2101,42 +2108,39 @@ async function loadDexPokemon(id) {
     }
 }
 
-// Fonction pour jouer le cri du Pokémon (Améliorée pour Z-A)
 function playDexCry() {
+    console.log("--- TEST AUDIO ---");
+    console.log("1. ID Courant :", currentDexId);
+    
     if(!currentDexId) return;
+    
     const btn = document.getElementById('dex-cry-btn');
-    btn.style.transform = 'scale(0.9)'; // Petite animation
+    console.log("2. Lien caché dans le bouton :", btn.dataset.customCry);
+    
+    btn.style.transform = 'scale(0.9)';
     setTimeout(() => btn.style.transform = 'scale(1)', 150);
     
-    // --- NOUVEAU : GESTION CRIS CUSTOM Z-A ---
-    // Si l'ID est custom, on joue le son local mémorisé dans Step 4
-    if (currentDexId >= 20000 && btn.dataset.customCry) {
-        const customCry = btn.dataset.customCry;
-        const audio = new Audio(customCry);
+    // --- GESTION CRIS CUSTOM Z-A ---
+    if (currentDexId >= 20000 && btn.dataset.customCry && btn.dataset.customCry !== "undefined") {
+        console.log("3. Fichier audio ciblé :", btn.dataset.customCry);
+        
+        const audio = new Audio(btn.dataset.customCry);
         audio.volume = 0.5;
-        audio.play().catch(e => console.log("Cri custom non disponible"));
-        return; // Mission accomplie !
+        
+        // On écoute exactement ce que répond le navigateur
+        audio.play()
+            .then(() => console.log("4. SUCCÈS ! Le son est joué."))
+            .catch(e => console.error("4. ERREUR AUDIO :", e.message));
+            
+        return; 
     }
     // -------------------------------------
 
-    // (Le reste de ton code original PokeAPI reste identique juste en dessous)
+    console.log("3. Lancement du cri PokeAPI classique...");
     const audio = new Audio(`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${currentDexId}.ogg`);
-    // ...
+    audio.volume = 0.5;
+    audio.play().catch(e => console.log("Cri non disponible sur PokeAPI"));
 }
-// =========================================
-// CHARGEMENT INITIAL & RESTAURATION DE PAGE
-// =========================================
-window.addEventListener('DOMContentLoaded', () => {
-    // On regarde s'il y a une page en mémoire
-    const lastSection = localStorage.getItem('last_visited_section');
-    
-    // Si oui, on l'ouvre. Sinon, on ouvre le tableau de bord Shiny par défaut.
-    if (lastSection) {
-        showSection(lastSection);
-    } else {
-        showSection('shiny');
-    }
-});
 // Fonction pour simuler le rendu PokeAPI pour les formes custom
 // Fonction pour simuler le rendu PokeAPI pour les formes custom Z-A
 function renderCustomCardLocal(id, data) {
@@ -2145,43 +2149,71 @@ function renderCustomCardLocal(id, data) {
     // Vital : on sauvegarde l'ID courant pour le bouton des cris !
     currentDexId = id; 
     
-    // Gestion de l'image principale avec IMAGE DE SECOURS (Zarbi "?")
-    const imgElement = document.getElementById('dex-image'); 
-    if(imgElement) {
-        // 1. On retire les anciennes sécurités d'erreur pour faire place nette
+    // 1. On affiche le Pokédex (comme pour un Pokémon normal)
+    const emptyState = document.getElementById('dex-empty-state');
+    if (emptyState) emptyState.style.display = 'none';
+    
+    const cardContainer = document.getElementById('dex-card-container');
+    if (cardContainer) cardContainer.style.display = 'block';
+
+    // 2. Mise à jour du Header (Noms et ID) - SÉCURISÉ
+    const idElement = document.getElementById('dex-id');
+    if (idElement) idElement.textContent = `#${id}`;
+    
+    const nameFrElement = document.getElementById('dex-name-fr'); 
+    if (nameFrElement) nameFrElement.textContent = data.name_fr;
+    
+    const nameEnElement = document.getElementById('dex-name-en');
+    if (nameEnElement) nameEnElement.textContent = data.name_en || data.name_fr; 
+
+    // 3. Gestion de l'image principale avec IMAGE DE SECOURS (Zarbi "?")
+    const imgElement = document.getElementById('dex-sprite'); 
+    if (imgElement) {
         imgElement.onerror = null; 
-        
-        // 2. On tente de charger ton image (qui n'existe peut-être pas encore)
         imgElement.src = data.sprite;
-        
-        // 3. LA MAGIE : Si ça rate (erreur 404), on met le Zarbi "?"
         imgElement.onerror = function() {
-            this.onerror = null; // Empêche une boucle infinie si le Zarbi bug aussi
+            this.onerror = null; // Empêche une boucle infinie
             this.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-question.png'; 
-            // Tu peux aussi utiliser une Pokéball : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
         };
     }
     
-    // Le nom français
-    const nameElement = document.getElementById('dex-nameFr'); 
-    if(nameElement) nameElement.textContent = data.name_fr;
-    
-    // Gestion des types
+    // 4. Gestion des types
     const typesElement = document.getElementById('dex-types');
-    if(typesElement) {
-        typesElement.innerHTML = ''; // On vide les types précédents
-        data.types.forEach(t => {
-            const span = document.createElement('span');
-            // Assure-toi d'avoir une fonction capitalized() ou remplace par t.charAt(0).toUpperCase() + t.slice(1)
-            span.textContent = t.charAt(0).toUpperCase() + t.slice(1); 
-            span.className = `type-badge type-${t}`; 
-            typesElement.appendChild(span);
-        });
+    if (typesElement) {
+        typesElement.innerHTML = data.types.map(t => {
+            const typeColor = (typeof typeColors !== 'undefined' && typeColors[t]) ? typeColors[t] : '#777';
+            const typeTrans = (typeof typeTranslations !== 'undefined' && typeTranslations[t]) ? typeTranslations[t] : t.charAt(0).toUpperCase() + t.slice(1);
+            return `<span class="type-badge" style="background-color: ${typeColor}">${typeTrans}</span>`;
+        }).join('');
     }
 
-    // Gestion de l'audio des cris (Z-A)
+    // 5. LA MAGIE AUDIO : On donne le lien du cri au bouton !
     const cryBtn = document.getElementById('dex-cry-btn');
-    if(cryBtn) {
+    if (cryBtn) {
         cryBtn.dataset.customCry = data.cry; 
     }
+
+    // 6. Nettoyage des onglets du bas
+    const tabsToEmpty = ['dex-tab-infos', 'dex-tab-moves', 'dex-tab-locations', 'dex-tab-hunting'];
+    tabsToEmpty.forEach(tab => {
+        const el = document.getElementById(tab);
+        if (el) {
+            el.innerHTML = `<div style="text-align:center; padding: 40px; color: #888; background: rgba(0,0,0,0.02); border-radius: 12px;">
+                <span style="font-size: 24px;">🔬</span><br><br>
+                <strong>Données en cours de recherche par le Professeur Platane...</strong><br>
+                <span style="font-size:12px; font-style: italic;">(Forme Z-A non documentée)</span>
+            </div>`;
+        }
+    });
+
+    // 7. On cache les boutons Suivant/Précédent - SÉCURISÉ
+    const btnPrev = document.getElementById('dex-btn-prev');
+    if (btnPrev) btnPrev.style.visibility = 'hidden';
+    
+    const btnNext = document.getElementById('dex-btn-next');
+    if (btnNext) btnNext.style.visibility = 'hidden';
+
+    // 8. Force l'affichage du premier onglet proprement
+    const firstTabBtn = document.querySelector('.dex-tab-btn');
+    if (firstTabBtn) firstTabBtn.click();
 }
