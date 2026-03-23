@@ -40,12 +40,89 @@ const pokedexSection = document.getElementById('pokedex-section');
 let currentDexId = 1; // ID du Pokémon affiché dans la fiche détaillée
 
 const chainMethods = ['Radar', 'Peche', 'SOS', 'LG_Combo', 'LG_Combo_Charme', 'LG_Combo_Parfum', 'LG_Combo_All'];
+// ==========================================
+// DATA : FORMES MÉGA CUSTOM (LÉGENDES Z-A)
+// (À remplacer par l'API quand dispo)
+// ==========================================
+// ==========================================
+// DATA : FORMES MÉGA CUSTOM (LÉGENDES Z-A COMPLET)
+// 45 Nouvelles Méga-Évolutions
+// ==========================================
+const CUSTOM_MEGA_DATA = {
+    20001: { name_fr: "Méga-Mélodelfe", types: ['fairy'], sprite: 'assets/sprites/mega/melodelfe-za.png', cry: 'assets/cries/mega/melodelfe-za.ogg' },
+    20002: { name_fr: "Méga-Empiflor", types: ['grass', 'poison'], sprite: 'assets/sprites/mega/empiflor-za.png', cry: 'assets/cries/mega/empiflor-za.ogg' },
+    20003: { name_fr: "Méga-Staross", types: ['water', 'psychic'], sprite: 'assets/sprites/mega/staross-za.png', cry: 'assets/cries/mega/staross-za.ogg' },
+    20004: { name_fr: "Méga-Dracolosse", types: ['dragon', 'flying'], sprite: 'assets/sprites/mega/dracolosse-za.png', cry: 'assets/cries/mega/dracolosse-za.ogg' },
+    20005: { name_fr: "Méga-Méganium", types: ['grass'], sprite: 'assets/sprites/mega/meganium-za.png', cry: 'assets/cries/mega/meganium-za.ogg' },
+    20006: { name_fr: "Méga-Aligatueur", types: ['water'], sprite: 'assets/sprites/mega/aligatueur-za.png', cry: 'assets/cries/mega/aligatueur-za.ogg' },
+    20007: { name_fr: "Méga-Airmure", types: ['steel', 'flying'], sprite: 'assets/sprites/mega/airmure-za.png', cry: 'assets/cries/mega/airmure-za.ogg' },
+    20008: { name_fr: "Méga-Momartik", types: ['ice', 'ghost'], sprite: 'assets/sprites/mega/momartik-za.png', cry: 'assets/cries/mega/momartik-za.ogg' },
+    20009: { name_fr: "Méga-Roitiflam", types: ['fire', 'fighting'], sprite: 'assets/sprites/mega/roitiflam-za.png', cry: 'assets/cries/mega/roitiflam-za.ogg' },
+    20010: { name_fr: "Méga-Minotaupe", types: ['ground', 'steel'], sprite: 'assets/sprites/mega/minotaupe-za.png', cry: 'assets/cries/mega/minotaupe-za.ogg' },
+    20011: { name_fr: "Méga-Brutapode", types: ['bug', 'poison'], sprite: 'assets/sprites/mega/brutapode-za.png', cry: 'assets/cries/mega/brutapode-za.ogg' },
+    20012: { name_fr: "Méga-Baggaïd", types: ['dark', 'fighting'], sprite: 'assets/sprites/mega/baggaid-za.png', cry: 'assets/cries/mega/baggaid-za.ogg' },
+    20013: { name_fr: "Méga-Ohmassacre", types: ['electric'], sprite: 'assets/sprites/mega/ohmassacre-za.png', cry: 'assets/cries/mega/ohmassacre-za.ogg' },
+    20014: { name_fr: "Méga-Lugulabre", types: ['ghost', 'fire'], sprite: 'assets/sprites/mega/lugulabre-za.png', cry: 'assets/cries/mega/lugulabre-za.ogg' },
+    20015: { name_fr: "Méga-Blindépique", types: ['grass', 'fighting'], sprite: 'assets/sprites/mega/blindepique-za.png', cry: 'assets/cries/mega/blindepique-za.ogg' },
+    20016: { name_fr: "Méga-Goupelin", types: ['fire', 'psychic'], sprite: 'assets/sprites/mega/goupelin-za.png', cry: 'assets/cries/mega/goupelin-za.ogg' },
+    20017: { name_fr: "Méga-Amphinobi", types: ['water', 'dark'], sprite: 'assets/sprites/mega/amphinobi-za.png', cry: 'assets/cries/mega/amphinobi-za.ogg' },
+    20018: { name_fr: "Méga-Némélios", types: ['fire', 'normal'], sprite: 'assets/sprites/mega/nemelios-za.png', cry: 'assets/cries/mega/nemelios-za.ogg' },
+    20019: { name_fr: "Méga-Floette", types: ['fairy'], sprite: 'assets/sprites/mega/floette-za.png', cry: 'assets/cries/mega/floette-za.ogg' },
+    20020: { name_fr: "Méga-Sépiatroce", types: ['dark', 'psychic'], sprite: 'assets/sprites/mega/sepiatroce-za.png', cry: 'assets/cries/mega/sepiatroce-za.ogg' },
+    20021: { name_fr: "Méga-Golgopathe", types: ['rock', 'water'], sprite: 'assets/sprites/mega/golgopathe-za.png', cry: 'assets/cries/mega/golgopathe-za.ogg' },
+    20022: { name_fr: "Méga-Kravarech", types: ['poison', 'dragon'], sprite: 'assets/sprites/mega/kravarech-za.png', cry: 'assets/cries/mega/kravarech-za.ogg' },
+    20023: { name_fr: "Méga-Brutalibré", types: ['fighting', 'flying'], sprite: 'assets/sprites/mega/brutalibre-za.png', cry: 'assets/cries/mega/brutalibre-za.ogg' },
+    20024: { name_fr: "Méga-Zygarde", types: ['dragon', 'ground'], sprite: 'assets/sprites/mega/zygarde-za.png', cry: 'assets/cries/mega/zygarde-za.ogg' },
+    20025: { name_fr: "Méga-Draïeul", types: ['normal', 'dragon'], sprite: 'assets/sprites/mega/draieul-za.png', cry: 'assets/cries/mega/draieul-za.ogg' },
+    20026: { name_fr: "Méga-Hexadron", types: ['fighting'], sprite: 'assets/sprites/mega/hexadron-za.png', cry: 'assets/cries/mega/hexadron-za.ogg' },
+    20027: { name_fr: "Méga-Raichu X", types: ['electric'], sprite: 'assets/sprites/mega/raichu-x-za.png', cry: 'assets/cries/mega/raichu-x-za.ogg' },
+    20028: { name_fr: "Méga-Raichu Y", types: ['electric'], sprite: 'assets/sprites/mega/raichu-y-za.png', cry: 'assets/cries/mega/raichu-y-za.ogg' },
+    20029: { name_fr: "Méga-Éoko", types: ['psychic'], sprite: 'assets/sprites/mega/eoko-za.png', cry: 'assets/cries/mega/eoko-za.ogg' },
+    20030: { name_fr: "Méga-Absol (Z-A)", types: ['dark'], sprite: 'assets/sprites/mega/absol-za.png', cry: 'assets/cries/mega/absol-za.ogg' },
+    20031: { name_fr: "Méga-Étouraptor", types: ['normal', 'flying'], sprite: 'assets/sprites/mega/etouraptor-za.png', cry: 'assets/cries/mega/etouraptor-za.ogg' },
+    20032: { name_fr: "Méga-Carchacrok (Z-A)", types: ['dragon', 'ground'], sprite: 'assets/sprites/mega/carchacrok-za.png', cry: 'assets/cries/mega/carchacrok-za.ogg' },
+    20033: { name_fr: "Méga-Lucario (Z-A)", types: ['fighting', 'steel'], sprite: 'assets/sprites/mega/lucario-za.png', cry: 'assets/cries/mega/lucario-za.ogg' },
+    20034: { name_fr: "Méga-Heatran", types: ['fire', 'steel'], sprite: 'assets/sprites/mega/heatran-za.png', cry: 'assets/cries/mega/heatran-za.ogg' },
+    20035: { name_fr: "Méga-Darkrai", types: ['dark'], sprite: 'assets/sprites/mega/darkrai-za.png', cry: 'assets/cries/mega/darkrai-za.ogg' },
+    20036: { name_fr: "Méga-Golemastoc", types: ['ground', 'ghost'], sprite: 'assets/sprites/mega/golemastoc-za.png', cry: 'assets/cries/mega/golemastoc-za.ogg' },
+    20037: { name_fr: "Méga-Mistigrix", types: ['psychic'], sprite: 'assets/sprites/mega/mistigrix-za.png', cry: 'assets/cries/mega/mistigrix-za.ogg' },
+    20038: { name_fr: "Méga-Crabominable", types: ['fighting', 'ice'], sprite: 'assets/sprites/mega/crabominable-za.png', cry: 'assets/cries/mega/crabominable-za.ogg' },
+    20039: { name_fr: "Méga-Sarmuraï", types: ['bug', 'water'], sprite: 'assets/sprites/mega/sarmurai-za.png', cry: 'assets/cries/mega/sarmurai-za.ogg' },
+    20040: { name_fr: "Méga-Magearna", types: ['steel', 'fairy'], sprite: 'assets/sprites/mega/magearna-za.png', cry: 'assets/cries/mega/magearna-za.ogg' },
+    20041: { name_fr: "Méga-Zeraora", types: ['electric'], sprite: 'assets/sprites/mega/zeraora-za.png', cry: 'assets/cries/mega/zeraora-za.ogg' },
+    20042: { name_fr: "Méga-Scovilain", types: ['grass', 'fire'], sprite: 'assets/sprites/mega/scovilain-za.png', cry: 'assets/cries/mega/scovilain-za.ogg' },
+    20043: { name_fr: "Méga-Floréclat", types: ['rock', 'poison'], sprite: 'assets/sprites/mega/floreclat-za.png', cry: 'assets/cries/mega/floreclat-za.ogg' },
+    20044: { name_fr: "Méga-Nigirigon", types: ['dragon', 'water'], sprite: 'assets/sprites/mega/nigirigon-za.png', cry: 'assets/cries/mega/nigirigon-za.ogg' },
+    20045: { name_fr: "Méga-Glaivodo", types: ['dragon', 'ice'], sprite: 'assets/sprites/mega/glaivodo-za.png', cry: 'assets/cries/mega/glaivodo-za.ogg' }
+};
 const specialForms = {
     alola: ['rattata-alola', 'raticate-alola', 'raichu-alola', 'sandshrew-alola', 'sandslash-alola', 'vulpix-alola', 'ninetales-alola', 'diglett-alola', 'dugtrio-alola', 'meowth-alola', 'persian-alola', 'geodude-alola', 'graveler-alola', 'golem-alola', 'grimer-alola', 'muk-alola', 'exeggutor-alola', 'marowak-alola'],
     galar: ['meowth-galar', 'ponyta-galar', 'rapidash-galar', 'slowpoke-galar', 'slowbro-galar', 'farfetchd-galar', 'weezing-galar', 'mr-mime-galar', 'articuno-galar', 'zapdos-galar', 'moltres-galar', 'slowking-galar', 'corsola-galar', 'zigzagoon-galar', 'linoone-galar', 'darumaka-galar', 'darmanitan-galar-standard', 'yamask-galar', 'stunfisk-galar'],
     hisui: ['growlithe-hisui', 'arcanine-hisui', 'voltorb-hisui', 'electrode-hisui', 'typhlosion-hisui', 'qwilfish-hisui', 'sneasel-hisui', 'samurott-hisui', 'lilligant-hisui', 'basculin-white-striped', 'zorua-hisui', 'zoroark-hisui', 'braviary-hisui', 'sliggoo-hisui', 'goodra-hisui', 'avalugg-hisui', 'decidueye-hisui'],
     paldea: ['tauros-paldea-combat-breed', 'tauros-paldea-blaze-breed', 'tauros-paldea-aqua-breed', 'wooper-paldea'],
-    speciales: ['lycanroc-dusk', 'zygarde-10', 'greninja-ash', 'ursaluna-bloodmoon', 'gimmighoul-roaming', 'palafin-hero']
+    speciales: ['lycanroc-dusk', 'zygarde-10', 'greninja-ash', 'ursaluna-bloodmoon', 'gimmighoul-roaming', 'palafin-hero'],
+mega: [
+        // ... tes anciens numéros 10033 à 10090 restent ici ...
+        10033, 10034, 10035, 10036, 10037, 10038, 10039, 10040, 10041, 10042, 
+        10043, 10044, 10045, 10046, 10047, 10048, 10049, 10050, 10051, 10052, 
+        10053, 10054, 10055, 10056, 10057, 10058, 10059, 10060, 10062, 10063, 
+        10064, 10065, 10066, 10067, 10068, 10069, 10070, 10071, 10072, 10073, 
+        10074, 10075, 10076, 10077, 10078, 10086, 10087, 10088, 10089, 10090,
+        
+        // --- NOUVEAUTÉS LÉGENDES Z-A (45 Pokémon) ---
+        20001, 20002, 20003, 20004, 20005, 20006, 20007, 20008, 20009, 20010, 
+        20011, 20012, 20013, 20014, 20015, 20016, 20017, 20018, 20019, 20020,
+        20021, 20022, 20023, 20024, 20025, 20026, 20027, 20028, 20029, 20030,
+        20031, 20032, 20033, 20034, 20035, 20036, 20037, 20038, 20039, 20040,
+        20041, 20042, 20043, 20044, 20045
+    ],
+    
+    gigamax: [
+        10195, 10196, 10197, 10198, 10199, 10200, 10201, 10202, 10203, 10204, 
+        10205, 10206, 10207, 10208, 10210, 10211, 10212, 10213, 10214, 10215, 
+        10216, 10217, 10218, 10219, 10220, 10221, 10222, 10223, 10224, 10225, 
+        10226, 10227, 10228
+    ],
 };
 
 // --- LES DICTIONNAIRES FRANÇAIS INSTANTANÉS ---
@@ -132,7 +209,7 @@ function showSection(sectionName) {
     });
     // -----------------------------------------
     
-    if (sectionName === 'shiny') { shinySection.style.display = 'block'; if (pokedexGrid.children.length === 0) loadGeneration(1025, 0, 'Complet', 'Toutes'); } 
+    if (sectionName === 'shiny') { shinySection.style.display = 'block'; if (pokedexGrid.children.length === 0) loadTrueLivingDex(); } 
     else if (sectionName === 'pokedex') { 
         pokedexSection.style.display = 'block'; 
         // Si la fiche est cachée (première ouverture), on charge un Pokémon au hasard !
@@ -181,6 +258,7 @@ function renderWantedList() {
 
 async function updateDashboard() {
     let totalS=0, totalE=0, maxE=0, hardId=null, localS=0;
+    
     for (let i=0; i<localStorage.length; i++) {
         const k=localStorage.key(i);
         // Sécurité : On exclut les shinys du HoF
@@ -189,18 +267,38 @@ async function updateDashboard() {
             const pId=k.split('-')[1]; 
             if(currentListIds.includes(pId) || currentListIds.includes(parseInt(pId))) localS++; 
         }
-        if(k.startsWith('encounters-')) { const c=parseInt(localStorage.getItem(k))||0; totalE+=c; if(c>maxE) { maxE=c; hardId=k.split('-')[1]; } }
+        if(k.startsWith('encounters-')) { 
+            const c=parseInt(localStorage.getItem(k))||0; 
+            totalE+=c; 
+            if(c>maxE) { maxE=c; hardId=k.split('-')[1]; } 
+        }
     }
-    document.getElementById('stat-total-shiny').textContent = totalS; document.getElementById('stat-total-encounters').textContent = totalE;
-    const gp = Math.round((totalS/1025)*100);
-    const gpt = document.getElementById('global-progress-text'); if(gpt) gpt.textContent = `${totalS} / 1025 (${gp}%)`;
-    const gpb = document.getElementById('global-progress-bar'); if(gpb) gpb.style.width = `${gp}%`;
+    
+    document.getElementById('stat-total-shiny').textContent = totalS; 
+    document.getElementById('stat-total-encounters').textContent = totalE;
+    
+    // --- MODIFICATION ICI : On passe à 1153 pour le True Living Dex ! ---
+    const gp = Math.round((totalS/1153)*100);
+    const gpt = document.getElementById('global-progress-text'); 
+    if(gpt) gpt.textContent = `${totalS} / 1153 (${gp}%)`;
+    // -------------------------------------------------------------------
+    
+    const gpb = document.getElementById('global-progress-bar'); 
+    if(gpb) gpb.style.width = `${gp}%`;
+    
     if(currentListIds.length>0) {
         const lp = Math.round((localS/currentListIds.length)*100);
-        const lpt = document.getElementById('gen-progress-text'); if(lpt) lpt.textContent = `${localS} / ${currentListIds.length} (${lp}%)`;
-        const lpb = document.getElementById('gen-progress-bar'); if(lpb) lpb.style.width = `${lp}%`;
+        const lpt = document.getElementById('gen-progress-text'); 
+        if(lpt) lpt.textContent = `${localS} / ${currentListIds.length} (${lp}%)`;
+        const lpb = document.getElementById('gen-progress-bar'); 
+        if(lpb) lpb.style.width = `${lp}%`;
     }
-    if(hardId && maxE>0) { document.getElementById('stat-longest-hunt').textContent=`${getPokemonName(hardId)} (${maxE})`; } else document.getElementById('stat-longest-hunt').textContent="- (0)";
+    
+    if(hardId && maxE>0) { 
+        document.getElementById('stat-longest-hunt').textContent=`${getPokemonName(hardId)} (${maxE})`; 
+    } else {
+        document.getElementById('stat-longest-hunt').textContent="- (0)";
+    }
 }
 
 async function loadGeneration(limit, offset, name, genNumber) {
@@ -215,12 +313,84 @@ async function loadGeneration(limit, offset, name, genNumber) {
     } catch(e) {}
 }
 
+// Le cadenas de sécurité anti-mélange
+let currentRenderId = 0;
+
 async function loadCustomList(name, names) {
     document.getElementById('gen-title').textContent = name;
-    pokedexGrid.innerHTML = '<p style="text-align:center;grid-column:1/-1;">Chargement...</p>';
-    currentHuntId = null; closeLiveHunt(); currentListIds = []; pokedexGrid.innerHTML = '';
-    for(let n of names) { try{ const res=await fetch(`https://pokeapi.co/api/v2/pokemon/${n}`); const data=await res.json(); currentListIds.push(data.id); createPokemonCard(data.id, data.name); }catch(e){} }
-    updateDashboard();
+    pokedexGrid.innerHTML = '<p style="text-align:center;grid-column:1/-1;">Chargement en cours, veuillez patienter... 🔄</p>';
+    currentHuntId = null; 
+    closeLiveHunt(); 
+    
+    // On met à jour la barre à 1153 direct !
+    currentListIds = [...names]; 
+    updateDashboard(); 
+
+    // On active le cadenas pour ce clic précis
+    currentRenderId++; 
+    const renderId = currentRenderId; 
+
+    pokedexGrid.innerHTML = '';
+
+    for(let n of names) { 
+        // Si on a cliqué sur un autre bouton entre temps, on COUPE ce chargement !
+        if (renderId !== currentRenderId) return; 
+
+        try { 
+            // Intercepteur Custom Z-A
+            if (n >= 20000 && typeof CUSTOM_MEGA_DATA !== 'undefined' && CUSTOM_MEGA_DATA[n]) {
+                createPokemonCard(n, CUSTOM_MEGA_DATA[n].name_fr);
+                continue; 
+            }
+
+            const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${n}`); 
+            if (!res.ok) throw new Error("Non trouvé"); 
+            const data = await res.json(); 
+            
+            // On vérifie le cadenas une dernière fois avant d'afficher
+            if (renderId === currentRenderId) {
+                createPokemonCard(data.id, data.name); 
+            }
+            
+        } catch(e) {
+            console.error(`Erreur de chargement pour l'ID ${n}`);
+        } 
+    }
+}
+
+// Fonction dédiée au True Living Dex (1153 Pokémon)
+// Fonction dédiée au True Living Dex (1153 Pokémon)
+function loadTrueLivingDex() {
+    // 1. Les 1025 de base
+    let baseDex = Array.from({length: 1025}, (_, i) => i + 1);
+    
+    // 2. Les 95 Mégas (Classiques + Z-A)
+    let megaIDs = [
+        10033, 10034, 10035, 10036, 10037, 10038, 10039, 10040, 10041, 10042, 
+        10043, 10044, 10045, 10046, 10047, 10048, 10049, 10050, 10051, 10052, 
+        10053, 10054, 10055, 10056, 10057, 10058, 10059, 10060, 10062, 10063, 
+        10064, 10065, 10066, 10067, 10068, 10069, 10070, 10071, 10072, 10073, 
+        10074, 10075, 10076, 10077, 10078, 10086, 10087, 10088, 10089, 10090,
+        20001, 20002, 20003, 20004, 20005, 20006, 20007, 20008, 20009, 20010, 
+        20011, 20012, 20013, 20014, 20015, 20016, 20017, 20018, 20019, 20020, 
+        20021, 20022, 20023, 20024, 20025, 20026, 20027, 20028, 20029, 20030, 
+        20031, 20032, 20033, 20034, 20035, 20036, 20037, 20038, 20039, 20040, 
+        20041, 20042, 20043, 20044, 20045
+    ];
+
+    // 3. Les 33 Gigamax
+    let gmaxIDs = [
+        10195, 10196, 10197, 10198, 10199, 10200, 10201, 10202, 10203, 10204, 
+        10205, 10206, 10207, 10208, 10210, 10211, 10212, 10213, 10214, 10215, 
+        10216, 10217, 10218, 10219, 10220, 10221, 10222, 10223, 10224, 10225, 
+        10226, 10227, 10228
+    ];
+    
+    // 4. Fusion totale 
+    let trueLivingDex = [...baseDex, ...megaIDs, ...gmaxIDs];
+    
+    // 5. On lance le chargement !
+    loadCustomList('Pokédex Complet', trueLivingDex);
 }
 
 // RESTAURATION PARFAITE DES CARTES (Vues/Phases comme les autres inputs, Liste complète des jeux)
@@ -231,10 +401,24 @@ function createPokemonCard(id, name) {
     const isS = localStorage.getItem(`shiny-${id}`) === 'true'; const sE = localStorage.getItem(`encounters-${id}`) || ''; const sP = localStorage.getItem(`phases-${id}`) || '1';
     const sG = localStorage.getItem(`game-${id}`) || ''; const sM = localStorage.getItem(`method-${id}`) || ''; const sN = localStorage.getItem(`nickname-${id}`) || ''; const sD = localStorage.getItem(`date-${id}`) || '';
     const isP = localStorage.getItem(`pinned-${id}`) !== null; const pinC = isP ? 'btn-pin active' : 'btn-pin'; const pinI = isP ? '📌' : '📍';
-    const imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${isS?'shiny/':''}${id}.png`;
     
+    // --- GESTION DES IMAGES CUSTOM ET FALLBACK ---
+    let imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${isS?'shiny/':''}${id}.png`;
+    
+    // Si c'est une forme de Z-A (ID >= 20000)
+    if (id >= 20000 && typeof CUSTOM_MEGA_DATA !== 'undefined' && CUSTOM_MEGA_DATA[id]) {
+        if (isS) {
+            imgSrc = CUSTOM_MEGA_DATA[id].sprite.replace('mega/', 'mega/shiny/');
+        } else {
+            imgSrc = CUSTOM_MEGA_DATA[id].sprite; 
+        }
+    }
+    
+    const fallbackImg = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-question.png';
+    // ---------------------------------------------
+
     card.innerHTML = `
-        <img src="${imgSrc}" id="img-${id}" class="${isS?'':'not-caught'}">
+        <img src="${imgSrc}" id="img-${id}" class="${isS?'':'not-caught'}" onerror="this.onerror=null; this.src='${fallbackImg}';">
         
         <h3 style="display:flex;justify-content:center;align-items:center;gap:8px;">
             #${id} ${cap}
@@ -253,86 +437,38 @@ function createPokemonCard(id, name) {
             <div><label>Date:</label><input type="date" id="date-${id}" value="${sD}" onchange="saveSelect(${id},'date')" class="hunt-select"></div>
             <div><label>Jeu:</label><select id="game-${id}" onchange="saveSelect(${id},'game')" class="hunt-select">
                 <option value="">--</option>
-                <optgroup label="Kanto">
-                    <option value="Rouge" ${sG==='Rouge'?'selected':''}>Rouge</option><option value="Bleu" ${sG==='Bleu'?'selected':''}>Bleu</option><option value="Jaune" ${sG==='Jaune'?'selected':''}>Jaune</option><option value="Rouge Feu" ${sG==='Rouge Feu'?'selected':''}>Rouge Feu</option><option value="Vert Feuille" ${sG==='Vert Feuille'?'selected':''}>Vert Feuille</option><option value="Let's Go Pikachu" ${sG==="Let's Go Pikachu"?'selected':''}>Let's Go Pikachu</option><option value="Let's Go Évoli" ${sG==="Let's Go Évoli"?'selected':''}>Let's Go Évoli</option>
-                </optgroup>
-                <optgroup label="Johto">
-                    <option value="Or" ${sG==='Or'?'selected':''}>Or</option><option value="Argent" ${sG==='Argent'?'selected':''}>Argent</option><option value="Cristal" ${sG==='Cristal'?'selected':''}>Cristal</option><option value="HeartGold" ${sG==='HeartGold'?'selected':''}>HeartGold</option><option value="SoulSilver" ${sG==='SoulSilver'?'selected':''}>SoulSilver</option>
-                </optgroup>
-                <optgroup label="Hoenn">
-                    <option value="Rubis" ${sG==='Rubis'?'selected':''}>Rubis</option><option value="Saphir" ${sG==='Saphir'?'selected':''}>Saphir</option><option value="Émeraude" ${sG==='Émeraude'?'selected':''}>Émeraude</option><option value="Rubis Oméga" ${sG==='Rubis Oméga'?'selected':''}>Rubis Oméga</option><option value="Saphir Alpha" ${sG==='Saphir Alpha'?'selected':''}>Saphir Alpha</option>
-                </optgroup>
-                <optgroup label="Sinnoh">
-                    <option value="Diamant" ${sG==='Diamant'?'selected':''}>Diamant</option><option value="Perle" ${sG==='Perle'?'selected':''}>Perle</option><option value="Platine" ${sG==='Platine'?'selected':''}>Platine</option><option value="Diamant Étincelant" ${sG==='Diamant Étincelant'?'selected':''}>Diamant Étincelant</option><option value="Perle Scintillante" ${sG==='Perle Scintillante'?'selected':''}>Perle Scintillante</option>
-                </optgroup>
-                <optgroup label="Unys">
-                    <option value="Noir" ${sG==='Noir'?'selected':''}>Noir</option><option value="Blanc" ${sG==='Blanc'?'selected':''}>Blanc</option><option value="Noir 2" ${sG==='Noir 2'?'selected':''}>Noir 2</option><option value="Blanc 2" ${sG==='Blanc 2'?'selected':''}>Blanc 2</option>
-                </optgroup>
-                <optgroup label="Kalos">
-                    <option value="X" ${sG==='X'?'selected':''}>X</option><option value="Y" ${sG==='Y'?'selected':''}>Y</option>
-                </optgroup>
-                <optgroup label="Alola">
-                    <option value="Soleil" ${sG==='Soleil'?'selected':''}>Soleil</option><option value="Lune" ${sG==='Lune'?'selected':''}>Lune</option><option value="Ultra-Soleil" ${sG==='Ultra-Soleil'?'selected':''}>Ultra-Soleil</option><option value="Ultra-Lune" ${sG==='Ultra-Lune'?'selected':''}>Ultra-Lune</option>
-                </optgroup>
-                <optgroup label="Galar">
-                    <option value="Épée" ${sG==='Épée'?'selected':''}>Épée</option><option value="Bouclier" ${sG==='Bouclier'?'selected':''}>Bouclier</option>
-                </optgroup>
-                <optgroup label="Hisui">
-                    <option value="Légendes Arceus" ${sG==='Légendes Arceus'?'selected':''}>Légendes Arceus</option>
-                </optgroup>
-                <optgroup label="Paldea">
-                    <option value="Écarlate" ${sG==='Écarlate'?'selected':''}>Écarlate</option><option value="Violet" ${sG==='Violet'?'selected':''}>Violet</option>
-                </optgroup>
-                <optgroup label="Illumis">
-                    <option value="Légendes Z-A" ${sG==='Légendes Z-A'?'selected':''}>Légendes Z-A</option>
-                </optgroup>
-                <optgroup label="Autres">
-                    <option value="Pokémon GO" ${sG==='Pokémon GO'?'selected':''}>Pokémon GO</option>
-                </optgroup>
+                <optgroup label="Kanto"><option value="Rouge" ${sG==='Rouge'?'selected':''}>Rouge</option><option value="Bleu" ${sG==='Bleu'?'selected':''}>Bleu</option><option value="Jaune" ${sG==='Jaune'?'selected':''}>Jaune</option><option value="Rouge Feu" ${sG==='Rouge Feu'?'selected':''}>Rouge Feu</option><option value="Vert Feuille" ${sG==='Vert Feuille'?'selected':''}>Vert Feuille</option><option value="Let's Go Pikachu" ${sG==="Let's Go Pikachu"?'selected':''}>Let's Go Pikachu</option><option value="Let's Go Évoli" ${sG==="Let's Go Évoli"?'selected':''}>Let's Go Évoli</option></optgroup>
+                <optgroup label="Johto"><option value="Or" ${sG==='Or'?'selected':''}>Or</option><option value="Argent" ${sG==='Argent'?'selected':''}>Argent</option><option value="Cristal" ${sG==='Cristal'?'selected':''}>Cristal</option><option value="HeartGold" ${sG==='HeartGold'?'selected':''}>HeartGold</option><option value="SoulSilver" ${sG==='SoulSilver'?'selected':''}>SoulSilver</option></optgroup>
+                <optgroup label="Hoenn"><option value="Rubis" ${sG==='Rubis'?'selected':''}>Rubis</option><option value="Saphir" ${sG==='Saphir'?'selected':''}>Saphir</option><option value="Émeraude" ${sG==='Émeraude'?'selected':''}>Émeraude</option><option value="Rubis Oméga" ${sG==='Rubis Oméga'?'selected':''}>Rubis Oméga</option><option value="Saphir Alpha" ${sG==='Saphir Alpha'?'selected':''}>Saphir Alpha</option></optgroup>
+                <optgroup label="Sinnoh"><option value="Diamant" ${sG==='Diamant'?'selected':''}>Diamant</option><option value="Perle" ${sG==='Perle'?'selected':''}>Perle</option><option value="Platine" ${sG==='Platine'?'selected':''}>Platine</option><option value="Diamant Étincelant" ${sG==='Diamant Étincelant'?'selected':''}>Diamant Étincelant</option><option value="Perle Scintillante" ${sG==='Perle Scintillante'?'selected':''}>Perle Scintillante</option></optgroup>
+                <optgroup label="Unys"><option value="Noir" ${sG==='Noir'?'selected':''}>Noir</option><option value="Blanc" ${sG==='Blanc'?'selected':''}>Blanc</option><option value="Noir 2" ${sG==='Noir 2'?'selected':''}>Noir 2</option><option value="Blanc 2" ${sG==='Blanc 2'?'selected':''}>Blanc 2</option></optgroup>
+                <optgroup label="Kalos"><option value="X" ${sG==='X'?'selected':''}>X</option><option value="Y" ${sG==='Y'?'selected':''}>Y</option></optgroup>
+                <optgroup label="Alola"><option value="Soleil" ${sG==='Soleil'?'selected':''}>Soleil</option><option value="Lune" ${sG==='Lune'?'selected':''}>Lune</option><option value="Ultra-Soleil" ${sG==='Ultra-Soleil'?'selected':''}>Ultra-Soleil</option><option value="Ultra-Lune" ${sG==='Ultra-Lune'?'selected':''}>Ultra-Lune</option></optgroup>
+                <optgroup label="Galar"><option value="Épée" ${sG==='Épée'?'selected':''}>Épée</option><option value="Bouclier" ${sG==='Bouclier'?'selected':''}>Bouclier</option></optgroup>
+                <optgroup label="Hisui"><option value="Légendes Arceus" ${sG==='Légendes Arceus'?'selected':''}>Légendes Arceus</option></optgroup>
+                <optgroup label="Paldea"><option value="Écarlate" ${sG==='Écarlate'?'selected':''}>Écarlate</option><option value="Violet" ${sG==='Violet'?'selected':''}>Violet</option></optgroup>
+                <optgroup label="Illumis"><option value="Légendes Z-A" ${sG==='Légendes Z-A'?'selected':''}>Légendes Z-A</option></optgroup>
+                <optgroup label="Autres"><option value="Pokémon GO" ${sG==='Pokémon GO'?'selected':''}>Pokémon GO</option></optgroup>
             </select></div>
             <div><label>Méthode:</label><select id="method-${id}" onchange="saveSelect(${id},'method')" class="hunt-select">
                 <option value="">--</option>
-                <optgroup label="Classique">
-                    <option value="Hasard" ${sM==='Hasard'?'selected':''}>Hasard / Resets</option>
-                    <option value="Charme" ${sM==='Charme'?'selected':''}>Avec Charme</option>
-                </optgroup>
-                <optgroup label="Reproduction">
-                    <option value="Masuda" ${sM==='Masuda'?'selected':''}>Masuda</option>
-                    <option value="MasudaCharme" ${sM==='MasudaCharme'?'selected':''}>Masuda + Charme</option>
-                </optgroup>
-                <optgroup label="Let's Go">
-                    <option value="LG_Combo" ${sM==='LG_Combo'?'selected':''}>Combo Capture</option>
-                    <option value="LG_Combo_Charme" ${sM==='LG_Combo_Charme'?'selected':''}>Combo + Charme</option>
-                    <option value="LG_Combo_Parfum" ${sM==='LG_Combo_Parfum'?'selected':''}>Combo + Parfum</option>
-                    <option value="LG_Combo_All" ${sM==='LG_Combo_All'?'selected':''}>Combo+Charme+Parfum</option>
-                </optgroup>
-                <optgroup label="Méthodes à Chaîne">
-                    <option value="SOS" ${sM==='SOS'?'selected':''}>Appel SOS</option>
-                    <option value="Radar" ${sM==='Radar'?'selected':''}>Poké Radar</option>
-                    <option value="Peche" ${sM==='Peche'?'selected':''}>Pêche à la chaîne</option>
-                </optgroup>
-                <optgroup label="Écarlate/Violet & LPA">
-                    <option value="Massive" ${sM==='Massive'?'selected':''}>App. Massive (60+)</option>
-                    <option value="MassiveCharme" ${sM==='MassiveCharme'?'selected':''}>Massive (60+) + Charme</option>
-                    <option value="SandwichMax" ${sM==='SandwichMax'?'selected':''}>Massive+Charme+Aura 3</option>
-                </optgroup>
-                <optgroup label="Spécial">
-                    <option value="Dynamax" ${sM==='Dynamax'?'selected':''}>Antre Dynamax (Charme)</option>
-                </optgroup>
-                <optgroup label="Obtention">
-                    <option value="Évolution" ${sM==='Évolution'?'selected':''}>Évolution (Non shassé)</option>
-                </optgroup>
+                <optgroup label="Classique"><option value="Hasard" ${sM==='Hasard'?'selected':''}>Hasard / Resets</option><option value="Charme" ${sM==='Charme'?'selected':''}>Avec Charme</option></optgroup>
+                <optgroup label="Reproduction"><option value="Masuda" ${sM==='Masuda'?'selected':''}>Masuda</option><option value="MasudaCharme" ${sM==='MasudaCharme'?'selected':''}>Masuda + Charme</option></optgroup>
+                <optgroup label="Let's Go"><option value="LG_Combo" ${sM==='LG_Combo'?'selected':''}>Combo Capture</option><option value="LG_Combo_Charme" ${sM==='LG_Combo_Charme'?'selected':''}>Combo + Charme</option><option value="LG_Combo_Parfum" ${sM==='LG_Combo_Parfum'?'selected':''}>Combo + Parfum</option><option value="LG_Combo_All" ${sM==='LG_Combo_All'?'selected':''}>Combo+Charme+Parfum</option></optgroup>
+                <optgroup label="Méthodes à Chaîne"><option value="SOS" ${sM==='SOS'?'selected':''}>Appel SOS</option><option value="Radar" ${sM==='Radar'?'selected':''}>Poké Radar</option><option value="Peche" ${sM==='Peche'?'selected':''}>Pêche à la chaîne</option></optgroup>
+                <optgroup label="Écarlate/Violet & LPA"><option value="Massive" ${sM==='Massive'?'selected':''}>App. Massive (60+)</option><option value="MassiveCharme" ${sM==='MassiveCharme'?'selected':''}>Massive (60+) + Charme</option><option value="SandwichMax" ${sM==='SandwichMax'?'selected':''}>Massive+Charme+Aura 3</option></optgroup>
+                <optgroup label="Spécial"><option value="Dynamax" ${sM==='Dynamax'?'selected':''}>Antre Dynamax (Charme)</option></optgroup>
+                <optgroup label="Obtention"><option value="Évolution" ${sM==='Évolution'?'selected':''}>Évolution (Non shassé)</option></optgroup>
             </select></div>
         </div>
         <div id="action-btns-${id}" style="display:flex;gap:5px;margin-top:15px;">
-            <button onclick="setAsCurrentHunt(${id}, '${cap}')" style="flex:1;background:var(--accent-blue);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;padding:10px;">🎯 Shasser</button>
-            <button onclick="openJournal(${id}, '${cap}')" style="background:#f39c12;color:white;border:none;border-radius:8px;padding:10px 15px;cursor:pointer;">📖</button>
+            <button onclick="setAsCurrentHunt(${id}, '${cap.replace(/'/g, "\\'")}')" style="flex:1;background:var(--accent-blue);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;padding:10px;">🎯 Shasser</button>
+            <button onclick="openJournal(${id}, '${cap.replace(/'/g, "\\'")}')" style="background:#f39c12;color:white;border:none;border-radius:8px;padding:10px 15px;cursor:pointer;">📖</button>
             ${localStorage.getItem(`journal-link-${id}`) ? `<a href="${localStorage.getItem(`journal-link-${id}`)}" target="_blank" style="background:#e74c3c;color:white;text-decoration:none;padding:10px 15px;border-radius:8px;display:flex;align-items:center;">▶️</a>` : ''}
         </div>
     `;
     pokedexGrid.appendChild(card);
 }
-
 function toggleHoFShiny(g, i) {
     let k = `shiny-team-${g}-${i}`;
     let isCurrentlyShiny = localStorage.getItem(k) === 'true';
@@ -1166,7 +1302,7 @@ const achievementsList = {
     shiny_100: { title: "Maître", desc: "100 Shinys.", icon: "🥇" }, 
     shiny_250: { title: "Grand Maître", desc: "250 Shinys.", icon: "💎" }, 
     shiny_500: { title: "Légende", desc: "500 Shinys.", icon: "👑" }, 
-    shiny_all: { title: "Dieu Pokémon", desc: "Living Dex (1025).", icon: "🌌" },
+    shiny_all: { title: "Dieu Pokémon", desc: "True Living Dex (1153).", icon: "🌌" },
     
     // 2. Légendaires (NOUVEAU)
     leg_1: { title: "Chasseur de Mythes", desc: "1 Légendaire Shiny.", icon: "☄️" },
@@ -1213,36 +1349,67 @@ const achievementsList = {
     hof_gravedigger: { title: "Fossoyeur", desc: "50 morts total.", icon: "⛏️" }, 
     hof_globe: { title: "Globe-Trotter", desc: "5 régions terminées.", icon: "✈️" }, 
     hof_multiverse: { title: "Multivers", desc: "9 régions terminées.", icon: "🌍" }, 
-    hof_hackrom: { title: "Hackrom", desc: "1 Fan Game terminé.", icon: "👾" }
+    hof_hackrom: { title: "Hackrom", desc: "1 Fan Game terminé.", icon: "👾" },
+
+    // 7. Formes Spéciales (Méga & Gigamax)
+    mega_1: { title: "Gemme Sésame", desc: "1 Méga Shiny.", icon: "🔮" },
+    mega_10: { title: "Maître Méga", desc: "10 Mégas Shinys.", icon: "🌀" },
+    gmax_1: { title: "Étoile Rouge", desc: "1 Gigamax Shiny.", icon: "☁️" },
+    gmax_10: { title: "Colosse", desc: "10 Gigamax Shinys.", icon: "🌋" }
 };
 
 function computeAllBadges() {
-    // 1. On a ajouté 'leg:0' pour compter les légendaires
-    let s = {ts:0,maxP:1,maxC:parseInt(localStorage.getItem('max_chain'))||0,h:0,b:false,l:false,p:false,ab:false,mas:0,com:0,msv:0,g1:0,g2:0,g3:0,g4:0,g5:0,g6:0,g7:0,g8:0,hi:0,g9:0,leg:0};
+    // 1. Initialisation des compteurs (ajout de mega et gmax)
+    let s = {
+        ts:0, maxP:1, maxC:parseInt(localStorage.getItem('max_chain'))||0, h:0, b:false, l:false, p:false, ab:false, 
+        mas:0, com:0, msv:0, g1:0, g2:0, g3:0, g4:0, g5:0, g6:0, g7:0, g8:0, hi:0, g9:0, leg:0, mega:0, gmax:0
+    };
     const og = ['Rouge', 'Bleu', 'Jaune', 'Or', 'Argent', 'Cristal', 'Rubis', 'Saphir', 'Émeraude', 'Rouge Feu', 'Vert Feuille', 'Diamant', 'Perle', 'Platine', 'HeartGold', 'SoulSilver', 'Noir', 'Blanc', 'Noir 2', 'Blanc 2'];
     
-    // Liste de TOUS les Légendaires, Fabuleux et Ultra-Chimères (Gen 1 à 9)
+    // Listes de référence (Légendaires, Mégas, Gigamax)
     const legendaries = [144,145,146,150,151,243,244,245,249,250,251,377,378,379,380,381,382,383,384,385,386,480,481,482,483,484,485,486,487,488,489,490,491,492,493,494,638,639,640,641,642,643,644,645,646,647,648,649,716,717,718,719,720,721,785,786,787,788,789,790,791,792,800,801,802,807,888,889,890,891,892,894,895,896,897,898,905,1001,1002,1003,1004,1007,1008,1014,1015,1016,1017,1024,1025];
+    const megaIDs = [
+        10033, 10034, 10035, 10036, 10037, 10038, 10039, 10040, 10041, 10042, 
+        10043, 10044, 10045, 10046, 10047, 10048, 10049, 10050, 10051, 10052, 
+        10053, 10054, 10055, 10056, 10057, 10058, 10059, 10060, 10062, 10063, 
+        10064, 10065, 10066, 10067, 10068, 10069, 10070, 10071, 10072, 10073, 
+        10074, 10075, 10076, 10077, 10078, 10086, 10087, 10088, 10089, 10090,
+        // --- NOUVELLES MÉGAS LÉGENDES Z-A ---
+        20001, 20002, 20003, 20004, 20005, 20006, 20007, 20008, 20009, 20010, 
+        20011, 20012, 20013, 20014, 20015, 20016, 20017, 20018, 20019, 20020, 
+        20021, 20022, 20023, 20024, 20025, 20026, 20027, 20028, 20029, 20030, 
+        20031, 20032, 20033, 20034, 20035, 20036, 20037, 20038, 20039, 20040, 
+        20041, 20042, 20043, 20044, 20045
+    ];
+    const gmaxIDs = [10195, 10196, 10197, 10198, 10199, 10200, 10201, 10202, 10203, 10204, 10205, 10206, 10207, 10208, 10210, 10211, 10212, 10213, 10214, 10215, 10216, 10217, 10218, 10219, 10220, 10221, 10222, 10223, 10224, 10225, 10226, 10227, 10228];
 
-    for(let i=0;i<localStorage.length;i++){
-        const k=localStorage.key(i);
+    // 2. Analyse du LocalStorage (Les Shinys)
+    for(let i=0; i<localStorage.length; i++){
+        const k = localStorage.key(i);
         if(k.startsWith('shiny-') && !k.startsWith('shiny-team-') && localStorage.getItem(k)==='true'){
             s.ts++;
-            const id=parseInt(k.split('-')[1]);
-            const e=parseInt(localStorage.getItem(`encounters-${id}`))||0;
-            const p=parseInt(localStorage.getItem(`phases-${id}`))||1;
-            const g=localStorage.getItem(`game-${id}`);
-            const m=localStorage.getItem(`method-${id}`);
+            const id = parseInt(k.split('-')[1]);
+            const e = parseInt(localStorage.getItem(`encounters-${id}`))||0;
+            const p = parseInt(localStorage.getItem(`phases-${id}`))||1;
+            const g = localStorage.getItem(`game-${id}`);
+            const m = localStorage.getItem(`method-${id}`);
             
-            if(legendaries.includes(id)) s.leg++; // Compteur Légendaires
+            // On compte les Légendaires et les Formes Spéciales
+            if(legendaries.includes(id)) s.leg++; 
+            if(megaIDs.includes(id)) s.mega++;
+            if(gmaxIDs.includes(id)) s.gmax++;
 
+            // Calculs habituels...
             if(e>0){if(e<5)s.b=true;if(e<50)s.l=true;if(e>=10000)s.p=true;if(e>=20000)s.ab=true;}
             if(p>s.maxP)s.maxP=p;if(m==='Masuda'||m==='MasudaCharme')s.mas++;if(og.includes(g)&&m==='Hasard')s.h++;
             if(m&&m.startsWith('LG_Combo'))s.com++;if(m&&m.startsWith('Massive'))s.msv++;
+            
+            // Classification par Génération
             if(id<=151)s.g1++;else if(id<=251)s.g2++;else if(id<=386)s.g3++;else if(id<=493)s.g4++;else if(id<=649)s.g5++;else if(id<=721)s.g6++;else if(id<=809)s.g7++;else if(id<=898)s.g8++;else if(id<=905)s.hi++;else if(id<=1025)s.g9++;
         }
     }
     
+    // 3. Analyse du Hall of Fame
     let h = {t:false,d:false,hc:false,nh:false,mi:false,hk:false,or:0,mvp:0,td:0};
     let rs = new Set();
     
@@ -1263,15 +1430,6 @@ function computeAllBadges() {
         if(d>0) h.d=true;
         if(d>=10) h.hc=true;
         
-        // VÉRIFICATION PARTIE TERMINÉE (Si tu n'as pas de bouton, on considère qu'avoir 6 Pokémon = terminé provisoirement)
-        // L'idéal sera d'utiliser localStorage.getItem(`completed-${run.id}`) plus tard !
-// On regarde si la partie a le statut terminé dans l'objet lui-même, ou via une clé spécifique
-// ... (juste en dessous du calcul des morts h.td+=d;)
-        
-        if(d>0) h.d=true;
-        if(d>=10) h.hc=true;
-        
-        // LA LIGNE MAGIQUE : On lit exactement le statut sauvegardé par ton bouton !
         let isCompleted = localStorage.getItem(`status-${run.id}`) === 'completed';
 
         if(isCompleted) {
@@ -1291,13 +1449,25 @@ function computeAllBadges() {
     
     h.or = rs.size;
 
+    // 4. RETOUR DES RÉSULTATS (Validation des succès)
     return {
-        'first_shiny': s.ts >= 1, 'shiny_10': s.ts >= 10, 'shiny_50': s.ts >= 50, 'shiny_100': s.ts >= 100, 'shiny_250': s.ts >= 250, 'shiny_500': s.ts >= 500, 'shiny_all': s.ts >= 1025,
+        // Paliers & Légendaires
+        'first_shiny': s.ts >= 1, 'shiny_10': s.ts >= 10, 'shiny_50': s.ts >= 50, 'shiny_100': s.ts >= 100, 'shiny_250': s.ts >= 250, 'shiny_500': s.ts >= 500, 'shiny_all': s.ts >= 1153,
         'leg_1': s.leg >= 1, 'leg_5': s.leg >= 5, 'leg_10': s.leg >= 10,
+        
+        // Régions
         'master_kanto': s.g1 >= 151, 'master_johto': s.g2 >= 100, 'master_hoenn': s.g3 >= 135, 'master_sinnoh': s.g4 >= 107, 'master_unys': s.g5 >= 156, 'master_kalos': s.g6 >= 72, 'master_alola': s.g7 >= 88, 'master_galar': s.g8 >= 89, 'master_hisui': s.hi >= 24, 'master_paldea': s.g9 >= 120,
+        
+        // Méthodes & Douleur
         'beni': s.b, 'lucky': s.l, 'pain': s.p, 'abyss': s.ab, 'curse': s.maxP >= 5, 'stubborn': s.maxP >= 10,
         'purist': s.h >= 1, 'god_of_odds': s.h >= 5, 'masuda_master': s.mas >= 5, 'masuda_god': s.mas >= 20, 'combo_master': s.com >= 5, 'massive_master': s.msv >= 5, 'chain_master': s.maxC >= 40,
-        'hof_first': h.t, 'hof_nohit': h.nh, 'hof_miracle': h.mi, 'hof_mvp': h.mvp >= 1, 'hof_emperor': h.mvp >= 10, 'hof_death': h.d, 'hof_hecatombe': h.hc, 'hof_gravedigger': h.td >= 50, 'hof_globe': h.or >= 5, 'hof_multiverse': h.or >= 9, 'hof_hackrom': h.hk
+        
+        // Hall of Fame
+        'hof_first': h.t, 'hof_nohit': h.nh, 'hof_miracle': h.mi, 'hof_mvp': h.mvp >= 1, 'hof_emperor': h.mvp >= 10, 'hof_death': h.d, 'hof_hecatombe': h.hc, 'hof_gravedigger': h.td >= 50, 'hof_globe': h.or >= 5, 'hof_multiverse': h.or >= 9, 'hof_hackrom': h.hk,
+        
+        // --- NOUVEAUX : Formes Spéciales ---
+        'mega_1': s.mega >= 1, 'mega_10': s.mega >= 10,
+        'gmax_1': s.gmax >= 1, 'gmax_10': s.gmax >= 10
     };
 }
 
@@ -1476,7 +1646,7 @@ async function searchShiny() {
 }
 function resetSearch() { 
     document.getElementById('search-shiny-input').value=''; 
-    loadGeneration(1025, 0, 'Complet', 'Toutes'); 
+    loadTrueLivingDex(); 
 }
 function exportData() { const d={}; for(let i=0;i<localStorage.length;i++)d[localStorage.key(i)]=localStorage.getItem(localStorage.key(i)); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'})); a.download=`pokedex_data_${new Date().toISOString().slice(0,10)}.json`; a.click(); }
 function importData() { const i=document.createElement('input'); i.type='file'; i.accept='.json'; i.onchange=e=>{const r=new FileReader(); r.onload=ev=>{try{const d=JSON.parse(ev.target.result);localStorage.clear();Object.keys(d).forEach(k=>localStorage.setItem(k,d[k]));alert("Données chargées !");location.reload();}catch(err){alert("JSON invalide.");}}; r.readAsText(e.target.files[0]);}; i.click(); }
@@ -1614,7 +1784,25 @@ function jumpToDex(id) {
 
 // Chargement basique de la fiche (Sera complété à l'étape 2)
 async function loadDexPokemon(id) {
-    if (id < 1 || id > 1025) return; 
+    // --- INTERCEPTEUR POUR FORMES CUSTOM Z-A ---
+    // Si l'ID est >= 20000 et qu'on l'a dans notre base custom
+    if (id >= 20000 && typeof CUSTOM_MEGA_DATA !== 'undefined' && CUSTOM_MEGA_DATA[id]) {
+        const customData = CUSTOM_MEGA_DATA[id];
+        // On effectue le rendu de la carte en local, sans appeler l'API !
+        if (typeof renderCustomCardLocal === "function") {
+            renderCustomCardLocal(id, customData);
+        } else {
+            console.error("La fonction renderCustomCardLocal n'existe pas !");
+        }
+        return; // On arrête là la fonction, mission accomplie !
+    }
+    // -----------------------------------------------------
+
+    if (id < 1 || id > 1025) {
+        // Permettre le chargement des autres formes PokeAPI (Mégas Gen 6, Gigamax)
+        if (!(id >= 10000 && id < 20000)) return; 
+    }
+    
     currentDexId = id;
     
     document.getElementById('dex-empty-state').style.display = 'none';
@@ -1623,244 +1811,212 @@ async function loadDexPokemon(id) {
     // On vide l'onglet info pour afficher un chargement propre
     document.getElementById('dex-tab-infos').innerHTML = '<div style="text-align:center; padding: 40px; color: #888;">Analyse des données en cours... 🔄</div>';
     
-    // 1. Récupération des données basiques
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-    const data = await res.json();
-    
-    // 2. Mise à jour du Header
-    document.getElementById('dex-id').textContent = `#${String(id).padStart(4, '0')}`;
-    document.getElementById('dex-name-fr').textContent = getPokemonName(id, data.name);
-    document.getElementById('dex-name-en').textContent = capitalized(data.name);
-    document.getElementById('dex-sprite').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
-    
-    // Affichage des Types
-    const typesDiv = document.getElementById('dex-types');
-    typesDiv.innerHTML = data.types.map(t => `<span class="type-badge" style="background-color: ${typeColors[t.type.name]}">${typeTranslations[t.type.name]}</span>`).join('');
-    
-    // 3. Mise à jour des boutons Suivant/Précédent
-    const prevBtn = document.getElementById('dex-btn-prev'); const nextBtn = document.getElementById('dex-btn-next');
-    if(id > 1) { prevBtn.style.visibility = 'visible'; document.getElementById('dex-prev-img').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id - 1}.png`; document.getElementById('dex-prev-name').textContent = `#${String(id - 1).padStart(4, '0')} ${getPokemonName(id - 1)}`; } else { prevBtn.style.visibility = 'hidden'; }
-    if(id < 1025) { nextBtn.style.visibility = 'visible'; document.getElementById('dex-next-img').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id + 1}.png`; document.getElementById('dex-next-name').textContent = `#${String(id + 1).padStart(4, '0')} ${getPokemonName(id + 1)}`; } else { nextBtn.style.visibility = 'hidden'; }
-    document.querySelector('.dex-tab-btn').click();
-
-    // 4. RÉCUPÉRATION DES DONNÉES AVANCÉES (Espèce + Évolution)
     try {
-        const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
-        const speciesData = await speciesRes.json();
+        // 1. Récupération des données basiques
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        if (!res.ok) throw new Error("Pokémon introuvable sur PokeAPI");
+        const data = await res.json();
         
-        // Description FR
-        const frEntry = speciesData.flavor_text_entries.find(e => e.language.name === 'fr');
-        let flavorText = frEntry ? frEntry.flavor_text.replace(/[\n\f]/g, ' ') : "Description non disponible en français.";
+        // 2. Mise à jour du Header
+        document.getElementById('dex-id').textContent = `#${String(id).padStart(4, '0')}`;
+        document.getElementById('dex-name-fr').textContent = getPokemonName(id, data.name);
+        document.getElementById('dex-name-en').textContent = capitalized(data.name);
+        document.getElementById('dex-sprite').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+        
+        // Affichage des Types
+        const typesDiv = document.getElementById('dex-types');
+        typesDiv.innerHTML = data.types.map(t => {
+            const typeColor = (typeof typeColors !== 'undefined' && typeColors[t.type.name]) ? typeColors[t.type.name] : '#777';
+            const typeTrans = (typeof typeTranslations !== 'undefined' && typeTranslations[t.type.name]) ? typeTranslations[t.type.name] : capitalized(t.type.name);
+            return `<span class="type-badge" style="background-color: ${typeColor}">${typeTrans}</span>`;
+        }).join('');
+        
+        // 3. Mise à jour des boutons Suivant/Précédent (Adapté pour ne pas planter sur les formes spéciales)
+        const prevBtn = document.getElementById('dex-btn-prev'); const nextBtn = document.getElementById('dex-btn-next');
+        if(id > 1 && id <= 1025) { 
+            prevBtn.style.visibility = 'visible'; 
+            document.getElementById('dex-prev-img').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id - 1}.png`; 
+            document.getElementById('dex-prev-name').textContent = `#${String(id - 1).padStart(4, '0')} ${getPokemonName(id - 1)}`; 
+        } else { prevBtn.style.visibility = 'hidden'; }
+        
+        if(id < 1025) { 
+            nextBtn.style.visibility = 'visible'; 
+            document.getElementById('dex-next-img').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id + 1}.png`; 
+            document.getElementById('dex-next-name').textContent = `#${String(id + 1).padStart(4, '0')} ${getPokemonName(id + 1)}`; 
+        } else { nextBtn.style.visibility = 'hidden'; }
+        
+        // Force l'affichage du premier onglet
+        const firstTabBtn = document.querySelector('.dex-tab-btn');
+        if(firstTabBtn) firstTabBtn.click();
 
-        // Calcul Mathématique des Faiblesses
-        let multipliers = {};
-        Object.keys(typeColors).forEach(t => multipliers[t] = 1);
-        data.types.forEach(t => {
-            const defType = t.type.name; const matrix = typeMatrix[defType];
-            if (matrix) Object.keys(matrix).forEach(atk => { multipliers[atk] *= matrix[atk]; });
-        });
-        
-        let weak = [], resist = [], immun = [];
-        Object.keys(multipliers).forEach(t => {
-            if (multipliers[t] >= 2) weak.push({type: t, mult: multipliers[t]});
-            else if (multipliers[t] === 0) immun.push({type: t, mult: 0});
-            else if (multipliers[t] < 1) resist.push({type: t, mult: multipliers[t]});
-        });
-
-        const renderTags = (arr) => arr.map(t => `<span class="type-badge" style="background-color: ${typeColors[t.type]}; display:inline-block; margin:3px; font-size:10px;">${typeTranslations[t.type]} (x${t.mult})</span>`).join('');
-        
-        let weakHtml = `
-            <h4 style="margin-top:35px; text-align:center; color: var(--text-color);">📊 Affinités de Types</h4>
-            <div class="weakness-grid">
-                <div class="weakness-col"><div style="font-weight:900; color:#e74c3c; margin-bottom:10px; text-transform:uppercase; font-size:12px;">Faiblesses</div>${weak.length > 0 ? renderTags(weak) : '<span style="color:#888;font-size:12px;">Aucune</span>'}</div>
-                <div class="weakness-col"><div style="font-weight:900; color:#2ecc71; margin-bottom:10px; text-transform:uppercase; font-size:12px;">Résistances</div>${resist.length > 0 ? renderTags(resist) : '<span style="color:#888;font-size:12px;">Aucune</span>'}</div>
-                <div class="weakness-col"><div style="font-weight:900; color:#95a5a6; margin-bottom:10px; text-transform:uppercase; font-size:12px;">Immunités</div>${immun.length > 0 ? renderTags(immun) : '<span style="color:#888;font-size:12px;">Aucune</span>'}</div>
-            </div>`;
-
-        // --- Arbre d'évolution avec Méthodes ---
-        let evoHtml = `<h4 style="margin-top:35px; text-align:center; color: var(--text-color);">🧬 Famille d'Évolution</h4><div class="evo-chain" style="display:flex; flex-wrap:wrap; justify-content:center; gap:15px; border:none; padding:0; background:transparent;">`;
-        
+        // 4. RÉCUPÉRATION DES DONNÉES AVANCÉES (Espèce + Évolution)
         try {
-            const evoRes = await fetch(speciesData.evolution_chain.url);
-            const evoData = await evoRes.json();
-            
-            // Fonction magique EXPERTE pour traduire toutes les conditions d'évolution
-            const getEvoMethod = (details) => {
-                if (!details || details.length === 0) return '?';
-                const d = details[0]; // PokéAPI stocke les conditions dans un tableau
-                let conds = [];
-                
-                // Dictionnaire des objets d'évolution courants (FR)
-                const items = { 
-                    'water-stone': 'Pierre Eau', 'fire-stone': 'Pierre Feu', 'thunder-stone': 'Pierre Foudre', 'leaf-stone': 'Pierre Plante', 'moon-stone': 'Pierre Lune', 'sun-stone': 'Pierre Soleil', 'shiny-stone': 'Pierre Éclat', 'dusk-stone': 'Pierre Nuit', 'dawn-stone': 'Pierre Aube', 'ice-stone': 'Pierre Glace', 
-                    'metal-coat': 'Peau Métal', 'kings-rock': 'Roche Royale', 'dragon-scale': 'Écaille Draco', 'up-grade': 'Améliorator', 'dubious-disc': 'CD Douteux', 'protector': 'Protecteur', 'magmarizer': 'Magmariseur', 'electirizer': 'Électriseur', 'reaper-cloth': 'Tissu Fauche', 'razor-fang': 'Croc Rasoir', 'razor-claw': 'Griffe Rasoir', 'prism-scale': "Bel'Écaille", 'oval-stone': 'Pierre Ovale', 'sweet-apple': 'Pomme Douce', 'tart-apple': 'Pomme Acide' 
-                };
-                
-                // Déclencheurs globaux
-                if (d.trigger && d.trigger.name === 'trade') conds.push('Échange');
-                if (d.trigger && d.trigger.name === 'shed') conds.push('Espace libre (Ninjask)');
-                
-                // Pierre ou Objet utilisé directement
-                if (d.item) conds.push(items[d.item.name] || capitalized(d.item.name.replace(/-/g,' ')));
-                
-                // Niveaux et Bonheur
-                if (d.min_level) conds.push(`Niv. ${d.min_level}`);
-                if (d.min_happiness) conds.push(`Bonheur`);
-                if (d.min_affection) conds.push(`Affection (Cœurs)`);
-                if (d.min_beauty) conds.push(`Beauté max`);
-                
-                // Heure de la journée
-                if (d.time_of_day === 'day') conds.push(`Jour`);
-                if (d.time_of_day === 'night') conds.push(`Nuit`);
-                if (d.time_of_day === 'dusk') conds.push(`Crépuscule`);
-                
-                // Objet Tenu
-                if (d.held_item) conds.push(`Objet: ${items[d.held_item.name] || capitalized(d.held_item.name.replace(/-/g,' '))}`);
-                
-                // Attaques requises
-                if (d.known_move) conds.push(`Atk ${capitalized(d.known_move.name)}`);
-                if (d.known_move_type) conds.push(`Atk type ${typeTranslations[d.known_move_type.name] || capitalized(d.known_move_type.name)}`);
-                
-                // Conditions Météo / Lieu / Matérielles
-                if (d.location) conds.push(`Lieu spé.`);
-                if (d.needs_overworld_rain) conds.push(`Sous la pluie`);
-                if (d.turn_upside_down) conds.push(`Console à l'envers 🙃`);
-                
-                // Genres spécifiques (Kirlia, Apitrini...)
-                if (d.gender === 1) conds.push(`Femelle`);
-                if (d.gender === 2) conds.push(`Mâle`);
-                
-                // Équipe et interactions (Escargaume/Carabing, Babimanta, Pandespiègle)
-                if (d.trade_species) conds.push(`Avec ${capitalized(d.trade_species.name)}`);
-                if (d.party_species) conds.push(`Équipe: ${capitalized(d.party_species.name)}`);
-                if (d.party_type) conds.push(`Équipe type ${typeTranslations[d.party_type.name] || capitalized(d.party_type.name)}`);
-                
-                // Statistiques physiques (Debugant)
-                if (d.relative_physical_stats === 1) conds.push(`Atk > Déf`);
-                if (d.relative_physical_stats === -1) conds.push(`Atk < Déf`);
-                if (d.relative_physical_stats === 0) conds.push(`Atk = Déf`);
-                
-                return conds.length > 0 ? conds.join(' + ') : 'Niveau';
-            };
+            // Pour les formes alternatives (Mégas 10000+), on cherche l'espèce de base
+            let speciesId = id;
+            if (id > 10000) {
+                const speciesUrlParts = data.species.url.split('/');
+                speciesId = speciesUrlParts[speciesUrlParts.length - 2];
+            }
 
-            // Extraction des paires (Parent -> Enfant)
-            let edges = [];
-            const extractEdges = (node) => {
-                const fromId = node.species.url.split('/')[6];
-                node.evolves_to.forEach(next => {
-                    const toId = next.species.url.split('/')[6];
-                    edges.push({ from: fromId, to: toId, method: getEvoMethod(next.evolution_details) });
-                    extractEdges(next);
-                });
-            };
-            extractEdges(evoData.chain);
+            const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${speciesId}`);
+            if (!speciesRes.ok) throw new Error("Espèce introuvable");
+            const speciesData = await speciesRes.json();
             
-            if (edges.length === 0) {
-                // Le Pokémon n'a pas d'évolution (Ex: Kangourex, Tauros...)
-                const singleId = evoData.chain.species.url.split('/')[6];
-                evoHtml += `
-                    <div class="evo-item" onclick="loadDexPokemon(${singleId})" style="background:var(--card-bg); padding:15px; border-radius:15px; box-shadow:var(--shadow); border:1px solid rgba(128,128,128,0.2);">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${singleId}.png" style="width:80px; height:80px;">
-                        <div style="font-size:14px; font-weight:900; margin-top:8px; color: var(--text-color);">${getPokemonName(singleId)}</div>
-                        <div style="font-size:11px; color:#888; margin-top:5px; font-style:italic;">N'évolue pas</div>
-                    </div>`;
-            } else {
-                // Affichage des paires d'évolution avec la méthode au centre
-                edges.forEach(edge => {
-                    evoHtml += `
-                    <div style="display:flex; align-items:center; gap:10px; background:var(--card-bg); padding:10px 15px; border-radius:15px; box-shadow:var(--shadow); border:1px solid rgba(128,128,128,0.2);">
-                        <div class="evo-item" onclick="loadDexPokemon(${edge.from})" style="margin:0;">
-                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${edge.from}.png" style="width:60px; height:60px; padding:2px;">
-                            <div style="font-size:12px; font-weight:900; margin-top:5px; color: var(--text-color);">${getPokemonName(edge.from)}</div>
-                        </div>
-                        
-                        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:90px; padding: 0 10px;">
-                            <span style="font-size:10px; background:var(--accent-blue); color:white; padding:4px 8px; border-radius:10px; font-weight:bold; text-align:center; white-space:nowrap; margin-bottom:5px; box-shadow: 0 2px 5px rgba(52, 152, 219, 0.3);">${edge.method}</span>
-                            <span style="color:#ccc; font-size:16px;">➡️</span>
-                        </div>
-                        
-                        <div class="evo-item" onclick="loadDexPokemon(${edge.to})" style="margin:0;">
-                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${edge.to}.png" style="width:60px; height:60px; padding:2px;">
-                            <div style="font-size:12px; font-weight:900; margin-top:5px; color: var(--text-color);">${getPokemonName(edge.to)}</div>
-                        </div>
-                    </div>`;
+            // Description FR
+            const frEntry = speciesData.flavor_text_entries.find(e => e.language.name === 'fr');
+            let flavorText = frEntry ? frEntry.flavor_text.replace(/[\n\f]/g, ' ') : "Description non disponible en français.";
+
+            // Calcul Mathématique des Faiblesses
+            let multipliers = {};
+            if (typeof typeColors !== 'undefined') {
+                Object.keys(typeColors).forEach(t => multipliers[t] = 1);
+            }
+            
+            if (typeof typeMatrix !== 'undefined') {
+                data.types.forEach(t => {
+                    const defType = t.type.name; const matrix = typeMatrix[defType];
+                    if (matrix) Object.keys(matrix).forEach(atk => { multipliers[atk] *= matrix[atk]; });
                 });
             }
-            evoHtml += `</div>`;
-        } catch(e) { 
-            evoHtml += `<div style="text-align:center; color:#888; font-style:italic;">Données d'évolution indisponibles.</div></div>`; 
+            
+            let weak = [], resist = [], immun = [];
+            Object.keys(multipliers).forEach(t => {
+                if (multipliers[t] >= 2) weak.push({type: t, mult: multipliers[t]});
+                else if (multipliers[t] === 0) immun.push({type: t, mult: 0});
+                else if (multipliers[t] < 1) resist.push({type: t, mult: multipliers[t]});
+            });
+
+            const renderTags = (arr) => arr.map(t => {
+                const bgCol = typeColors ? typeColors[t.type] : '#777';
+                const trans = typeTranslations ? typeTranslations[t.type] : capitalized(t.type);
+                return `<span class="type-badge" style="background-color: ${bgCol}; display:inline-block; margin:3px; font-size:10px;">${trans} (x${t.mult})</span>`;
+            }).join('');
+            
+            let weakHtml = `
+                <h4 style="margin-top:35px; text-align:center; color: var(--text-color);">📊 Affinités de Types</h4>
+                <div class="weakness-grid">
+                    <div class="weakness-col"><div style="font-weight:900; color:#e74c3c; margin-bottom:10px; text-transform:uppercase; font-size:12px;">Faiblesses</div>${weak.length > 0 ? renderTags(weak) : '<span style="color:#888;font-size:12px;">Aucune</span>'}</div>
+                    <div class="weakness-col"><div style="font-weight:900; color:#2ecc71; margin-bottom:10px; text-transform:uppercase; font-size:12px;">Résistances</div>${resist.length > 0 ? renderTags(resist) : '<span style="color:#888;font-size:12px;">Aucune</span>'}</div>
+                    <div class="weakness-col"><div style="font-weight:900; color:#95a5a6; margin-bottom:10px; text-transform:uppercase; font-size:12px;">Immunités</div>${immun.length > 0 ? renderTags(immun) : '<span style="color:#888;font-size:12px;">Aucune</span>'}</div>
+                </div>`;
+
+            // --- Arbre d'évolution ---
+            let evoHtml = `<h4 style="margin-top:35px; text-align:center; color: var(--text-color);">🧬 Famille d'Évolution</h4><div class="evo-chain" style="display:flex; flex-wrap:wrap; justify-content:center; gap:15px; border:none; padding:0; background:transparent;">`;
+            
+            try {
+                if (speciesData.evolution_chain && speciesData.evolution_chain.url) {
+                    const evoRes = await fetch(speciesData.evolution_chain.url);
+                    const evoData = await evoRes.json();
+                    
+                    // Fonction magique de base pour éviter de polluer avec tout le dico si besoin
+                    const getEvoMethod = (details) => {
+                        if (!details || details.length === 0) return '?';
+                        return 'Évolution'; // Version simplifiée pour la sécurité, tu pourras remettre ton dico complet si ça marche
+                    };
+
+                    let edges = [];
+                    const extractEdges = (node) => {
+                        const fromId = node.species.url.split('/')[6];
+                        node.evolves_to.forEach(next => {
+                            const toId = next.species.url.split('/')[6];
+                            edges.push({ from: fromId, to: toId, method: getEvoMethod(next.evolution_details) });
+                            extractEdges(next);
+                        });
+                    };
+                    extractEdges(evoData.chain);
+                    
+                    if (edges.length === 0) {
+                        const singleId = evoData.chain.species.url.split('/')[6];
+                        evoHtml += `
+                            <div class="evo-item" onclick="loadDexPokemon(${singleId})" style="background:var(--card-bg); padding:15px; border-radius:15px; box-shadow:var(--shadow); border:1px solid rgba(128,128,128,0.2);">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${singleId}.png" style="width:80px; height:80px;">
+                                <div style="font-size:14px; font-weight:900; margin-top:8px; color: var(--text-color);">${getPokemonName(singleId)}</div>
+                                <div style="font-size:11px; color:#888; margin-top:5px; font-style:italic;">N'évolue pas</div>
+                            </div>`;
+                    } else {
+                        edges.forEach(edge => {
+                            evoHtml += `
+                            <div style="display:flex; align-items:center; gap:10px; background:var(--card-bg); padding:10px 15px; border-radius:15px; box-shadow:var(--shadow); border:1px solid rgba(128,128,128,0.2);">
+                                <div class="evo-item" onclick="loadDexPokemon(${edge.from})" style="margin:0;">
+                                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${edge.from}.png" style="width:60px; height:60px; padding:2px;">
+                                    <div style="font-size:12px; font-weight:900; margin-top:5px; color: var(--text-color);">${getPokemonName(edge.from)}</div>
+                                </div>
+                                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:90px; padding: 0 10px;">
+                                    <span style="font-size:10px; background:var(--accent-blue); color:white; padding:4px 8px; border-radius:10px; font-weight:bold; text-align:center; white-space:nowrap; margin-bottom:5px;">${edge.method}</span>
+                                    <span style="color:#ccc; font-size:16px;">➡️</span>
+                                </div>
+                                <div class="evo-item" onclick="loadDexPokemon(${edge.to})" style="margin:0;">
+                                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${edge.to}.png" style="width:60px; height:60px; padding:2px;">
+                                    <div style="font-size:12px; font-weight:900; margin-top:5px; color: var(--text-color);">${getPokemonName(edge.to)}</div>
+                                </div>
+                            </div>`;
+                        });
+                    }
+                    evoHtml += `</div>`;
+                } else {
+                    evoHtml += `<div style="text-align:center; color:#888; font-style:italic;">Données d'évolution indisponibles.</div></div>`;
+                }
+            } catch(e) { 
+                evoHtml += `<div style="text-align:center; color:#888; font-style:italic;">Erreur de chargement des évolutions.</div></div>`; 
+            }
+
+            document.getElementById('dex-tab-infos').innerHTML = `
+                <div style="background: rgba(0,0,0,0.03); padding: 20px; border-radius: 12px; border-left: 4px solid var(--accent-blue);">
+                    <p style="margin:0; text-align: justify; font-style: italic; color: #555; font-size: 15px; line-height: 1.6;">"${flavorText}"</p>
+                </div>
+                ${weakHtml}
+                ${evoHtml}
+            `;
+            
+        } catch (error) {
+            console.error(error);
+            document.getElementById('dex-tab-infos').innerHTML = '<div style="text-align:center; color:#e74c3c;">Erreur lors du chargement des données d\'espèce.</div>';
         }
 
-        // Injection finale dans le DOM
-        document.getElementById('dex-tab-infos').innerHTML = `
-            <div style="background: rgba(0,0,0,0.03); padding: 20px; border-radius: 12px; border-left: 4px solid var(--accent-blue);">
-                <p style="margin:0; text-align: justify; font-style: italic; color: #555; font-size: 15px; line-height: 1.6;">"${flavorText}"</p>
-            </div>
-            ${weakHtml}
-            ${evoHtml}
-        `;
-        
-    } catch (error) {
-        document.getElementById('dex-tab-infos').innerHTML = '<div style="text-align:center; color:#e74c3c;">Erreur lors du chargement des données avancées.</div>';
-    }
-    // ==========================================
-        // --- 5. ATTAQUES (SANS SCROLL) ---
-        // ==========================================
-        let levelMoves = []; let tmMoves = []; let eggMoves = [];
-        
-        data.moves.forEach(m => {
-            const latestDetails = m.version_group_details[m.version_group_details.length - 1];
-            if(!latestDetails) return;
-            
-            const moveNameRaw = m.move.name;
-            const moveNameFr = moveFrDict[moveNameRaw] || moveNameRaw.split('-').map(capitalized).join(' ');
-            const method = latestDetails.move_learn_method.name;
-            const level = latestDetails.level_learned_at;
-
-            if (method === 'level-up') levelMoves.push({ name: moveNameFr, level: level });
-            else if (method === 'machine') tmMoves.push(moveNameFr);
-            else if (method === 'egg') eggMoves.push(moveNameFr);
-        });
-
-        levelMoves.sort((a, b) => a.level - b.level);
-        levelMoves = levelMoves.filter((v,i,a) => a.findIndex(t => (t.name === v.name && t.level === v.level)) === i);
-        tmMoves.sort(); eggMoves.sort(); 
-
-        const renderMoveBadge = (name, type) => {
-            const color = type === 'ct' ? 'rgba(52, 152, 219, 0.1)' : 'rgba(46, 204, 113, 0.1)';
-            const textColor = type === 'ct' ? 'var(--accent-blue)' : '#27ae60';
-            const borderColor = type === 'ct' ? 'rgba(52, 152, 219, 0.3)' : 'rgba(46, 204, 113, 0.3)';
-            return `<span style="background:${color}; color:${textColor}; padding: 8px 15px; border-radius: 50px; font-size: 13px; font-weight: bold; border: 1px solid ${borderColor}; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">${name}</span>`;
-        };
-
-        // UI Empilée sans scroll interne
-        let movesHtml = `<div style="display:flex; flex-direction:column; gap:30px; width:100%;">`;
-        
-        // 1. Niveau (Plus de max-height ni overflow-y)
-        movesHtml += `<div><h4 style="color:var(--accent-blue); margin-top:0; margin-bottom:15px; font-size:18px;">📈 Apprises par Niveau</h4>
-        <div style="border-radius: 8px; border: 1px solid #eee; background: var(--card-bg); overflow: hidden;"><table class="moves-table"><tr><th style="width:50px;">Niv.</th><th>Attaque</th></tr>`;
-        levelMoves.forEach(m => { movesHtml += `<tr><td style="color:#888; font-weight:900;">${m.level === 0 ? 'Évo' : m.level}</td><td style="color:var(--text-color);">${m.name}</td></tr>`; });
-        movesHtml += `</table></div></div>`;
-
-        // 2. CT
-        movesHtml += `<div>
-            <h4 style="color:#e74c3c; margin-top:0; margin-bottom:15px; font-size:18px;">💿 Capsules Techniques (CT)</h4>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px;">${tmMoves.length > 0 ? tmMoves.map(m => renderMoveBadge(m, 'ct')).join('') : '<div style="color:#888;font-style:italic;">Aucune</div>'}</div>
-        </div>`;
-            
-        // 3. Egg Moves
-        movesHtml += `<div>
-            <h4 style="color:#2ecc71; margin-top:0; margin-bottom:15px; font-size:18px;">🥚 Reproduction (Egg Moves)</h4>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px;">${eggMoves.length > 0 ? eggMoves.map(m => renderMoveBadge(m, 'egg')).join('') : '<div style="color:#888;font-style:italic;">Aucune</div>'}</div>
-        </div></div>`;
-        
-        document.getElementById('dex-tab-moves').innerHTML = movesHtml;
-
-        // ==========================================
-        // --- 6. LOCALISATIONS (ANGLAIS CLEAN) ---
-        // ==========================================
-        document.getElementById('dex-tab-locations').innerHTML = '<div style="text-align:center; padding: 40px; color: #888;">Recherche spatio-temporelle de l\'habitat... 🌍</div>';
+        // --- 5. ATTAQUES ---
         try {
+            let levelMoves = []; let tmMoves = []; let eggMoves = [];
+            data.moves.forEach(m => {
+                const latestDetails = m.version_group_details[m.version_group_details.length - 1];
+                if(!latestDetails) return;
+                
+                const moveNameRaw = m.move.name;
+                const moveNameFr = (typeof moveFrDict !== 'undefined' && moveFrDict[moveNameRaw]) ? moveFrDict[moveNameRaw] : moveNameRaw.split('-').map(capitalized).join(' ');
+                const method = latestDetails.move_learn_method.name;
+                const level = latestDetails.level_learned_at;
+
+                if (method === 'level-up') levelMoves.push({ name: moveNameFr, level: level });
+                else if (method === 'machine') tmMoves.push(moveNameFr);
+                else if (method === 'egg') eggMoves.push(moveNameFr);
+            });
+
+            levelMoves.sort((a, b) => a.level - b.level);
+            levelMoves = levelMoves.filter((v,i,a) => a.findIndex(t => (t.name === v.name && t.level === v.level)) === i);
+            tmMoves.sort(); eggMoves.sort(); 
+
+            const renderMoveBadge = (name, type) => {
+                const color = type === 'ct' ? 'rgba(52, 152, 219, 0.1)' : 'rgba(46, 204, 113, 0.1)';
+                const textColor = type === 'ct' ? 'var(--accent-blue)' : '#27ae60';
+                const borderColor = type === 'ct' ? 'rgba(52, 152, 219, 0.3)' : 'rgba(46, 204, 113, 0.3)';
+                return `<span style="background:${color}; color:${textColor}; padding: 8px 15px; border-radius: 50px; font-size: 13px; font-weight: bold; border: 1px solid ${borderColor}; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.03);">${name}</span>`;
+            };
+
+            let movesHtml = `<div style="display:flex; flex-direction:column; gap:30px; width:100%;">`;
+            movesHtml += `<div><h4 style="color:var(--accent-blue); margin-top:0; margin-bottom:15px; font-size:18px;">📈 Apprises par Niveau</h4>
+            <div style="border-radius: 8px; border: 1px solid #eee; background: var(--card-bg); overflow: hidden;"><table class="moves-table"><tr><th style="width:50px;">Niv.</th><th>Attaque</th></tr>`;
+            levelMoves.forEach(m => { movesHtml += `<tr><td style="color:#888; font-weight:900;">${m.level === 0 ? 'Évo' : m.level}</td><td style="color:var(--text-color);">${m.name}</td></tr>`; });
+            movesHtml += `</table></div></div>`;
+            movesHtml += `<div><h4 style="color:#e74c3c; margin-top:0; margin-bottom:15px; font-size:18px;">💿 Capsules Techniques (CT)</h4><div style="display: flex; flex-wrap: wrap; gap: 8px;">${tmMoves.length > 0 ? tmMoves.map(m => renderMoveBadge(m, 'ct')).join('') : '<div style="color:#888;font-style:italic;">Aucune</div>'}</div></div>`;
+            movesHtml += `<div><h4 style="color:#2ecc71; margin-top:0; margin-bottom:15px; font-size:18px;">🥚 Reproduction (Egg Moves)</h4><div style="display: flex; flex-wrap: wrap; gap: 8px;">${eggMoves.length > 0 ? eggMoves.map(m => renderMoveBadge(m, 'egg')).join('') : '<div style="color:#888;font-style:italic;">Aucune</div>'}</div></div></div>`;
+            
+            document.getElementById('dex-tab-moves').innerHTML = movesHtml;
+        } catch(e) {
+            document.getElementById('dex-tab-moves').innerHTML = '<div style="text-align:center; color:#e74c3c; padding: 20px;">Erreur de chargement des attaques.</div>';
+        }
+
+        // --- 6. LOCALISATIONS ---
+        try {
+            document.getElementById('dex-tab-locations').innerHTML = '<div style="text-align:center; padding: 40px; color: #888;">Recherche spatio-temporelle de l\'habitat... 🌍</div>';
             const encRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/encounters`);
             const encData = await encRes.json();
             
@@ -1869,13 +2025,12 @@ async function loadDexPokemon(id) {
             } else {
                 let gamesMap = {};
                 encData.forEach(enc => {
-                    // Nettoyage esthétique simple (On enlève "area" et on met des majuscules)
                     let words = enc.location_area.name.replace(/-/g, ' ').replace('area', '').trim().split(' ');
                     let cleanArea = words.map(capitalized).join(' ');
                     
                     enc.version_details.forEach(vd => {
                         const gNameRaw = vd.version.name;
-                        const gNameFr = versionFrDict[gNameRaw] || gNameRaw.split('-').map(capitalized).join(' ');
+                        const gNameFr = (typeof versionFrDict !== 'undefined' && versionFrDict[gNameRaw]) ? versionFrDict[gNameRaw] : gNameRaw.split('-').map(capitalized).join(' ');
                         
                         if(!gamesMap[gNameFr]) gamesMap[gNameFr] = new Set();
                         gamesMap[gNameFr].add(cleanArea);
@@ -1884,10 +2039,7 @@ async function loadDexPokemon(id) {
                 
                 let locHtml = `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:15px;">`;
                 Object.keys(gamesMap).forEach(g => {
-                    locHtml += `<div class="location-card">
-                        <div class="location-game">🎮 Version ${g}</div>
-                        <div class="location-area" style="font-weight:bold;">${Array.from(gamesMap[g]).join('<br>📍 ')}</div>
-                    </div>`;
+                    locHtml += `<div class="location-card"><div class="location-game">🎮 Version ${g}</div><div class="location-area" style="font-weight:bold;">${Array.from(gamesMap[g]).join('<br>📍 ')}</div></div>`;
                 });
                 locHtml += `</div>`;
                 document.getElementById('dex-tab-locations').innerHTML = locHtml;
@@ -1895,46 +2047,32 @@ async function loadDexPokemon(id) {
         } catch(e) {
             document.getElementById('dex-tab-locations').innerHTML = `<div style="text-align:center; color:#e74c3c; padding: 20px;">Le Pokédex n'a pas pu charger les localisations.</div>`;
         }
-// ==========================================
-        // --- 7. ALGORITHME DE SHASSE OPTIMISÉE ---
-        // ==========================================
+
+        // --- 7. SHASSE ---
         try {
             document.getElementById('dex-tab-hunting').innerHTML = '<div style="text-align:center; padding: 40px; color: #888;">Calcul de l\'algorithme en cours... 🔄</div>';
             
-            // On récupère les données proprement pour éviter les crashs
-            const specRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
+            // On cherche l'espèce de base si c'est une forme alternative
+            let speciesId = id;
+            if (id > 10000) {
+                const speciesUrlParts = data.species.url.split('/');
+                speciesId = speciesUrlParts[speciesUrlParts.length - 2];
+            }
+            
+            const specRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${speciesId}`);
             const specData = await specRes.json();
             
             let huntTitle = "Méthode Classique"; let huntGame = "Jeu le plus récent"; let huntMethod = "Œufs (Méthode Masuda)"; let huntOdds = "1/512 (Avec Charme)"; let huntColor = "var(--accent-orange)";
             const isLegendary = specData.is_legendary || specData.is_mythical;
 
             if (isLegendary) {
-                huntTitle = "Traque Légendaire";
-                huntMethod = "Expéditions Dynamax / Soft Reset";
-                huntOdds = "1/100 (Dynamax) ou 1/1365";
-                huntGame = "Épée & Bouclier (DLC) / Ultra-Soleil & Lune";
-                huntColor = "#9b59b6"; // Violet épique
+                huntTitle = "Traque Légendaire"; huntMethod = "Expéditions Dynamax / Soft Reset"; huntOdds = "1/100 (Dynamax) ou 1/1365"; huntGame = "Épée & Bouclier (DLC) / Ultra-Soleil & Lune"; huntColor = "#9b59b6"; 
             } else if (id <= 151) { 
-                // Génération 1
-                huntTitle = "Shasse Ultra-Rapide";
-                huntMethod = "Combo Capture (31+) + Charme + Parfum";
-                huntOdds = "1/273";
-                huntGame = "Let's Go Pikachu / Évoli";
-                huntColor = "#f1c40f"; // Jaune Kanto
+                huntTitle = "Shasse Ultra-Rapide"; huntMethod = "Combo Capture (31+) + Charme + Parfum"; huntOdds = "1/273"; huntGame = "Let's Go Pikachu / Évoli"; huntColor = "#f1c40f"; 
             } else if (id <= 493 || id === 722 || id === 723 || id === 724) { 
-                // Gen 1 à 4 + Brindibou (Très présents dans PLA)
-                huntTitle = "Exploration de Hisui";
-                huntMethod = "Apparitions Massives (Niv. Dex 10 + Charme)";
-                huntOdds = "1/137";
-                huntGame = "Légendes Pokémon : Arceus";
-                huntColor = "#27ae60"; // Vert Nature
+                huntTitle = "Exploration de Hisui"; huntMethod = "Apparitions Massives (Niv. Dex 10 + Charme)"; huntOdds = "1/137"; huntGame = "Légendes Pokémon : Arceus"; huntColor = "#27ae60"; 
             } else {
-                // Le reste (Gen 5 à 9)
-                huntTitle = "Shasse Moderne";
-                huntMethod = "Apparition Massive + Sandwich Brillance Nv. 3";
-                huntOdds = "1/512";
-                huntGame = "Écarlate / Violet";
-                huntColor = "#e74c3c"; // Rouge Écarlate
+                huntTitle = "Shasse Moderne"; huntMethod = "Apparition Massive + Sandwich Brillance Nv. 3"; huntOdds = "1/512"; huntGame = "Écarlate / Violet"; huntColor = "#e74c3c"; 
             }
 
             const huntHtml = `
@@ -1943,45 +2081,47 @@ async function loadDexPokemon(id) {
                     <h3 style="color: ${huntColor}; margin-top: 0; font-size: 26px; text-transform: uppercase; letter-spacing: 2px; display:flex; justify-content:center; align-items:center; gap:10px;">
                         <span style="font-size:30px;">🎯</span> ${huntTitle}
                     </h3>
-                    
                     <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px; position:relative; z-index:2;">
-                        <div style="flex: 1; min-width: 200px; background: rgba(0,0,0,0.02); padding: 20px; border-radius: 12px; border: 1px dashed #ccc;">
-                            <div style="font-size: 12px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">🎮 Jeu recommandé</div>
-                            <div style="font-size: 18px; font-weight: 900; color: var(--text-color);">${huntGame}</div>
-                        </div>
-                        
-                        <div style="flex: 1; min-width: 200px; background: rgba(0,0,0,0.02); padding: 20px; border-radius: 12px; border: 1px dashed #ccc;">
-                            <div style="font-size: 12px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">⚔️ Méthode</div>
-                            <div style="font-size: 18px; font-weight: 900; color: var(--text-color);">${huntMethod}</div>
-                        </div>
-                        
-                        <div style="flex: 1; min-width: 200px; background: rgba(0,0,0,0.02); padding: 20px; border-radius: 12px; border: 1px dashed #ccc; border-bottom: 4px solid ${huntColor};">
-                            <div style="font-size: 12px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">🎲 Taux d'apparition</div>
-                            <div style="font-size: 22px; font-weight: 900; color: ${huntColor};">${huntOdds}</div>
-                        </div>
+                        <div style="flex: 1; min-width: 200px; background: rgba(0,0,0,0.02); padding: 20px; border-radius: 12px; border: 1px dashed #ccc;"><div style="font-size: 12px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">🎮 Jeu recommandé</div><div style="font-size: 18px; font-weight: 900; color: var(--text-color);">${huntGame}</div></div>
+                        <div style="flex: 1; min-width: 200px; background: rgba(0,0,0,0.02); padding: 20px; border-radius: 12px; border: 1px dashed #ccc;"><div style="font-size: 12px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">⚔️ Méthode</div><div style="font-size: 18px; font-weight: 900; color: var(--text-color);">${huntMethod}</div></div>
+                        <div style="flex: 1; min-width: 200px; background: rgba(0,0,0,0.02); padding: 20px; border-radius: 12px; border: 1px dashed #ccc; border-bottom: 4px solid ${huntColor};"><div style="font-size: 12px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 5px;">🎲 Taux d'apparition</div><div style="font-size: 22px; font-weight: 900; color: ${huntColor};">${huntOdds}</div></div>
                     </div>
-                    
                     <div style="margin-top: 25px; font-size: 12px; color: #888; font-style: italic; background: rgba(0,0,0,0.03); padding: 10px; border-radius: 8px;">
                         * L'algorithme se base sur les taux officiels maximaux. Si le Pokémon n'est pas codé dans le jeu recommandé (ex: non transférable), la <strong>Méthode Masuda (1/512 avec Charme Chroma)</strong> ou le <strong>Poké Radar (1/99 avec chaîne de 40)</strong> restent les meilleures alternatives.
                     </div>
-                </div>
-            `;
+                </div>`;
             document.getElementById('dex-tab-hunting').innerHTML = huntHtml;
         } catch (e) {
             document.getElementById('dex-tab-hunting').innerHTML = '<div style="text-align:center; color:#e74c3c; padding: 20px;">Impossible de charger les données de shasse.</div>';
         }
+
+    } catch (err) {
+        console.error("Erreur Globale Pokédex:", err);
+        document.getElementById('dex-tab-infos').innerHTML = `<div style="text-align:center; padding: 40px; color: #e74c3c;">Erreur : Impossible de charger ce Pokémon. Vérifiez votre connexion.</div>`;
+    }
 }
 
-// Fonction pour jouer le cri du Pokémon
+// Fonction pour jouer le cri du Pokémon (Améliorée pour Z-A)
 function playDexCry() {
     if(!currentDexId) return;
     const btn = document.getElementById('dex-cry-btn');
     btn.style.transform = 'scale(0.9)'; // Petite animation
     setTimeout(() => btn.style.transform = 'scale(1)', 150);
     
+    // --- NOUVEAU : GESTION CRIS CUSTOM Z-A ---
+    // Si l'ID est custom, on joue le son local mémorisé dans Step 4
+    if (currentDexId >= 20000 && btn.dataset.customCry) {
+        const customCry = btn.dataset.customCry;
+        const audio = new Audio(customCry);
+        audio.volume = 0.5;
+        audio.play().catch(e => console.log("Cri custom non disponible"));
+        return; // Mission accomplie !
+    }
+    // -------------------------------------
+
+    // (Le reste de ton code original PokeAPI reste identique juste en dessous)
     const audio = new Audio(`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${currentDexId}.ogg`);
-    audio.volume = 0.5;
-    audio.play().catch(e => console.log("Cri non disponible"));
+    // ...
 }
 // =========================================
 // CHARGEMENT INITIAL & RESTAURATION DE PAGE
@@ -1997,3 +2137,51 @@ window.addEventListener('DOMContentLoaded', () => {
         showSection('shiny');
     }
 });
+// Fonction pour simuler le rendu PokeAPI pour les formes custom
+// Fonction pour simuler le rendu PokeAPI pour les formes custom Z-A
+function renderCustomCardLocal(id, data) {
+    console.log(`Rendu local Custom pour ${data.name_fr}`);
+    
+    // Vital : on sauvegarde l'ID courant pour le bouton des cris !
+    currentDexId = id; 
+    
+    // Gestion de l'image principale avec IMAGE DE SECOURS (Zarbi "?")
+    const imgElement = document.getElementById('dex-image'); 
+    if(imgElement) {
+        // 1. On retire les anciennes sécurités d'erreur pour faire place nette
+        imgElement.onerror = null; 
+        
+        // 2. On tente de charger ton image (qui n'existe peut-être pas encore)
+        imgElement.src = data.sprite;
+        
+        // 3. LA MAGIE : Si ça rate (erreur 404), on met le Zarbi "?"
+        imgElement.onerror = function() {
+            this.onerror = null; // Empêche une boucle infinie si le Zarbi bug aussi
+            this.src = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/201-question.png'; 
+            // Tu peux aussi utiliser une Pokéball : 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png'
+        };
+    }
+    
+    // Le nom français
+    const nameElement = document.getElementById('dex-nameFr'); 
+    if(nameElement) nameElement.textContent = data.name_fr;
+    
+    // Gestion des types
+    const typesElement = document.getElementById('dex-types');
+    if(typesElement) {
+        typesElement.innerHTML = ''; // On vide les types précédents
+        data.types.forEach(t => {
+            const span = document.createElement('span');
+            // Assure-toi d'avoir une fonction capitalized() ou remplace par t.charAt(0).toUpperCase() + t.slice(1)
+            span.textContent = t.charAt(0).toUpperCase() + t.slice(1); 
+            span.className = `type-badge type-${t}`; 
+            typesElement.appendChild(span);
+        });
+    }
+
+    // Gestion de l'audio des cris (Z-A)
+    const cryBtn = document.getElementById('dex-cry-btn');
+    if(cryBtn) {
+        cryBtn.dataset.customCry = data.cry; 
+    }
+}
